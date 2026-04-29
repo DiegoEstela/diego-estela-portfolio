@@ -8,14 +8,14 @@
   },
   "hero": {
     "greeting": "Hi, I'm",
-    "name": "Diego E. Estela Lopez",
+    "name": "Diego Estela Lopez",
     "typing": [
       "Software Engineer",
       "Frontend Developer",
       "Fullstack Developer",
       "AI Enthusiast"
     ],
-    "subtitle": "I build exceptional digital experiences with React, TypeScript, and the latest AI technologies.",
+    "subtitle": "Specialized in scalable frontend architectures with React, TypeScript and AI integration.",
     "cta_projects": "View projects",
     "cta_cv": "Download CV"
   },
