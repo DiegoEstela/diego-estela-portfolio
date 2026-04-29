@@ -87,7 +87,7 @@ export function ChatWindow() {
           'anthropic-dangerous-direct-browser-access': 'true',
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-5',
+          model: 'claude-haiku-4-5',
           max_tokens: 512,
           system: CHATBOT_SYSTEM_PROMPT,
           messages: history,
@@ -95,6 +95,25 @@ export function ChatWindow() {
       });
 
       const data = await res.json();
+
+      // Credits exhausted or billing error
+      if (res.status === 402 || data?.error?.type === 'billing_error' || data?.error?.message?.toLowerCase().includes('credit')) {
+        setMessages((prev) => [
+          ...prev,
+          { id: Date.now().toString(), role: 'assistant', content: t('chatbot.no_credits'), timestamp: new Date() },
+        ]);
+        return;
+      }
+
+      // Rate limit
+      if (res.status === 429) {
+        setMessages((prev) => [
+          ...prev,
+          { id: Date.now().toString(), role: 'assistant', content: t('chatbot.rate_limit'), timestamp: new Date() },
+        ]);
+        return;
+      }
+
       const reply = data.content?.[0]?.text ?? t('chatbot.error');
       setMessages((prev) => [
         ...prev,

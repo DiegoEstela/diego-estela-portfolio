@@ -133,6 +133,8 @@
     "initial": "Hi! I'm Diego's virtual assistant. Ask me about his experience, projects, skills or anything from his CV.",
     "thinking": "Typing...",
     "error": "Sorry, I couldn't connect. Please write to die.estela@gmail.com.",
+    "no_credits": "⚠️ The chatbot is temporarily unavailable due to insufficient credits. To reach me, write to die.estela@gmail.com.",
+    "rate_limit": "Too many requests in a short time. Wait a few seconds and try again.",
     "send": "Send"
   },
   "demo": {

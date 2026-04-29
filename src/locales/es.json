@@ -133,6 +133,8 @@
     "initial": "¡Hola! Soy el asistente virtual de Diego. Pregúntame sobre su experiencia, proyectos, habilidades o cualquier cosa de su CV.",
     "thinking": "Escribiendo...",
     "error": "Lo siento, no pude conectarme. Por favor escribe a die.estela@gmail.com.",
+    "no_credits": "⚠️ El chatbot está temporalmente fuera de servicio por falta de créditos. Para contactarme escribí a die.estela@gmail.com.",
+    "rate_limit": "Demasiadas consultas en poco tiempo. Esperá unos segundos e intentá de nuevo.",
     "send": "Enviar"
   },
   "demo": {
