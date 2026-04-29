@@ -1,0 +1,196 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "about": "Sobre mí",
+    "experience": "Experiencia",
+    "projects": "Proyectos",
+    "contact": "Contacto"
+  },
+  "hero": {
+    "greeting": "Hola, soy",
+    "name": "Diego Estela Lopez",
+    "typing": [
+      "Software Engineer",
+      "Frontend Developer",
+      "Fullstack Developer",
+      "AI Enthusiast"
+    ],
+    "subtitle": "Construyo experiencias digitales excepcionales con React, TypeScript y las últimas tecnologías de IA.",
+    "cta_projects": "Ver proyectos",
+    "cta_cv": "Descargar CV"
+  },
+  "about": {
+    "title": "Sobre mí",
+    "p1": "Soy un Software Engineer con más de 5 años de experiencia especializado en desarrollo frontend con React y TypeScript. Actualmente lidero el equipo frontend en Knowmad Mood para el proyecto Mapfre Inversiones.",
+    "p2": "Me apasiona construir interfaces de usuario de alto rendimiento, escalables y accesibles. Tengo experiencia sólida en arquitectura de aplicaciones, liderazgo técnico y la integración de tecnologías de IA en productos modernos.",
+    "p3": "Además de mi rol como desarrollador, soy tutor activo en CoderHouse donde he formado a más de 200 estudiantes en tecnologías fullstack.",
+    "stat1": "años de experiencia",
+    "stat2": "alumnos formados",
+    "stat3": "proyectos entregados",
+    "stat4": "usuarios impactados",
+    "skills_title": "Tecnologías"
+  },
+  "skills": {
+    "frontend": "Frontend",
+    "backend": "Backend",
+    "cloud": "Cloud & DevOps",
+    "ai": "Inteligencia Artificial",
+    "methodologies": "Metodologías"
+  },
+  "experience": {
+    "title": "Experiencia",
+    "present": "Presente",
+    "knowmad": {
+      "title": "Software Engineer",
+      "bullet1": "Lidero el equipo de frontend como owner del proyecto, gestionando Jira, repositorio en Bitbucket y coordinando con el equipo de CI/CD en los despliegues a producción.",
+      "bullet2": "Desarrollé módulos frontend críticos (SCR Reports, HierarchiesManager) con ReactJS, TypeScript y TanStack Query, reduciendo errores en producción un 35%.",
+      "bullet3": "Diseñé el módulo de jerarquías de carteras de inversión: sistema de nodos con relaciones padre-hijo dinámicas, edición concurrente y validaciones multinivel.",
+      "bullet4": "Implementé flujos de descarga de Excel con control de concurrencia y feedback visual.",
+      "bullet5": "Resolví race conditions e invalidación de cache con TanStack Query, mejorando la estabilidad del módulo en un 40%."
+    },
+    "uma": {
+      "title": "Desarrollador SSR Frontend",
+      "bullet1": "Lideré el desarrollo del portal backoffice con ReactJS, NestJS, TypeScript y Firebase.",
+      "bullet2": "Coordiné equipo de 4 desarrolladores, definiendo arquitectura y estándares de código.",
+      "bullet3": "Integré GCP y Firebase para autenticación, storage y push notifications, sirviendo a +10.000 usuarios activos.",
+      "bullet4": "Implementé Redux y React Query, reduciendo llamadas redundantes a la API en un 50%."
+    },
+    "coderhouse": {
+      "title": "Tutor Backend & Frontend",
+      "bullet1": "Formé a +200 estudiantes en Node.js, MongoDB, PostgreSQL, React y JavaScript con calificación promedio 4.8/5.",
+      "bullet2": "Diseñé desafíos técnicos y dicté clases sobre API REST, autenticación JWT y despliegue en producción."
+    },
+    "freelance": {
+      "title": "Desarrollador Fullstack Autónomo",
+      "bullet1": "Desarrollé sistema de firma digital para la Agencia Española del Comité Internacional para la Protección de los DDHH.",
+      "bullet2": "Construí aplicaciones fullstack para clientes en Argentina (Wigou, BuenosVinos) con React, Firebase y Express.",
+      "bullet3": "Apalanqué el desarrollo con asistentes de IA creados en Claude (Anthropic), optimizando tiempos de codificación y documentación."
+    }
+  },
+  "projects": {
+    "title": "Proyectos",
+    "view_demo": "Ver Demo",
+    "view_github": "GitHub",
+    "close": "Cerrar",
+    "disney": {
+      "title": "Disney Learning Game",
+      "description": "Juego educativo interactivo con personajes Disney. Modo verdadero/falso, modo historia y batallas entre personajes. Firebase + React + TypeScript."
+    },
+    "solesplast": {
+      "title": "Solesplast App",
+      "description": "Aplicación de gestión de producción industrial con diseño iOS-like. CRUD completo de clientes, productos y órdenes de producción."
+    },
+    "gymbot": {
+      "title": "Gym Reservation Bot",
+      "description": "Worker en Python que automatiza la reserva de clases en el gimnasio. Usa Selenium para navegar el portal y ejecutarse con cron job diario."
+    },
+    "whoTookMyMoney": {
+      "title": "Who Took My Money",
+      "description": "Tracker de gastos personales con dashboard de análisis, categorización inteligente y visualizaciones con Chart.js."
+    },
+    "tourism": {
+      "title": "ChatGPT Tourism App",
+      "description": "Recomendador de destinos turísticos inteligente impulsado por IA. Busca destinos por interés, país o tipo de viaje."
+    },
+    "matrimillas": {
+      "title": "Matrimillas App",
+      "description": "App gamificada para parejas con sistema de tareas compartidas, recompensas, puntos y calendario sincronizado."
+    },
+    "signature": {
+      "title": "Sistema de Firma Digital",
+      "description": "Flujo completo de firma de contratos con canvas interactivo, generación de PDF y envío automático por email."
+    }
+  },
+  "education": {
+    "title": "Formación",
+    "master": "Máster en Desarrollo Web con IA Integrada",
+    "mern": "Full Stack MERN",
+    "reactnative": "React Native Avanzado",
+    "scrum": "Scrum Master",
+    "uba": "Lic. Administración de Empresas"
+  },
+  "contact": {
+    "title": "Contacto",
+    "subtitle": "¿Interesado en trabajar juntos? Escríbeme.",
+    "name": "Nombre",
+    "email": "Email",
+    "message": "Mensaje",
+    "send": "Enviar mensaje",
+    "name_placeholder": "Tu nombre",
+    "email_placeholder": "tu@email.com",
+    "message_placeholder": "Cuéntame sobre tu proyecto...",
+    "success": "¡Mensaje enviado correctamente!",
+    "or_reach": "También puedes encontrarme en"
+  },
+  "clients": {
+    "title": "Clientes",
+    "subtitle": "Empresas con las que he colaborado"
+  },
+  "chatbot": {
+    "title": "Chat con Diego AI",
+    "badge": "Pregúntame",
+    "placeholder": "Escribe tu pregunta...",
+    "initial": "¡Hola! Soy el asistente virtual de Diego. Pregúntame sobre su experiencia, proyectos, habilidades o cualquier cosa de su CV.",
+    "thinking": "Escribiendo...",
+    "error": "Lo siento, no pude conectarme. Por favor escribe a die.estela@gmail.com.",
+    "send": "Enviar"
+  },
+  "demo": {
+    "solesplast": {
+      "add": "Agregar cliente",
+      "search": "Buscar cliente...",
+      "name": "Nombre",
+      "company": "Empresa",
+      "status": "Estado",
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "add_title": "Agregar nuevo cliente"
+    },
+    "expense": {
+      "add": "Agregar gasto",
+      "amount": "Monto",
+      "category": "Categoría",
+      "date": "Fecha",
+      "description": "Descripción",
+      "total": "Total del mes",
+      "distribution": "Distribución por categoría",
+      "recent": "Gastos recientes",
+      "categories": {
+        "food": "Comida",
+        "transport": "Transporte",
+        "entertainment": "Entretenimiento",
+        "services": "Servicios",
+        "other": "Otros"
+      }
+    },
+    "tourism": {
+      "placeholder": "ej: playas en España, montañas en Argentina...",
+      "search": "Buscar destinos",
+      "title": "Descubre tu próximo destino",
+      "subtitle": "Busca por país, interés o tipo de viaje",
+      "rating": "Calificación",
+      "results": "Destinos recomendados"
+    },
+    "couples": {
+      "tasks": "Tareas compartidas",
+      "add_task": "Agregar tarea",
+      "points": "Puntos",
+      "player1": "Diego",
+      "player2": "Romi",
+      "task_placeholder": "Nueva tarea..."
+    },
+    "signature": {
+      "draw": "Dibuja tu firma aquí",
+      "clear": "Limpiar",
+      "sign": "Firmar documento",
+      "preview": "Vista previa del documento",
+      "contract_title": "CONTRATO DE SERVICIOS PROFESIONALES",
+      "signed": "Firmado digitalmente",
+      "signature_label": "Firma del cliente"
+    }
+  }
+}

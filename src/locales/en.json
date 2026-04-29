@@ -1,0 +1,196 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "experience": "Experience",
+    "projects": "Projects",
+    "contact": "Contact"
+  },
+  "hero": {
+    "greeting": "Hi, I'm",
+    "name": "Diego E. Estela Lopez",
+    "typing": [
+      "Software Engineer",
+      "Frontend Developer",
+      "Fullstack Developer",
+      "AI Enthusiast"
+    ],
+    "subtitle": "I build exceptional digital experiences with React, TypeScript, and the latest AI technologies.",
+    "cta_projects": "View projects",
+    "cta_cv": "Download CV"
+  },
+  "about": {
+    "title": "About me",
+    "p1": "I'm a Software Engineer with over 5 years of experience specializing in frontend development with React and TypeScript. I currently lead the frontend team at Knowmad Mood for the Mapfre Inversiones project.",
+    "p2": "I'm passionate about building high-performance, scalable, and accessible user interfaces. I have solid experience in application architecture, technical leadership, and integrating AI technologies into modern products.",
+    "p3": "Beyond my developer role, I'm an active tutor at CoderHouse where I've trained over 200 students in fullstack technologies.",
+    "stat1": "years of experience",
+    "stat2": "students trained",
+    "stat3": "projects delivered",
+    "stat4": "users impacted",
+    "skills_title": "Technologies"
+  },
+  "skills": {
+    "frontend": "Frontend",
+    "backend": "Backend",
+    "cloud": "Cloud & DevOps",
+    "ai": "Artificial Intelligence",
+    "methodologies": "Methodologies"
+  },
+  "experience": {
+    "title": "Experience",
+    "present": "Present",
+    "knowmad": {
+      "title": "Software Engineer",
+      "bullet1": "Lead the frontend team as project owner, managing Jira, Bitbucket repository and coordinating with the CI/CD team on production deployments.",
+      "bullet2": "Developed critical frontend modules (SCR Reports, HierarchiesManager) with ReactJS, TypeScript and TanStack Query, reducing production errors by 35%.",
+      "bullet3": "Designed the investment portfolio hierarchies module: node system with dynamic parent-child relationships, concurrent editing and multi-level validations.",
+      "bullet4": "Implemented Excel download flows with concurrency control and visual feedback.",
+      "bullet5": "Resolved race conditions and cache invalidation with TanStack Query, improving module stability by 40%."
+    },
+    "uma": {
+      "title": "SSR Frontend Developer",
+      "bullet1": "Led backoffice portal development with ReactJS, NestJS, TypeScript and Firebase.",
+      "bullet2": "Coordinated a team of 4 developers, defining architecture and code standards.",
+      "bullet3": "Integrated GCP and Firebase for authentication, storage and push notifications, serving +10,000 active users.",
+      "bullet4": "Implemented Redux and React Query, reducing redundant API calls by 50%."
+    },
+    "coderhouse": {
+      "title": "Backend & Frontend Tutor",
+      "bullet1": "Trained +200 students in Node.js, MongoDB, PostgreSQL, React and JavaScript with an average rating of 4.8/5.",
+      "bullet2": "Designed technical challenges and taught classes on REST APIs, JWT authentication and production deployment."
+    },
+    "freelance": {
+      "title": "Freelance Fullstack Developer",
+      "bullet1": "Developed a digital signature system for the Spanish Agency of the International Committee for the Protection of Human Rights.",
+      "bullet2": "Built fullstack applications for clients in Argentina (Wigou, BuenosVinos) with React, Firebase and Express.",
+      "bullet3": "Leveraged AI assistants built with Claude (Anthropic), optimizing coding and documentation times."
+    }
+  },
+  "projects": {
+    "title": "Projects",
+    "view_demo": "Live Demo",
+    "view_github": "GitHub",
+    "close": "Close",
+    "disney": {
+      "title": "Disney Learning Game",
+      "description": "Interactive educational game with Disney characters. True/false mode, story mode and character battles. Firebase + React + TypeScript."
+    },
+    "solesplast": {
+      "title": "Solesplast App",
+      "description": "Industrial production management application with iOS-like design. Full CRUD for clients, products and production orders."
+    },
+    "gymbot": {
+      "title": "Gym Reservation Bot",
+      "description": "Python worker that automates gym class reservations. Uses Selenium to navigate the portal and runs as a daily cron job."
+    },
+    "whoTookMyMoney": {
+      "title": "Who Took My Money",
+      "description": "Personal expense tracker with analytics dashboard, smart categorization and Chart.js visualizations."
+    },
+    "tourism": {
+      "title": "ChatGPT Tourism App",
+      "description": "AI-powered smart travel destination recommender. Search by interest, country or trip type."
+    },
+    "matrimillas": {
+      "title": "Matrimillas App",
+      "description": "Gamified couples app with shared task system, rewards, points and synchronized calendar."
+    },
+    "signature": {
+      "title": "Digital Signature System",
+      "description": "Complete contract signing flow with interactive canvas, PDF generation and automatic email delivery."
+    }
+  },
+  "education": {
+    "title": "Education",
+    "master": "Master in Web Development with AI Integration",
+    "mern": "Full Stack MERN",
+    "reactnative": "Advanced React Native",
+    "scrum": "Scrum Master",
+    "uba": "B.A. Business Administration"
+  },
+  "contact": {
+    "title": "Contact",
+    "subtitle": "Interested in working together? Write to me.",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "send": "Send message",
+    "name_placeholder": "Your name",
+    "email_placeholder": "your@email.com",
+    "message_placeholder": "Tell me about your project...",
+    "success": "Message sent successfully!",
+    "or_reach": "You can also find me on"
+  },
+  "clients": {
+    "title": "Clients",
+    "subtitle": "Companies I've worked with"
+  },
+  "chatbot": {
+    "title": "Chat with Diego AI",
+    "badge": "Ask me",
+    "placeholder": "Type your question...",
+    "initial": "Hi! I'm Diego's virtual assistant. Ask me about his experience, projects, skills or anything from his CV.",
+    "thinking": "Typing...",
+    "error": "Sorry, I couldn't connect. Please write to die.estela@gmail.com.",
+    "send": "Send"
+  },
+  "demo": {
+    "solesplast": {
+      "add": "Add client",
+      "search": "Search client...",
+      "name": "Name",
+      "company": "Company",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "edit": "Edit",
+      "delete": "Delete",
+      "save": "Save",
+      "cancel": "Cancel",
+      "add_title": "Add new client"
+    },
+    "expense": {
+      "add": "Add expense",
+      "amount": "Amount",
+      "category": "Category",
+      "date": "Date",
+      "description": "Description",
+      "total": "Monthly total",
+      "distribution": "Distribution by category",
+      "recent": "Recent expenses",
+      "categories": {
+        "food": "Food",
+        "transport": "Transport",
+        "entertainment": "Entertainment",
+        "services": "Services",
+        "other": "Other"
+      }
+    },
+    "tourism": {
+      "placeholder": "e.g: beaches in Spain, mountains in Argentina...",
+      "search": "Search destinations",
+      "title": "Discover your next destination",
+      "subtitle": "Search by country, interest or trip type",
+      "rating": "Rating",
+      "results": "Recommended destinations"
+    },
+    "couples": {
+      "tasks": "Shared tasks",
+      "add_task": "Add task",
+      "points": "Points",
+      "player1": "Diego",
+      "player2": "Romi",
+      "task_placeholder": "New task..."
+    },
+    "signature": {
+      "draw": "Draw your signature here",
+      "clear": "Clear",
+      "sign": "Sign document",
+      "preview": "Document preview",
+      "contract_title": "PROFESSIONAL SERVICES AGREEMENT",
+      "signed": "Digitally signed",
+      "signature_label": "Client signature"
+    }
+  }
+}
