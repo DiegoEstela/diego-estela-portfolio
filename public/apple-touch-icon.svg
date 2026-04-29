@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1b2d4f"/>
+      <stop offset="100%" stop-color="#0F1729"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4A9FD9"/>
+      <stop offset="100%" stop-color="#7EC8E3"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7EC8E3"/>
+      <stop offset="100%" stop-color="#4A9FD9"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background with rounded corners -->
+  <rect width="180" height="180" rx="40" fill="url(#bg)"/>
+
+  <!-- Subtle grid lines -->
+  <line x1="0" y1="60" x2="180" y2="60" stroke="white" stroke-opacity="0.03" stroke-width="1"/>
+  <line x1="0" y1="120" x2="180" y2="120" stroke="white" stroke-opacity="0.03" stroke-width="1"/>
+  <line x1="60" y1="0" x2="60" y2="180" stroke="white" stroke-opacity="0.03" stroke-width="1"/>
+  <line x1="120" y1="0" x2="120" y2="180" stroke="white" stroke-opacity="0.03" stroke-width="1"/>
+
+  <!-- Left accent bar -->
+  <rect x="20" y="34" width="14" height="112" rx="7" fill="url(#bar)" filter="url(#glow)"/>
+
+  <!-- "D" letter -->
+  <text
+    x="50" y="130"
+    font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif"
+    font-weight="900"
+    font-size="96"
+    fill="white"
+    letter-spacing="-4"
+  >D</text>
+
+  <!-- "E" letter in accent -->
+  <text
+    x="115" y="130"
+    font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif"
+    font-weight="900"
+    font-size="96"
+    fill="url(#accent)"
+    letter-spacing="-4"
+    filter="url(#glow)"
+  >E</text>
+</svg>
