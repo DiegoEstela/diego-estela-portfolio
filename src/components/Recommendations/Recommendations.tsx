@@ -155,15 +155,19 @@ export function Recommendations() {
 
   const x = useMotionValue(0);
   const rowRef = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
   const items = [...RECOMMENDATIONS, ...RECOMMENDATIONS];
 
   useAnimationFrame((_, delta) => {
+    if (isDragging.current) return;
     const w = rowRef.current?.scrollWidth ?? 0;
     const half = w / 2;
     if (!half) return;
     let cur = x.get();
     cur -= (26 * delta) / 1000;
-    if (cur <= -half) cur = 0;
+    // Wrap: keep in [-half, 0]
+    if (cur <= -half) cur += half;
+    if (cur > 0) cur -= half;
     x.set(cur);
   });
 
@@ -208,7 +212,26 @@ export function Recommendations() {
             WebkitMaskImage: 'linear-gradient(to right, transparent, black 6%, black 94%, transparent)',
           }}
         >
-          <motion.div ref={rowRef} className="flex py-3" style={{ x }}>
+          <motion.div
+            ref={rowRef}
+            className="flex py-3 cursor-grab active:cursor-grabbing"
+            style={{ x }}
+            drag="x"
+            dragConstraints={{ left: -Infinity, right: Infinity }}
+            dragElastic={0}
+            dragMomentum={false}
+            onDragStart={() => { isDragging.current = true; }}
+            onDragEnd={() => {
+              // Normalize position back into the [-half, 0] range after drag
+              const w = rowRef.current?.scrollWidth ?? 0;
+              const half = w / 2;
+              if (!half) { isDragging.current = false; return; }
+              let cur = x.get() % half;
+              if (cur > 0) cur -= half;
+              x.set(cur);
+              isDragging.current = false;
+            }}
+          >
             {items.map((rec, i) => (
               <RecommendationCard key={`${rec.id}-${i}`} rec={rec} lang={lang} />
             ))}

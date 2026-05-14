@@ -129,7 +129,7 @@ export function Hero() {
         >
           <button
             onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-            className="px-8 py-3.5 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-105"
+            className="w-64 sm:w-auto px-8 py-3.5 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-105"
             style={{ background: 'var(--accent)', boxShadow: '0 0 28px var(--glow)' }}
           >
             {t('hero.cta_projects')}
@@ -138,7 +138,7 @@ export function Hero() {
           <a
             href="/CV-Diego-Estela-Lopez-2026.pdf"
             download="CV Diego Ezequiel Estela Lopez 2026.pdf"
-            className="px-8 py-3.5 rounded-xl font-semibold flex items-center gap-2 transition-all duration-300 hover:scale-105 border"
+            className="w-64 sm:w-auto px-8 py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all duration-300 hover:scale-105 border"
             style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
           >
             <Download size={16} />
