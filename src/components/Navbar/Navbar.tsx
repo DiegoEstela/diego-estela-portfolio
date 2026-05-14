@@ -5,11 +5,12 @@ import { Sun, Moon, Menu, X } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import clsx from "clsx";
 
-const LINKS = ["home", "about", "experience", "projects", "contact"] as const;
+const LINKS = ["home", "about", "experience", "recommendations", "projects", "contact"] as const;
 const SECTION_IDS: Record<string, string> = {
   home: "hero",
   about: "about",
   experience: "experience",
+  recommendations: "recommendations",
   projects: "projects",
   contact: "contact",
 };

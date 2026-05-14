@@ -4,6 +4,7 @@
     "about": "Sobre mí",
     "experience": "Experiencia",
     "projects": "Proyectos",
+    "recommendations": "Recomendaciones",
     "contact": "Contacto"
   },
   "hero": {
@@ -125,6 +126,11 @@
   "clients": {
     "title": "Clientes",
     "subtitle": "Empresas con las que he colaborado"
+  },
+  "recommendations": {
+    "title": "Lo que dicen de mí",
+    "subtitle": "Recomendaciones de compañeros, líderes y directivos con quienes trabajé.",
+    "cta": "Ver en LinkedIn"
   },
   "chatbot": {
     "title": "Chat con Diego AI",
