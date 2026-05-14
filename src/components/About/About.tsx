@@ -123,12 +123,44 @@ export function About() {
               ))}
             </div>
             <div className="flex items-center justify-center">
-              <div className="relative w-48 h-48 sm:w-56 sm:h-56">
-                <div className="absolute inset-0 rounded-full opacity-20 blur-2xl" style={{ background: 'var(--accent)' }} />
-                <div className="relative w-full h-full rounded-full flex items-center justify-center text-5xl font-bold glass" style={{ color: 'var(--accent)', fontFamily: "'Space Grotesk', sans-serif" }}>
-                  DE
-                </div>
-              </div>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.85 }}
+                animate={visible ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.6, delay: 0.2, ease: 'backOut' }}
+                className="relative w-52 h-52 sm:w-64 sm:h-64"
+              >
+                {/* Glow ring */}
+                <div
+                  className="absolute inset-0 rounded-full blur-2xl opacity-30"
+                  style={{ background: 'var(--accent)' }}
+                />
+                {/* Rotating accent border */}
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    background: `conic-gradient(from 0deg, var(--accent), #7EC8E3, transparent 60%, var(--accent))`,
+                    padding: '3px',
+                  }}
+                />
+                {/* White gap ring */}
+                <div
+                  className="absolute rounded-full"
+                  style={{
+                    inset: '3px',
+                    background: 'var(--bg-primary)',
+                    borderRadius: '9999px',
+                  }}
+                />
+                {/* Photo */}
+                <img
+                  src="/profile.jpg"
+                  alt="Diego Estela Lopez"
+                  className="absolute rounded-full object-cover object-top"
+                  style={{ inset: '5px' }}
+                />
+              </motion.div>
             </div>
           </div>
 
