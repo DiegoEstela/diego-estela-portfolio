@@ -51,9 +51,12 @@ export function Navbar() {
   }, []);
 
   const scrollTo = (link: string) => {
-    const id = SECTION_IDS[link];
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     setMobileOpen(false);
+    // Wait for the mobile menu close animation before scrolling
+    setTimeout(() => {
+      const id = SECTION_IDS[link];
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    }, 320);
   };
 
   const toggleLang = () => {
