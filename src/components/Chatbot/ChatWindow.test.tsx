@@ -1,5 +1,5 @@
-import { afterEach, describe, expect, it } from 'vitest'
-import { act, render, screen } from '@testing-library/react'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import i18n from '@/i18n'
 import { ChatContext } from '@/context/ChatContext'
 import { ChatWindow } from './ChatWindow'
@@ -31,5 +31,28 @@ describe('ChatWindow greeting', () => {
     await act(() => i18n.changeLanguage('en'))
     expect(await screen.findByText(i18n.t('chatbot.initial'))).toBeInTheDocument()
     expect(i18n.t('chatbot.initial')).toMatch(/^Hi!/)
+  })
+})
+
+describe('ChatWindow conversation', () => {
+  afterEach(async () => {
+    vi.unstubAllEnvs()
+    await act(() => i18n.changeLanguage('es'))
+  })
+
+  async function sendMessage(text: string) {
+    // Without an API key the component answers locally and never hits the network
+    vi.stubEnv('VITE_ANTHROPIC_API_KEY', '')
+    fireEvent.change(screen.getByPlaceholderText(i18n.t('chatbot.placeholder')), { target: { value: text } })
+    fireEvent.click(screen.getByRole('button'))
+    expect(await screen.findByText(text)).toBeInTheDocument()
+  }
+
+  it('keeps the conversation when the language changes', async () => {
+    await act(() => i18n.changeLanguage('es'))
+    renderChat()
+    await sendMessage('hola desde el test')
+    await act(() => i18n.changeLanguage('en'))
+    expect(screen.getByText('hola desde el test')).toBeInTheDocument()
   })
 })

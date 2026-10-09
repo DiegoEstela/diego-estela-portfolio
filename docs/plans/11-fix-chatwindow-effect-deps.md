@@ -56,7 +56,7 @@ Cada tarea: 5-10 min, con su test; el proyecto funciona tras cada una.
 - **Ficheros:** `src/components/Chatbot/ChatWindow.test.tsx`
 - **Test (red):** con `vi.stubEnv('VITE_ANTHROPIC_API_KEY', '')` el envío no llama a la red y responde con `chatbot.error`. Se escribe un mensaje, se cambia el idioma y se espera que el mensaje del usuario siga visible. **Falla** hoy porque el segundo efecto reinicia `messages`.
 - **Commit:** se une al de la tarea 4 (el test rojo no se commitea solo).
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 4: Derivar el saludo y eliminar los efectos
 
@@ -69,7 +69,7 @@ Cada tarea: 5-10 min, con su test; el proyecto funciona tras cada una.
   - importar `useMemo`.
 - **Verificación:** tareas 2 y 3 en verde, `npm run lint` sin warnings.
 - **Commit:** `fix(chatbot): derive greeting to remove effect dependency warning` + `Refs #11`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 5: Test de persistencia al cerrar y reabrir
 
