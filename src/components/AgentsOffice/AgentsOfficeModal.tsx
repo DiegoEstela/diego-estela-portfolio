@@ -17,6 +17,43 @@ interface AgentsOfficeModalProps {
   returnFocusTo?: RefObject<HTMLElement | null>
 }
 
+/**
+ * The scene and the card. It only exists while the dialog does, so every opening starts from
+ * scratch: the first character in the spotlight and nothing selected.
+ */
+function OfficeBody({ active }: { active: boolean }) {
+  const { t } = useTranslation()
+  const reduceMotion = useReducedMotion()
+  const [selectedId, setSelectedId] = useState<AgentId | null>(null)
+
+  // One bubble at a time keeps a phone screen readable. A picked character keeps it; reduced
+  // motion turns the rotation off entirely.
+  const { activeId, round } = useSpotlight(AGENT_IDS, { enabled: active && !reduceMotion, pinnedId: selectedId })
+  const activities = activeId ? (t(`agentsOffice.agents.${activeId}.doing`, { returnObjects: true }) as unknown) : null
+  const bubble =
+    activeId && Array.isArray(activities) && activities.length > 0
+      ? { id: activeId, text: String(activities[round % activities.length]) }
+      : null
+
+  const agents = AGENT_IDS.map((id) => ({ id, label: t(`agentsOffice.agents.${id}.name`) }))
+
+  return (
+    <div className="grid gap-4 p-4 sm:p-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-start">
+      <div className="overflow-hidden rounded-2xl" style={{ border: '1px solid var(--border)' }}>
+        <OfficeScene
+          agents={agents}
+          description={t('agentsOffice.sceneDescription')}
+          selectedId={selectedId}
+          activeId={activeId}
+          bubble={bubble}
+          onSelect={setSelectedId}
+        />
+      </div>
+      <AgentCard selectedId={selectedId} />
+    </div>
+  )
+}
+
 export function AgentsOfficeModal({ open, onClose, returnFocusTo }: AgentsOfficeModalProps) {
   const { t } = useTranslation()
   const reduceMotion = useReducedMotion()
@@ -25,7 +62,6 @@ export function AgentsOfficeModal({ open, onClose, returnFocusTo }: AgentsOffice
   const dialogRef = useRef<HTMLDivElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
   const onCloseRef = useRef(onClose)
-  const [selectedId, setSelectedId] = useState<AgentId | null>(null)
 
   useEffect(() => {
     onCloseRef.current = onClose
@@ -73,16 +109,6 @@ export function AgentsOfficeModal({ open, onClose, returnFocusTo }: AgentsOffice
     }
   }, [open, returnFocusTo])
 
-  // One bubble at a time keeps a phone screen readable. A picked character keeps it; reduced
-  // motion turns the rotation off entirely.
-  const { activeId, round } = useSpotlight(AGENT_IDS, { enabled: open && !reduceMotion, pinnedId: selectedId })
-  const activities = activeId ? (t(`agentsOffice.agents.${activeId}.doing`, { returnObjects: true }) as unknown) : null
-  const bubble =
-    activeId && Array.isArray(activities) && activities.length > 0
-      ? { id: activeId, text: String(activities[round % activities.length]) }
-      : null
-
-  const agents = AGENT_IDS.map((id) => ({ id, label: t(`agentsOffice.agents.${id}.name`) }))
   const duration = reduceMotion ? 0 : 0.2
 
   // Drawn on document.body: an ancestor with a transform (like the hero buttons) would break `fixed`.
@@ -111,7 +137,7 @@ export function AgentsOfficeModal({ open, onClose, returnFocusTo }: AgentsOffice
             aria-modal="true"
             aria-labelledby={titleId}
             aria-describedby={subtitleId}
-            className="relative flex h-full w-full flex-col overflow-y-auto sm:h-auto sm:max-h-[92vh] sm:max-w-4xl sm:rounded-3xl"
+            className="relative flex h-full w-full flex-col overflow-y-auto overscroll-contain sm:h-auto sm:max-h-[92vh] sm:max-w-4xl sm:rounded-3xl"
             style={{
               background: 'var(--bg-primary)',
               border: '1px solid var(--border)',
@@ -143,19 +169,7 @@ export function AgentsOfficeModal({ open, onClose, returnFocusTo }: AgentsOffice
               </button>
             </header>
 
-            <div className="grid gap-4 p-4 sm:p-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-start">
-              <div className="overflow-hidden rounded-2xl" style={{ border: '1px solid var(--border)' }}>
-                <OfficeScene
-                  agents={agents}
-                  description={t('agentsOffice.sceneDescription')}
-                  selectedId={selectedId}
-                  activeId={activeId}
-                  bubble={bubble}
-                  onSelect={setSelectedId}
-                />
-              </div>
-              <AgentCard selectedId={selectedId} />
-            </div>
+            <OfficeBody active={open} />
           </motion.div>
         </motion.div>
       )}

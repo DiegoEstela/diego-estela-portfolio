@@ -126,7 +126,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** al reabrir, la rotación y la selección empiezan de cero; al elegir un personaje la ficha se desplaza a la vista; la selección se anuncia con una línea breve (`role="status"`) y no con toda la ficha; la página reserva el hueco de la barra de scroll (`scrollbar-gutter: stable`).
 - **Implementación (green):** el contenido del diálogo pasa a un componente interno que solo existe mientras está abierto; `scrollIntoView({ block: 'nearest' })`; `overscroll-contain`; claves de lista por índice.
 - **Commit:** `fix(agents-office): reset the dialog on reopen and announce selections briefly` + `Refs #18`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 11: Brillo del botón sin repintados y textos coherentes con los datos
 

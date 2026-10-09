@@ -1,4 +1,5 @@
-import { useId } from 'react'
+import { useEffect, useId, useRef } from 'react'
+import { useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { Hand } from 'lucide-react'
 import { loadAgents, type AgentDefinition } from './agents'
@@ -26,15 +27,30 @@ const chip = {
 
 export function AgentCard({ selectedId, agents = REAL_AGENTS }: AgentCardProps) {
   const { t } = useTranslation()
+  const reduceMotion = useReducedMotion()
+  const cardRef = useRef<HTMLDivElement>(null)
   const toolsId = useId()
   const doingId = useId()
 
+  // On a phone the card sits below the scene: bring it into view when a character is picked.
+  useEffect(() => {
+    if (selectedId !== null) {
+      cardRef.current?.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' })
+    }
+  }, [selectedId, reduceMotion])
+
   return (
     <div
-      aria-live="polite"
+      ref={cardRef}
       className="rounded-2xl p-4 sm:p-5"
       style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', minHeight: 168 }}
     >
+      {/* One short line for screen readers: a live region around the whole card would read it all aloud. */}
+      {selectedId !== null && (
+        <p role="status" className="sr-only">
+          {t('agentsOffice.selected', { name: t(`agentsOffice.agents.${selectedId}.name`) })}
+        </p>
+      )}
       {selectedId === null ? (
         <p className="flex items-center gap-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
           <Hand size={16} aria-hidden="true" style={{ color: 'var(--accent)' }} />
@@ -93,8 +109,8 @@ function Details({
           {t('agentsOffice.doingLabel')}
         </p>
         <ul aria-labelledby={doingId} className="list-disc space-y-0.5 pl-5 text-sm" style={{ color: 'var(--text-primary)' }}>
-          {activities.map((activity) => (
-            <li key={activity}>{activity}</li>
+          {activities.map((activity, index) => (
+            <li key={`${id}-${index}`}>{activity}</li>
           ))}
         </ul>
       </div>

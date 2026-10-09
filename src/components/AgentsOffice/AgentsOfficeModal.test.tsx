@@ -47,6 +47,11 @@ describe('AgentsOfficeModal semantics', () => {
     expect(screen.getByRole('heading', { name: title(), level: 2 })).toBeInTheDocument()
   })
 
+  it('does not pass its scrolling on to the page behind', async () => {
+    render(<Harness />)
+    expect(await openModal()).toHaveClass('overscroll-contain')
+  })
+
   it('is drawn on document.body, so no ancestor transform or overflow can clip it', async () => {
     const { container } = render(<Harness />)
     const dialog = await openModal()

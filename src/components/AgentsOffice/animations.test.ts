@@ -30,3 +30,9 @@ describe('office animations', () => {
     expect(block).toMatch(/animation:\s*none/)
   })
 })
+
+describe('page layout while the modal is open', () => {
+  it('reserves the scrollbar gutter, so locking the scroll does not make the page jump sideways', () => {
+    expect(css).toMatch(/html\s*\{[^}]*scrollbar-gutter:\s*stable/)
+  })
+})

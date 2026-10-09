@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, render, screen, within } from '@testing-library/react'
 import i18n from '@/i18n'
 import { AgentCard } from './AgentCard'
@@ -96,9 +96,17 @@ describe('AgentCard language', () => {
     expect(screen.getByText(i18n.t('agentsOffice.agents.security-auditor.role'))).toBeInTheDocument()
   })
 
-  it('announces the selected agent to screen readers', () => {
-    const { container } = render(<AgentCard selectedId="claude" agents={[]} />)
-    expect(container.querySelector('[aria-live="polite"]')).not.toBeNull()
+  it('announces the selection with one short line, not by reading the whole card aloud', async () => {
+    await useLanguage('es')
+    const { container } = render(<AgentCard selectedId="code-reviewer" agents={[reviewer]} />)
+    const status = screen.getByRole('status')
+    expect(status).toHaveTextContent(i18n.t('agentsOffice.selected', { name: i18n.t('agentsOffice.agents.code-reviewer.name') }))
+    expect(container.querySelector('[aria-live]')).toBeNull()
+  })
+
+  it('announces nothing before anything is selected', () => {
+    render(<AgentCard selectedId={null} agents={[]} />)
+    expect(screen.queryByRole('status')).not.toBeInTheDocument()
   })
 })
 
@@ -120,5 +128,27 @@ describe('agents office copy', () => {
       expect(AGENT_IDS as readonly string[], `${name} needs a character`).toContain(name)
       expect(t(`agentsOffice.agents.${name}.role`)).not.toBe(`agentsOffice.agents.${name}.role`)
     }
+  })
+})
+
+describe('AgentCard scrolling', () => {
+  beforeEach(() => vi.mocked(Element.prototype.scrollIntoView).mockClear())
+
+  it('brings the card into view when a character is picked, since on a phone it sits below the scene', () => {
+    const { container, rerender } = render(<AgentCard selectedId={null} agents={[]} />)
+    expect(Element.prototype.scrollIntoView).not.toHaveBeenCalled()
+
+    rerender(<AgentCard selectedId="claude" agents={[]} />)
+    expect(Element.prototype.scrollIntoView).toHaveBeenCalledTimes(1)
+    expect(Element.prototype.scrollIntoView).toHaveBeenCalledWith({ block: 'nearest', behavior: 'smooth' })
+    expect(vi.mocked(Element.prototype.scrollIntoView).mock.contexts[0]).toBe(container.firstElementChild)
+  })
+
+  it('scrolls again when another character is picked, but not on an unrelated re-render', () => {
+    const { rerender } = render(<AgentCard selectedId="claude" agents={[]} />)
+    rerender(<AgentCard selectedId="claude" agents={[reviewer]} />)
+    expect(Element.prototype.scrollIntoView).toHaveBeenCalledTimes(1)
+    rerender(<AgentCard selectedId="code-reviewer" agents={[reviewer]} />)
+    expect(Element.prototype.scrollIntoView).toHaveBeenCalledTimes(2)
   })
 })
