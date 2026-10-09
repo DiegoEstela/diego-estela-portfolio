@@ -202,6 +202,10 @@
     }
   },
   "agentsOffice": {
+    "title": "How AI works for me",
+    "subtitle": "A pixel art office with this repository's real agents. Tap a character.",
+    "close": "Close",
+    "sceneDescription": "A top-down office with five AI assistants at their desks: the orchestrator and four specialized agents.",
     "hint": "Tap a character to see what it does",
     "orchestrator": "Orchestrator",
     "toolsLabel": "Allowed tools",

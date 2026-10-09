@@ -83,7 +83,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** tiene `role="dialog"`, `aria-modal` y un título asociado; Escape y el clic en el fondo lo cierran; al abrir, el foco pasa al botón de cerrar y al cerrar vuelve al botón que lo abrió; mientras está abierto el `<body>` no hace scroll y se restaura; Tab no sale del modal.
 - **Implementación (green):** modal con `framer-motion`, a pantalla completa en móvil y centrado (`max-w-4xl`) en escritorio, con scroll interno.
 - **Commit:** `feat(agents-office): add the accessible modal shell` + `Refs #18`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 6: Vida propia: foco rotativo y animaciones
 

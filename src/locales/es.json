@@ -202,6 +202,10 @@
     }
   },
   "agentsOffice": {
+    "title": "Así trabaja la IA por mí",
+    "subtitle": "Una oficina pixel art con los agentes reales de este repositorio. Toca un personaje.",
+    "close": "Cerrar",
+    "sceneDescription": "Una oficina vista desde arriba con cinco asistentes de IA en sus escritorios: el orquestador y cuatro agentes especializados.",
     "hint": "Toca un personaje para ver qué hace",
     "orchestrator": "Orquestador",
     "toolsLabel": "Herramientas permitidas",
