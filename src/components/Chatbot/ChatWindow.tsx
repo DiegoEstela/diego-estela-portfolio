@@ -5,7 +5,11 @@ import { Send } from 'lucide-react';
 import { useChatContext } from '@/context/ChatContext';
 import { ChatMessage } from './ChatMessage';
 import type { ChatMessage as ChatMessageType } from '@/types';
-import { CHATBOT_SYSTEM_PROMPT } from '@/data/portfolio';
+
+type SystemKey = 'chatbot.error' | 'chatbot.no_credits' | 'chatbot.rate_limit';
+
+// The server answers with these statuses; anything else is a generic failure.
+const KEY_BY_STATUS: Record<number, SystemKey> = { 402: 'chatbot.no_credits', 429: 'chatbot.rate_limit' };
 
 export function ChatWindow() {
   const { t } = useTranslation();
@@ -38,70 +42,35 @@ export function ChatWindow() {
     setMessages((prev) => [...prev, userMsg]);
     setLoading(true);
 
-    const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY;
-
-    if (!apiKey) {
-      setMessages((prev) => [
-        ...prev,
-        { id: Date.now().toString(), role: 'assistant', content: t('chatbot.error'), contentKey: 'chatbot.error', timestamp: new Date() },
-      ]);
-      setLoading(false);
-      return;
-    }
+    const systemMessage = (key: SystemKey): ChatMessageType => ({
+      id: Date.now().toString(),
+      role: 'assistant',
+      content: t(key),
+      contentKey: key,
+      timestamp: new Date(),
+    });
 
     const history = [...messages, userMsg]
       .slice(-10)
-      .map((m) => ({ role: m.role as 'user' | 'assistant', content: m.content }));
+      .map((m) => ({ role: m.role, content: m.content }));
 
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+      // The API key and the system prompt live on the server (see server/chat).
+      const res = await fetch('/api/chat', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true',
-        },
-        body: JSON.stringify({
-          model: 'claude-haiku-4-5',
-          max_tokens: 512,
-          system: CHATBOT_SYSTEM_PROMPT,
-          messages: history,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: history }),
       });
+      const data = await res.json().catch(() => null);
 
-      const data = await res.json();
-
-      // Credits exhausted or billing error
-      if (res.status === 402 || data?.error?.type === 'billing_error' || data?.error?.message?.toLowerCase().includes('credit')) {
-        setMessages((prev) => [
-          ...prev,
-          { id: Date.now().toString(), role: 'assistant', content: t('chatbot.no_credits'), contentKey: 'chatbot.no_credits', timestamp: new Date() },
-        ]);
-        return;
-      }
-
-      // Rate limit
-      if (res.status === 429) {
-        setMessages((prev) => [
-          ...prev,
-          { id: Date.now().toString(), role: 'assistant', content: t('chatbot.rate_limit'), contentKey: 'chatbot.rate_limit', timestamp: new Date() },
-        ]);
-        return;
-      }
-
-      const reply: string | undefined = data.content?.[0]?.text;
-      setMessages((prev) => [
-        ...prev,
-        reply
+      const reply: unknown = res.ok ? data?.reply : undefined;
+      const next: ChatMessageType =
+        typeof reply === 'string' && reply
           ? { id: Date.now().toString(), role: 'assistant', content: reply, timestamp: new Date() }
-          : { id: Date.now().toString(), role: 'assistant', content: t('chatbot.error'), contentKey: 'chatbot.error', timestamp: new Date() },
-      ]);
+          : systemMessage(KEY_BY_STATUS[res.status] ?? 'chatbot.error');
+      setMessages((prev) => [...prev, next]);
     } catch {
-      setMessages((prev) => [
-        ...prev,
-        { id: Date.now().toString(), role: 'assistant', content: t('chatbot.error'), contentKey: 'chatbot.error', timestamp: new Date() },
-      ]);
+      setMessages((prev) => [...prev, systemMessage('chatbot.error')]);
     } finally {
       setLoading(false);
     }

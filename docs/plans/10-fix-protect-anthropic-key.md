@@ -90,7 +90,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** con `fetch` simulado: el envío hace `POST /api/chat` con `{messages}` y **sin** cabecera `x-api-key`; muestra `reply`; 402 → `chatbot.no_credits`; 429 → `chatbot.rate_limit`; cualquier otro fallo → `chatbot.error`. Los tests actuales que simulan "sin clave" se adaptan a una respuesta de error del servidor.
 - **Implementación (green):** sustituir la llamada directa a Anthropic y la lectura de `VITE_ANTHROPIC_API_KEY`; el historial sigue enviando los últimos 10 mensajes.
 - **Commit:** `fix(chatbot): call /api/chat instead of anthropic from the browser` + `Refs #10`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 8: Quitar el prompt y la clave del cliente
 
