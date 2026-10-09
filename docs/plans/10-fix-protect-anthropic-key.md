@@ -106,7 +106,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** el script falla (código 1) si algún fichero de un directorio contiene `sk-ant-` o `VITE_ANTHROPIC`, y pasa en uno limpio.
 - **Implementación (green):** script `npm run check:bundle`; el CI lo ejecuta tras `npm run build`.
 - **Commit:** `ci: fail the build if the bundle contains api keys` + `Refs #10`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 10: Documentación
 

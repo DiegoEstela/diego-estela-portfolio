@@ -12,7 +12,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "prepare": "husky"
+    "prepare": "husky",
+    "check:bundle": "node scripts/check-bundle-secrets.mjs dist"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.91.1",
