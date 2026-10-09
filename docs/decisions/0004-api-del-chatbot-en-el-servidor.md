@@ -34,5 +34,10 @@ El navegador llama a `/api/chat` y el servidor guarda la clave y el prompt.
 - La clave ya no puede filtrarse por el bundle, y una regresión rompe el CI.
 - **El límite por IP es de mejor esfuerzo:** cada instancia serverless tiene su propia memoria, así que no es global. La defensa real contra el gasto es el **límite mensual configurado en la consola de Anthropic**.
 - La comprobación de `Origin` frena el uso desde otras webs, no desde scripts, que pueden falsificarla.
+- El historial lo envía el cliente, que puede falsear turnos de `assistant`. El prompt del sistema no es modificable, pero el historial sí es inyectable: es inherente a este diseño sin estado y el riesgo se acota con los topes de tamaño.
+- Sin cabecera `x-forwarded-for` (por ejemplo en desarrollo local) todas las peticiones comparten la misma clave del limitador; en Vercel la plataforma la rellena.
+- `npm run build` ejecuta la guardia de secretos, así que un despliegue en Vercel también falla ante una fuga, no solo el CI.
+- El cliente del SDK usa `timeout` de 20 s y un único reintento, y el handler rechaza con 413 los cuerpos de más de 100 KB sin leerlos.
+- Las funciones se importan **con extensión** (`./validate.ts`): Vercel las ejecuta como ESM nativo y los imports sin extensión fallan en producción aunque Vitest y Vite los resuelvan. Lo vigila `server/esmImports.test.ts`.
 - Pendiente: evals del chatbot y endurecimiento del prompt frente a inyección.
 - La clave que estuvo expuesta debe darse por comprometida y rotarse (paso manual de la issue).

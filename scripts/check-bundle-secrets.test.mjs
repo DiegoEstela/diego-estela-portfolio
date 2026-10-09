@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { spawnSync } from 'node:child_process'
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
@@ -70,5 +70,12 @@ describe('check-bundle-secrets cli', () => {
   it('fails closed when the directory does not exist', () => {
     const result = run(join(tmpdir(), 'does-not-exist-' + Date.now()))
     expect(result.status).toBe(1)
+  })
+})
+
+describe('wiring', () => {
+  it('runs as part of the production build, so Vercel fails too, not only CI', () => {
+    const pkg = JSON.parse(readFileSync(join(import.meta.dirname, '..', 'package.json'), 'utf8'))
+    expect(pkg.scripts.build).toContain('check-bundle-secrets')
   })
 })

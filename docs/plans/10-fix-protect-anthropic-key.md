@@ -143,7 +143,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** cuerpo de más de 100 KB → 413 sin llegar al modelo; `api/chat.ts` exporta `POST` y un `GET` devuelve 405.
 - **Implementación (green):** comprobar `content-length` antes de leer el cuerpo; el cliente del SDK con `timeout` de 20 s y `maxRetries` 1; `npm run build` ejecuta la guardia de secretos, para que Vercel también falle si hay una fuga.
 - **Commit:** `fix(chatbot): bound body size and provider latency` + `Refs #10`
-- [ ] Hecho
+- [x] Hecho
 
 ## Pasos manuales (los haces tú, antes de fusionar)
 

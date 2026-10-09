@@ -10,7 +10,9 @@ interface Options {
   createClient?: (apiKey: string) => MessagesClient
 }
 
-const defaultCreateClient = (apiKey: string): MessagesClient => new Anthropic({ apiKey })
+// Without these the SDK waits up to 10 minutes and retries twice, tying up the function.
+const defaultCreateClient = (apiKey: string): MessagesClient =>
+  new Anthropic({ apiKey, timeout: 20_000, maxRetries: 1 })
 
 /**
  * Wires the chat endpoint. The limiter and the client are created once per

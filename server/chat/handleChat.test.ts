@@ -130,3 +130,18 @@ describe('handleChat provider errors', () => {
     expect(await res.json()).toEqual({ error: 'upstream' })
   })
 })
+
+describe('handleChat body size', () => {
+  it('rejects an oversized body with 413 before reading it or calling the model', async () => {
+    const deps = makeDeps()
+    const res = await handleChat(post(validBody, { 'content-length': '200000' }), deps)
+    expect(res.status).toBe(413)
+    expect(await res.json()).toEqual({ error: 'invalid_request' })
+    expect(deps.complete).not.toHaveBeenCalled()
+  })
+
+  it('accepts a body just under the limit', async () => {
+    const res = await handleChat(post(validBody, { 'content-length': '90000' }), makeDeps())
+    expect(res.status).toBe(200)
+  })
+})

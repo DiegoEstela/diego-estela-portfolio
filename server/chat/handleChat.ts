@@ -9,6 +9,9 @@ export interface ChatDeps {
   limiter: RateLimiter
 }
 
+/** A valid request is at most ~16k chars; anything much bigger is not a chat message. */
+const MAX_BODY_BYTES = 100_000
+
 function json(status: number, body: unknown, headers: Record<string, string> = {}): Response {
   return Response.json(body, { status, headers: { 'Cache-Control': 'no-store', ...headers } })
 }
@@ -35,6 +38,9 @@ export async function handleChat(request: Request, deps: ChatDeps): Promise<Resp
   if (request.method !== 'POST') return json(405, { error: 'method_not_allowed' }, { Allow: 'POST' })
   if (isForeignOrigin(request)) return json(403, { error: 'forbidden_origin' })
   if (!deps.limiter.check(clientKey(request))) return json(429, { error: 'rate_limit' })
+
+  // Reject before reading: request.json() would buffer the whole body first.
+  if (Number(request.headers.get('content-length')) > MAX_BODY_BYTES) return json(413, { error: 'invalid_request' })
 
   const body: unknown = await request.json().catch(() => null)
   const parsed = parseChatRequest(body)
