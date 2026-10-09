@@ -64,7 +64,7 @@ npm run dev
 | `npm run build` | Build de producción |
 | `npm run check:bundle` | Falla si `dist/` contiene claves o el prompt del servidor |
 
-Para probar el chatbot en local, crea `.env.local` con `ANTHROPIC_API_KEY` (ver `.env.example`). Solo la lee el servidor; `npm run dev` sirve `/api/chat` con el mismo handler que Vercel.
+Para probar el chatbot en local, crea `.env.local` con `ANTHROPIC_API_KEY` (ver `.env.example`). Solo la lee el servidor; `npm run dev` sirve `/api/chat` con el mismo handler que Vercel. **No arranques el servidor con `--host` mientras haya una clave real**: expondría el endpoint (y tu crédito) a tu red local.
 
 ## Estructura
 

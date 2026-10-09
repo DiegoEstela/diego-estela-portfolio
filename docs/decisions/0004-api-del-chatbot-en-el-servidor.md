@@ -36,8 +36,12 @@ El navegador llama a `/api/chat` y el servidor guarda la clave y el prompt.
 - La comprobación de `Origin` frena el uso desde otras webs, no desde scripts, que pueden falsificarla.
 - El historial lo envía el cliente, que puede falsear turnos de `assistant`. El prompt del sistema no es modificable, pero el historial sí es inyectable: es inherente a este diseño sin estado y el riesgo se acota con los topes de tamaño.
 - Sin cabecera `x-forwarded-for` (por ejemplo en desarrollo local) todas las peticiones comparten la misma clave del limitador; en Vercel la plataforma la rellena.
+- La comprobación de origen incluye `Sec-Fetch-Site`, que un script de página no puede falsear. Se acepta `same-origin` y `none`; el resto, 403.
+- Los fallos del proveedor se registran en el servidor solo con tipo, estado y clase de error, nunca con el mensaje.
+- La guardia de secretos deriva sus huellas del propio fichero del prompt (tramos ASCII largos), así que editar el prompt no la desactiva en silencio. Es una red de seguridad: no detecta contenido ofuscado (base64, concatenación) y no sustituye a `server/noClientSecrets.test.ts`.
+- El servidor de desarrollo maneja `.env.local` con una clave real. Vite 8.0.0–8.0.15 permitía saltarse `server.fs.deny` en Windows (GHSA-fx2h-pf6j-xcff); se actualizó a 8.3.x. No uses `--host` con una clave real.
 - `npm run build` ejecuta la guardia de secretos, así que un despliegue en Vercel también falla ante una fuga, no solo el CI.
-- El cliente del SDK usa `timeout` de 20 s y un único reintento, y el handler rechaza con 413 los cuerpos de más de 100 KB sin leerlos.
+- El cliente del SDK usa `timeout` de 20 s y un único reintento, y el handler rechaza con 413 los cuerpos de más de 100 KB. La cabecera `content-length` solo se usa como atajo: las peticiones `chunked` no la llevan, así que el cuerpo se lee como flujo con un contador y se cancela al pasar el límite.
 - Las funciones se importan **con extensión** (`./validate.ts`): Vercel las ejecuta como ESM nativo y los imports sin extensión fallan en producción aunque Vitest y Vite los resuelvan. Lo vigila `server/esmImports.test.ts`.
 - Pendiente: evals del chatbot y endurecimiento del prompt frente a inyección.
 - La clave que estuvo expuesta debe darse por comprometida y rotarse (paso manual de la issue).

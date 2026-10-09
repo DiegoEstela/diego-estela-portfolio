@@ -172,7 +172,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Ficheros:** `package.json`, `package-lock.json`, `README.md`, `.env.example`
 - **Verificación:** `npm audit --omit=dev` ya no lista `vite`; lint, tests y build en verde. Documentar no usar `--host` con una clave real.
 - **Commit:** `build(deps): update vite to fix the dev server fs.deny bypass` + `Refs #10`
-- [ ] Hecho
+- [x] Hecho
 
 ## Pasos manuales (los haces tú, antes de fusionar)
 
