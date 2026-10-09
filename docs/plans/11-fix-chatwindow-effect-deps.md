@@ -49,7 +49,7 @@ Cada tarea: 5-10 min, con su test; el proyecto funciona tras cada una.
   2. tras `i18n.changeLanguage('en')` muestra el saludo en inglés.
   Con el código actual **ya pasan** (caracterizan el comportamiento actual, protegen el refactor).
 - **Commit:** `test(chatbot): cover initial greeting and language change` + `Refs #11`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 3: Test rojo, la conversación sobrevive al cambio de idioma
 
