@@ -59,7 +59,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** `spriteToRects` convierte una cuadrícula en rectángulos agrupando píxeles contiguos del mismo color (una fila `AAAB` da 2 rectángulos); ignora el carácter transparente; lanza error si una letra no está en la paleta. Todos los sprites definidos tienen filas del mismo ancho y solo letras de su paleta.
 - **Implementación (green):** el conversor y los sprites: personaje base de 16×20 con variantes de color y accesorio para los 5 personajes, escritorio con monitor, planta, ventana y baldosa del suelo.
 - **Commit:** `feat(agents-office): add the pixel art sprite engine and sprites` + `Refs #18`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 3: La escena y sus personajes accesibles
 
