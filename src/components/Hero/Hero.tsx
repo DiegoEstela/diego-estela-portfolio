@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
 import { ArrowDown, Download } from 'lucide-react';
+import { AgentsOffice } from '@/components/AgentsOffice/AgentsOffice';
 
 /* Stable particle positions — computed once, not on every render */
 const PARTICLES = Array.from({ length: 28 }, (_, i) => ({
@@ -125,7 +126,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.9 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          className="flex flex-col sm:flex-row sm:flex-wrap items-center justify-center gap-4"
         >
           <button
             onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
@@ -144,6 +145,8 @@ export function Hero() {
             <Download size={16} />
             {t('hero.cta_cv')}
           </a>
+
+          <AgentsOffice />
         </motion.div>
       </div>
 

@@ -33,6 +33,8 @@
 
   html {
     scroll-behavior: smooth;
+    /* Keep the scrollbar's space even when a modal hides it, so the page does not jump sideways. */
+    scrollbar-gutter: stable;
   }
 
   body {
@@ -163,5 +165,72 @@
 
   .light .hero-grid {
     background-image: radial-gradient(circle, rgba(29, 78, 104, 0.1) 1px, transparent 1px);
+  }
+}
+
+/* ── Hero button that opens the agents office: a gentle pulse to catch the eye ── */
+/* The glow is a fixed box-shadow on a pseudo-element whose opacity fades: opacity is composited
+   on the GPU, while animating box-shadow itself would repaint the hero on every frame. */
+@keyframes agents-cta-pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+/* A light tint, so the accent text keeps 4.5:1 or better over it in both themes. */
+.agents-cta {
+  position: relative;
+  box-shadow: 0 0 10px var(--glow);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%);
+}
+
+.agents-cta::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  box-shadow: 0 0 24px var(--glow), 0 0 4px var(--accent);
+  opacity: 0.35;
+  pointer-events: none;
+  animation: agents-cta-pulse 2.4s ease-in-out infinite;
+}
+
+/* ── Agents office: idle animations. Two-frame pixel steps, like an old videogame ── */
+@keyframes office-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1px); }
+}
+
+@keyframes office-glow {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 0.22; }
+}
+
+.office-character {
+  animation: office-bob 1.2s steps(1, end) infinite;
+}
+
+.office-glow {
+  opacity: 0;
+}
+
+.office-station[data-active] .office-character {
+  animation-duration: 0.6s;
+}
+
+.office-station[data-active] .office-glow {
+  animation: office-glow 1.4s steps(1, end) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .office-character,
+  .office-glow,
+  .agents-cta::after {
+    animation: none;
+  }
+
+  /* Same selector as the rule that animates it: .office-glow alone would lose on specificity. */
+  .office-station[data-active] .office-glow {
+    animation: none;
+    opacity: 0.16;
   }
 }
