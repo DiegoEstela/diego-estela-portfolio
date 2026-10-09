@@ -148,3 +148,31 @@ describe('spotlight and idle animation', () => {
     expect(new Set(delays).size).toBe(5)
   })
 })
+
+describe('speech bubble placement', () => {
+  const overlaps = (a: { left: number; top: number; right: number; bottom: number }, b: typeof a) =>
+    a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom
+
+  const bubbleBox = (id: keyof typeof STATIONS) => {
+    const { left } = bubbleAnchor(STATIONS[id].cx)
+    const bottom = STATIONS[id].bubbleY
+    return { left: left - BUBBLE.width / 2, right: left + BUBBLE.width / 2, top: bottom - BUBBLE.height, bottom }
+  }
+  // The head of a character: columns 3-8 of its sprite, rows 3-8 below the top of the station.
+  const headBox = ({ cx, y }: { cx: number; y: number }) => ({ left: cx - 5 + 2, right: cx - 5 + 8, top: y + 3, bottom: y + 8 })
+
+  it.each(Object.keys(STATIONS) as Array<keyof typeof STATIONS>)('the bubble of %s stays inside the scene', (id) => {
+    const box = bubbleBox(id)
+    expect(box.top).toBeGreaterThanOrEqual(0)
+    expect(box.bottom).toBeLessThanOrEqual(SCENE_SIZE.height)
+  })
+
+  it('never covers the head of another character, so everybody stays recognizable while one speaks', () => {
+    for (const speaker of Object.keys(STATIONS) as Array<keyof typeof STATIONS>) {
+      for (const [other, station] of Object.entries(STATIONS)) {
+        if (other === speaker) continue
+        expect(overlaps(bubbleBox(speaker), headBox(station)), `${speaker}'s bubble covers ${other}'s head`).toBe(false)
+      }
+    }
+  })
+})

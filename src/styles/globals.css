@@ -176,9 +176,11 @@
   50% { opacity: 1; }
 }
 
+/* A light tint, so the accent text keeps 4.5:1 or better over it in both themes. */
 .agents-cta {
   position: relative;
   box-shadow: 0 0 10px var(--glow);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%);
 }
 
 .agents-cta::after {

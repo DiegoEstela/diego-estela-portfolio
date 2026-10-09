@@ -9,7 +9,7 @@ import {
   type Rect,
   type Sprite,
 } from './sprites'
-import { BUBBLE, HIT, SCENE_SIZE, STATIONS, WALL_HEIGHT, bubbleAnchor } from './layout'
+import { BUBBLE, FOCUS_RING, HIT, SCENE_SIZE, STATIONS, WALL_COLOR, WALL_HEIGHT, bubbleAnchor } from './layout'
 
 function rects(sprite: Sprite, x: number, y: number): Rect[] {
   return spriteToRects(sprite.rows, sprite.palette, { x, y })
@@ -65,7 +65,7 @@ export interface OfficeSceneProps {
 }
 
 function Bubble({ id, text }: { id: AgentId; text: string }) {
-  const { cx, y } = STATIONS[id]
+  const { cx, bubbleY } = STATIONS[id]
   const { left, tail } = bubbleAnchor(cx)
   return (
     <div
@@ -74,7 +74,7 @@ function Bubble({ id, text }: { id: AgentId; text: string }) {
       className="pointer-events-none absolute z-10 rounded-lg px-2 py-1 text-center text-[11px] font-medium leading-snug sm:text-xs"
       style={{
         left: `${(left / SCENE_SIZE.width) * 100}%`,
-        top: `${((y + 2) / SCENE_SIZE.height) * 100}%`,
+        top: `${(bubbleY / SCENE_SIZE.height) * 100}%`,
         width: `${(BUBBLE.width / SCENE_SIZE.width) * 100}%`,
         transform: 'translate(-50%, -100%)',
         background: '#F8FAFC',
@@ -111,7 +111,7 @@ export function OfficeScene({ agents, description, selectedId, activeId = null, 
         </defs>
 
         {/* Back wall and floor */}
-        <rect width={SCENE_SIZE.width} height={WALL_HEIGHT} fill="#1B2540" />
+        <rect width={SCENE_SIZE.width} height={WALL_HEIGHT} fill={WALL_COLOR} />
         <rect y={WALL_HEIGHT - 2} width={SCENE_SIZE.width} height="2" fill="#2D3A5F" />
         <rect y={WALL_HEIGHT} width={SCENE_SIZE.width} height={SCENE_SIZE.height - WALL_HEIGHT} fill={`url(#${floorId})`} />
 
@@ -159,8 +159,8 @@ export function OfficeScene({ agents, description, selectedId, activeId = null, 
               top: `${(y / SCENE_SIZE.height) * 100}%`,
               width: `${(HIT.width / SCENE_SIZE.width) * 100}%`,
               height: `${(HIT.height / SCENE_SIZE.height) * 100}%`,
-              outlineColor: 'var(--accent)',
-              boxShadow: selected ? 'inset 0 0 0 2px var(--accent)' : undefined,
+              outlineColor: FOCUS_RING,
+              boxShadow: selected ? `inset 0 0 0 2px ${FOCUS_RING}` : undefined,
             }}
           />
         )

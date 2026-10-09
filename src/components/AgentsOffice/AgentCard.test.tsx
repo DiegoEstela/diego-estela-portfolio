@@ -104,9 +104,17 @@ describe('AgentCard language', () => {
     expect(container.querySelector('[aria-live]')).toBeNull()
   })
 
-  it('announces nothing before anything is selected', () => {
+  it('keeps the status region mounted but empty before anything is selected', () => {
     render(<AgentCard selectedId={null} agents={[]} />)
-    expect(screen.queryByRole('status')).not.toBeInTheDocument()
+    expect(screen.getByRole('status')).toBeEmptyDOMElement()
+  })
+
+  it('keeps the very same region when the selection changes, so screen readers notice the update', () => {
+    const { rerender } = render(<AgentCard selectedId={null} agents={[]} />)
+    const region = screen.getByRole('status')
+    rerender(<AgentCard selectedId="claude" agents={[]} />)
+    expect(screen.getByRole('status')).toBe(region)
+    expect(region).not.toBeEmptyDOMElement()
   })
 })
 

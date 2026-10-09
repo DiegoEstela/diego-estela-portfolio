@@ -138,6 +138,16 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Commit:** `fix(agents-office): pulse the hero button without repaints` + `Refs #18`
 - [x] Hecho
 
+### Tarea 12: Contraste y foco, medidos con los colores reales
+
+> Añadida tras la auditoría de `web-quality-auditor`. Cifras verificadas con la fórmula WCAG: insignia "Orquestador" 2,90:1 en oscuro, texto del botón del Hero 3,70:1 en oscuro, foco de los personajes 1,69:1 en claro (la escena es siempre oscura).
+
+- **Ficheros:** `src/components/AgentsOffice/AgentCard.tsx`, `AgentsOffice.tsx`, `OfficeScene.tsx`, `layout.ts`, `src/styles/globals.css`, `a11y-contrast.test.tsx`
+- **Test (red):** con los valores de `:root` y `.light` leídos de `globals.css`, el texto de la insignia, el texto del botón del Hero (sobre su tinte) y el anillo de foco (sobre la pared y el suelo) superan 4,5:1, 4,5:1 y 3:1; la región `role="status"` existe siempre y solo cambia su texto.
+- **Implementación (green):** insignia con `var(--bg-primary)`; el tinte del botón pasa a `.agents-cta` con `color-mix(... 14%)`; anillo de foco y de selección con un color fijo (`#7EC8E3`), ya que la escena no cambia con el tema; región viva siempre montada.
+- **Commit:** `fix(agents-office): meet contrast minimums in both themes` + `Refs #18`
+- [x] Hecho
+
 ## Riesgos y verificación
 
 - Comandos: `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build` (incluye `check:bundle`).

@@ -41,11 +41,11 @@ export function AgentCard({ selectedId, agents = REAL_AGENTS }: AgentCardProps) 
       style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', minHeight: 168 }}
     >
       {/* One short line for screen readers: a live region around the whole card would read it all aloud. */}
-      {selectedId !== null && (
-        <p role="status" className="sr-only">
-          {t('agentsOffice.selected', { name: t(`agentsOffice.agents.${selectedId}.name`) })}
-        </p>
-      )}
+      {/* Always mounted and only its text changes: some screen readers ignore a live region that
+          is created already holding its content. */}
+      <p role="status" className="sr-only">
+        {selectedId !== null ? t('agentsOffice.selected', { name: t(`agentsOffice.agents.${selectedId}.name`) }) : ''}
+      </p>
       {selectedId === null ? (
         <p className="flex items-center gap-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
           <Hand size={16} aria-hidden="true" style={{ color: 'var(--accent)' }} />
@@ -80,7 +80,8 @@ function Details({
           {t(`agentsOffice.agents.${id}.name`)}
         </h3>
         {id === 'claude' ? (
-          <span className="rounded-md px-2 py-0.5 text-xs font-semibold text-white" style={{ background: 'var(--accent)' }}>
+          // The page background reads better on the accent than white does (6:1 against 2.9:1 in the dark theme).
+          <span className="rounded-md px-2 py-0.5 text-xs font-semibold" style={{ background: 'var(--accent)', color: 'var(--bg-primary)' }}>
             {t('agentsOffice.orchestrator')}
           </span>
         ) : (

@@ -103,11 +103,7 @@ export function AgentsOffice() {
         onFocus={preload}
         aria-haspopup="dialog"
         className="agents-cta flex w-64 items-center justify-center gap-2 rounded-xl border px-8 py-3.5 font-semibold transition-all duration-300 hover:scale-105 sm:w-auto"
-        style={{
-          borderColor: 'var(--accent)',
-          color: 'var(--accent)',
-          background: 'linear-gradient(135deg, var(--glow), transparent 70%)',
-        }}
+        style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
       >
         <Bot size={18} aria-hidden="true" className="shrink-0" />
         {/* Same width as the other two buttons on a phone, so the question may wrap: keep it tight. */}
