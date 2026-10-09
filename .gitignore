@@ -12,8 +12,9 @@ dist
 dist-ssr
 *.local
 
-# Claude Code local config
-.claude/
+# Claude Code: se versiona todo salvo lo local/secreto
+.claude/settings.local.json
+.claude/worktrees/
 
 # Environment variables — NEVER commit these
 .env
