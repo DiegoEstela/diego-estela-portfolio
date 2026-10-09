@@ -51,7 +51,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** `parseAgent` extrae `name`, `tools` y `model` del frontmatter; separa las herramientas por comas **fuera** de los paréntesis (`Bash(git diff:*)` es una sola); ignora ficheros sin `name`. `loadAgents()` devuelve los 4 agentes reales (`code-reviewer`, `content-copywriter`, `web-quality-auditor`, `security-auditor`) con herramientas y modelo no vacíos.
 - **Implementación (green):** parser puro y `import.meta.glob('../../../.claude/agents/*.md', { query: '?raw', import: 'default', eager: true })`. Riesgo: que el glob ignore la carpeta oculta `.claude`; el test de los 4 agentes reales lo detecta.
 - **Commit:** `feat(agents-office): read the real agent definitions at build time` + `Refs #18`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 2: Motor de sprites
 
