@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send } from 'lucide-react';
@@ -8,41 +8,18 @@ import type { ChatMessage as ChatMessageType } from '@/types';
 import { CHATBOT_SYSTEM_PROMPT } from '@/data/portfolio';
 
 export function ChatWindow() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { isOpen } = useChatContext();
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [initialized, setInitialized] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (isOpen && !initialized) {
-      setMessages([
-        {
-          id: 'init',
-          role: 'assistant',
-          content: t('chatbot.initial'),
-          timestamp: new Date(),
-        },
-      ]);
-      setInitialized(true);
-    }
-  }, [isOpen, initialized, t]);
-
-  useEffect(() => {
-    if (isOpen) {
-      setMessages([
-        {
-          id: 'init',
-          role: 'assistant',
-          content: t('chatbot.initial'),
-          timestamp: new Date(),
-        },
-      ]);
-    }
-  }, [i18n.language]);
+  const greeting = useMemo<ChatMessageType>(
+    () => ({ id: 'init', role: 'assistant', content: t('chatbot.initial'), timestamp: new Date() }),
+    [t],
+  );
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -66,7 +43,7 @@ export function ChatWindow() {
     if (!apiKey) {
       setMessages((prev) => [
         ...prev,
-        { id: Date.now().toString(), role: 'assistant', content: t('chatbot.error'), timestamp: new Date() },
+        { id: Date.now().toString(), role: 'assistant', content: t('chatbot.error'), contentKey: 'chatbot.error', timestamp: new Date() },
       ]);
       setLoading(false);
       return;
@@ -74,7 +51,6 @@ export function ChatWindow() {
 
     const history = [...messages, userMsg]
       .slice(-10)
-      .filter((m) => m.id !== 'init')
       .map((m) => ({ role: m.role as 'user' | 'assistant', content: m.content }));
 
     try {
@@ -100,7 +76,7 @@ export function ChatWindow() {
       if (res.status === 402 || data?.error?.type === 'billing_error' || data?.error?.message?.toLowerCase().includes('credit')) {
         setMessages((prev) => [
           ...prev,
-          { id: Date.now().toString(), role: 'assistant', content: t('chatbot.no_credits'), timestamp: new Date() },
+          { id: Date.now().toString(), role: 'assistant', content: t('chatbot.no_credits'), contentKey: 'chatbot.no_credits', timestamp: new Date() },
         ]);
         return;
       }
@@ -109,20 +85,22 @@ export function ChatWindow() {
       if (res.status === 429) {
         setMessages((prev) => [
           ...prev,
-          { id: Date.now().toString(), role: 'assistant', content: t('chatbot.rate_limit'), timestamp: new Date() },
+          { id: Date.now().toString(), role: 'assistant', content: t('chatbot.rate_limit'), contentKey: 'chatbot.rate_limit', timestamp: new Date() },
         ]);
         return;
       }
 
-      const reply = data.content?.[0]?.text ?? t('chatbot.error');
+      const reply: string | undefined = data.content?.[0]?.text;
       setMessages((prev) => [
         ...prev,
-        { id: Date.now().toString(), role: 'assistant', content: reply, timestamp: new Date() },
+        reply
+          ? { id: Date.now().toString(), role: 'assistant', content: reply, timestamp: new Date() }
+          : { id: Date.now().toString(), role: 'assistant', content: t('chatbot.error'), contentKey: 'chatbot.error', timestamp: new Date() },
       ]);
     } catch {
       setMessages((prev) => [
         ...prev,
-        { id: Date.now().toString(), role: 'assistant', content: t('chatbot.error'), timestamp: new Date() },
+        { id: Date.now().toString(), role: 'assistant', content: t('chatbot.error'), contentKey: 'chatbot.error', timestamp: new Date() },
       ]);
     } finally {
       setLoading(false);
@@ -159,7 +137,7 @@ export function ChatWindow() {
           </div>
 
           <div className="h-72 overflow-y-auto p-4">
-            {messages.map((msg) => (
+            {[greeting, ...messages].map((msg) => (
               <ChatMessage key={msg.id} message={msg} />
             ))}
             {loading && (
