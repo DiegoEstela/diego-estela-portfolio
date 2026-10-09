@@ -1,3 +1,4 @@
+import { PROVIDER_ERROR_STATUS, ProviderError } from './providerError'
 import type { RateLimiter } from './rateLimit'
 import { SYSTEM_PROMPT } from './systemPrompt'
 import { parseChatRequest, type ChatTurn } from './validate'
@@ -39,6 +40,13 @@ export async function handleChat(request: Request, deps: ChatDeps): Promise<Resp
   const parsed = parseChatRequest(body)
   if (!parsed.ok) return json(400, { error: 'invalid_request' })
 
-  const reply = await deps.complete({ system: SYSTEM_PROMPT, messages: parsed.messages })
-  return json(200, { reply })
+  try {
+    const reply = await deps.complete({ system: SYSTEM_PROMPT, messages: parsed.messages })
+    if (reply.trim() === '') return json(502, { error: 'upstream' })
+    return json(200, { reply })
+  } catch (error) {
+    // Provider details (messages, stacks, keys) never reach the client.
+    const kind = error instanceof ProviderError ? error.kind : 'upstream'
+    return json(PROVIDER_ERROR_STATUS[kind], { error: kind })
+  }
 }

@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { describe, expect, it, vi } from 'vitest'
 import { handleChat, type ChatDeps } from './handleChat'
+import { ProviderError } from './providerError'
 import { createRateLimiter } from './rateLimit'
 import { SYSTEM_PROMPT } from './systemPrompt'
 
@@ -98,5 +99,34 @@ describe('handleChat', () => {
   it('does not cache responses', async () => {
     const res = await handleChat(post(validBody), makeDeps())
     expect(res.headers.get('cache-control')).toBe('no-store')
+  })
+})
+
+describe('handleChat provider errors', () => {
+  const failing = (error: unknown) => makeDeps({ complete: vi.fn().mockRejectedValue(error) })
+
+  it.each([
+    ['no_credits', 402],
+    ['rate_limit', 429],
+    ['upstream', 502],
+  ] as const)('maps a %s provider error to status %i', async (kind, status) => {
+    const res = await handleChat(post(validBody), failing(new ProviderError(kind)))
+    expect(res.status).toBe(status)
+    expect(await res.json()).toEqual({ error: kind })
+  })
+
+  it('hides unexpected error details from the client', async () => {
+    const res = await handleChat(post(validBody), failing(new Error('secret sk-ant-123 leaked in stack')))
+    expect(res.status).toBe(502)
+    const text = await res.text()
+    expect(text).toBe(JSON.stringify({ error: 'upstream' }))
+    expect(text).not.toContain('sk-ant')
+  })
+
+  it('treats an empty model reply as an upstream failure', async () => {
+    const deps = makeDeps({ complete: vi.fn().mockResolvedValue('   ') })
+    const res = await handleChat(post(validBody), deps)
+    expect(res.status).toBe(502)
+    expect(await res.json()).toEqual({ error: 'upstream' })
   })
 })

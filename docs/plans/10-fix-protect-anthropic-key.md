@@ -66,7 +66,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** `complete` que lanza error de facturación (402) → 402 `no_credits`; error 429 del proveedor → 429 `rate_limit`; cualquier otro error → 502 `upstream` sin filtrar su mensaje; respuesta vacía → 502 `upstream`.
 - **Implementación (green):** mapeo de errores a códigos estables.
 - **Commit:** `feat(chatbot): map provider errors to stable codes` + `Refs #10`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 5: Adaptador de Anthropic y función de Vercel
 
