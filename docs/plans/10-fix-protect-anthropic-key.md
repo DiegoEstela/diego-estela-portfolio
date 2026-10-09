@@ -98,7 +98,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** un test comprueba que `src/` no contiene `VITE_ANTHROPIC_API_KEY` ni `CHATBOT_SYSTEM_PROMPT`. Falla hoy.
 - **Implementación (green):** borrar `CHATBOT_SYSTEM_PROMPT` de `portfolio.ts`; `.env.example` documenta `ANTHROPIC_API_KEY` y `CHAT_MODEL` (sin prefijo `VITE_`).
 - **Commit:** `fix(chatbot): remove api key and system prompt from client code` + `Refs #10`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 9: Guardia de secretos en el bundle
 
