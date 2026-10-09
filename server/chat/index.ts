@@ -1,7 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk'
-import { DEFAULT_MODEL, createAnthropicCompleter, type MessagesClient } from './anthropic.ts'
-import { handleChat } from './handleChat.ts'
-import { createRateLimiter } from './rateLimit.ts'
+import { DEFAULT_MODEL, createAnthropicCompleter, type MessagesClient } from './anthropic.js'
+import { handleChat } from './handleChat.js'
+import { createRateLimiter } from './rateLimit.js'
 
 type Env = Record<string, string | undefined>
 

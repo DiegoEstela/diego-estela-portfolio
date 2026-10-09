@@ -174,6 +174,16 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Commit:** `build(deps): update vite to fix the dev server fs.deny bypass` + `Refs #10`
 - [x] Hecho
 
+### Tarea 17: Imports `.js` y una prueba que reproduce la compilación de Vercel
+
+> Añadida tras el fallo de la preview (`FUNCTION_INVOCATION_FAILED`): Vercel compila `api/chat.ts` a `api/chat.js` y deja intactos los especificadores, así que `../server/chat/index.ts` no existe en `/var/task`. La tarea 12 había sustituido un fallo por otro: los imports `.ts` solo funcionan donde Node lee TypeScript directamente.
+
+- **Ficheros:** `api/chat.ts`, `server/chat/*.ts` (no tests), `server/esmImports.test.ts`, `server/vercelCompile.test.ts`
+- **Test (red):** compilar `api/chat.ts` con `tsc` (módulo `nodenext`, sin reescribir especificadores) y ejecutar el resultado con Node puro: `POST` con cuerpo `{}` y clave configurada responde 400, y sin clave 500 `not_configured`. Además, todos los imports relativos de `api/` y `server/` terminan en `.js`.
+- **Implementación (green):** especificadores `.js` (`../server/chat/index.js`), que TypeScript y Vite resuelven a los `.ts`.
+- **Commit:** `fix(chatbot): import with .js extensions so compiled functions resolve` + `Refs #10`
+- [x] Hecho
+
 ## Pasos manuales (los haces tú, antes de fusionar)
 
 1. **Rotar la clave actual.** Estuvo en el bundle público, así que hay que darla por comprometida: crea una nueva en https://console.anthropic.com/settings/keys y revoca la anterior.

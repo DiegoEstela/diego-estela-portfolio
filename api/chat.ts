@@ -1,4 +1,4 @@
-import { createChatHandler } from '../server/chat/index.ts'
+import { createChatHandler } from '../server/chat/index.js'
 
 // Created once per instance so the rate limiter and the SDK client persist between requests.
 const handler = createChatHandler(process.env)
