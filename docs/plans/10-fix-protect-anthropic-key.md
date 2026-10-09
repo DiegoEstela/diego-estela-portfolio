@@ -58,7 +58,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** con un `complete` falso: método distinto de POST → 405; `Origin` ajeno → 403 `forbidden_origin`; cuerpo inválido → 400 `invalid_request`; límite superado → 429 `rate_limit`; petición válida → 200 `{reply}` y `complete` recibe el prompt del servidor.
 - **Implementación (green):** `handleChat(request, deps)`; el prompt del chatbot se copia a `server/chat/systemPrompt.ts` (aún sin borrarlo del cliente).
 - **Commit:** `feat(chatbot): add chat handler with origin and rate checks` + `Refs #10`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 4: Handler: errores del proveedor
 
