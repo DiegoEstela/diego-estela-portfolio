@@ -228,7 +228,9 @@
     animation: none;
   }
 
+  /* Same selector as the rule that animates it: .office-glow alone would lose on specificity. */
   .office-station[data-active] .office-glow {
+    animation: none;
     opacity: 0.16;
   }
 }

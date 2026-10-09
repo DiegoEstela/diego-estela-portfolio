@@ -148,6 +148,16 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Commit:** `fix(agents-office): meet contrast minimums in both themes` + `Refs #18`
 - [x] Hecho
 
+### Tarea 13: El movimiento reducido gana también sobre el brillo activo
+
+> Añadida tras el primer comentario de `claude-review` en el PR: la regla `.office-glow { animation: none }` (especificidad 0,1,0) pierde frente a `.office-station[data-active] .office-glow { animation: ... }` (0,3,0), así que con "reducir movimiento" el brillo del personaje seleccionado seguía pulsando.
+
+- **Ficheros:** `src/styles/globals.css`, `src/components/AgentsOffice/animations.test.ts`
+- **Test (red):** el bloque `prefers-reduced-motion` contiene el selector `.office-station[data-active] .office-glow` con `animation: none` (misma especificidad que la regla que debe vencer).
+- **Implementación (green):** esa regla dentro del bloque, con `opacity: 0.16`.
+- **Commit:** `fix(agents-office): honor reduced motion on the active glow` + `Refs #18`
+- [x] Hecho
+
 ## Riesgos y verificación
 
 - Comandos: `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build` (incluye `check:bundle`).

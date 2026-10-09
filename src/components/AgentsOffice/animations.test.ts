@@ -28,6 +28,13 @@ describe('office animations', () => {
     expect(css).toMatch(/office-bob[^;]*steps\(/)
   })
 
+  it('also switches off the glow of the active character, whose rule is more specific than .office-glow', () => {
+    const block = css.match(/@media \(prefers-reduced-motion: reduce\)\s*\{([\s\S]*?)\n\}/)?.[1] ?? ''
+    const rule = block.match(/\.office-station\[data-active\] \.office-glow\s*\{([^}]*)\}/)?.[1] ?? ''
+    expect(rule).toMatch(/animation:\s*none/)
+    expect(rule).toMatch(/opacity:\s*0\.16/)
+  })
+
   it('switches every office animation off for prefers-reduced-motion', () => {
     const block = css.match(/@media \(prefers-reduced-motion: reduce\)\s*\{([\s\S]*?)\n\}/)?.[1] ?? ''
     expect(block).toContain('.office-character')
