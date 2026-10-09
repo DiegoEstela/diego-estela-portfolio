@@ -1,0 +1,18 @@
+name: Bug
+description: Algo no funciona como debería
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes: { label: Qué ocurre, description: Comportamiento observado y esperado }
+    validations: { required: true }
+  - type: textarea
+    id: repro
+    attributes: { label: Cómo reproducirlo }
+    validations: { required: true }
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área
+      options: [web, content, chatbot, infra]
+    validations: { required: true }
