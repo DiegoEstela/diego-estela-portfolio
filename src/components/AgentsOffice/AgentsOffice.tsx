@@ -36,8 +36,9 @@ export function AgentsOffice() {
           background: 'linear-gradient(135deg, var(--glow), transparent 70%)',
         }}
       >
-        <Bot size={18} aria-hidden="true" />
-        {t('agentsOffice.cta')}
+        <Bot size={18} aria-hidden="true" className="shrink-0" />
+        {/* Same width as the other two buttons on a phone, so the question may wrap: keep it tight. */}
+        <span className="text-left leading-snug">{t('agentsOffice.cta')}</span>
       </button>
 
       {everOpened && (
