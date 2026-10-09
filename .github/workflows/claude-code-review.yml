@@ -29,9 +29,6 @@ jobs:
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          # Comentario único que se actualiza en cada push y se publica SIEMPRE,
-          # también cuando no hay hallazgos: así la revisión es verificable.
-          use_sticky_comment: true
           prompt: |
             Revisa el PR #${{ github.event.pull_request.number }} de ${{ github.repository }}
             (portfolio React 19 + Vite + TypeScript + Tailwind 4 + i18next).
@@ -50,5 +47,10 @@ jobs:
             - Hallazgos agrupados por severidad con `fichero:línea` y una propuesta concreta.
             - Si no hay hallazgos, indica explícitamente qué revisaste y que no encontraste problemas.
             No inventes problemas ni repitas lo que ya comprueban lint, tipos y tests.
+
+            PUBLICA SIEMPRE el resumen, aunque no haya hallazgos, para que la revisión sea verificable:
+            gh pr comment ${{ github.event.pull_request.number }} --edit-last --create-if-none --body "<resumen>"
+            (--edit-last actualiza tu comentario anterior en lugar de añadir uno nuevo en cada push).
+            Empieza el resumen con la línea "### Revisión automática de Claude".
           claude_args: >-
-            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr diff:*),Bash(gh pr view:*)"
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*)"
