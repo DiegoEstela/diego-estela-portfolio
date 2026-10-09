@@ -74,7 +74,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** el adaptador llama a `messages.create` con `model` (`CHAT_MODEL` o `claude-haiku-4-5`), `max_tokens: 512`, `system` y los mensajes, y devuelve el texto del primer bloque; sin `ANTHROPIC_API_KEY` el handler responde 500 `not_configured` sin llamar al proveedor.
 - **Implementación (green):** `createAnthropicCompleter` con `@anthropic-ai/sdk`; `api/chat.ts` exporta `POST` y delega en `handleChat`; `tsconfig.server.json` se añade a las referencias para que `tsc -b` lo compruebe.
 - **Commit:** `feat(chatbot): add anthropic adapter and /api/chat function` + `Refs #10`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 6: Plugin de Vite para desarrollo local
 
