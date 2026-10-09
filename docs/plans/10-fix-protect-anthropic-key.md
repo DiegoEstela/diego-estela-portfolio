@@ -42,7 +42,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** `parseChatRequest` rechaza JSON inválido, `messages` vacío o no array, más de 10 mensajes, roles distintos de `user`/`assistant`, contenido no string o vacío, mensajes de más de 2000 caracteres, total de más de 6000, y un historial que no termina en `user`. Acepta un historial válido.
 - **Implementación (green):** función pura que devuelve `{ok: true, messages}` o `{ok: false}`.
 - **Commit:** `feat(chatbot): validate chat requests on the server` + `Refs #10`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 2: Limitador de uso
 
