@@ -16,7 +16,7 @@ Portfolio personal de un desarrollador de software especializado en IA. Es tambi
 - Demos interactivas de proyectos (componentes propios con animaciones de `framer-motion`).
 - Internacionalización **es/en** con i18next; un test garantiza que ambos idiomas tienen las mismas claves.
 - Tema claro y oscuro.
-- Chatbot sobre la API de Anthropic que responde preguntas sobre mi experiencia.
+- Chatbot sobre la API de Anthropic que responde preguntas sobre mi experiencia. La clave y el prompt viven en el servidor (`api/chat.ts`), con validación, límites de uso y una guardia en CI que impide que se filtren al bundle ([ADR 0004](docs/decisions/0004-api-del-chatbot-en-el-servidor.md)).
 
 ## Stack
 
@@ -62,8 +62,9 @@ npm run dev
 | `npm run typecheck` | Comprobación de tipos |
 | `npm run test` | Tests (`test:watch`, `test:coverage`) |
 | `npm run build` | Build de producción |
+| `npm run check:bundle` | Falla si `dist/` contiene claves o el prompt del servidor |
 
-El chatbot necesita una clave de Anthropic en `.env` (ver `.env.example`).
+Para probar el chatbot en local, crea `.env.local` con `ANTHROPIC_API_KEY` (ver `.env.example`). Solo la lee el servidor; `npm run dev` sirve `/api/chat` con el mismo handler que Vercel. **No arranques el servidor con `--host` mientras haya una clave real**: expondría el endpoint (y tu crédito) a tu red local.
 
 ## Estructura
 
@@ -74,14 +75,20 @@ src/
   data/         Contenido del portfolio
   hooks/        Hooks propios
   locales/      Traducciones es y en
+api/            Función serverless del chatbot (Vercel)
+server/         Lógica del chatbot: validación, límites, adaptador
+vite-plugins/   Plugin que sirve /api/chat en desarrollo
 .claude/        Skills, agentes, hooks y permisos de Claude Code
 .github/        Workflows, plantillas de issue y de PR, Dependabot
 docs/           Flujo de IA, planes y decisiones (ADR)
 ```
 
-## Limitaciones conocidas
+## Seguridad del chatbot
 
-- El chatbot llama a la API de Anthropic desde el navegador, por lo que la clave `VITE_*` queda expuesta en el bundle. Está identificado y planificado: [issue #10](https://github.com/DiegoEstela/diego-estela-portfolio/issues/10) (mover la llamada a una función serverless con límites de uso).
+- La clave de Anthropic y el prompt del sistema nunca llegan al navegador: el cliente solo habla con `/api/chat`.
+- El servidor valida la entrada, limita el tamaño de la conversación y el ritmo de peticiones, y oculta los errores del proveedor.
+- El CI falla si el bundle contiene una clave (`npm run check:bundle`).
+- Límite honesto: el control de ritmo está en memoria por instancia, así que no es global; el tope real de gasto es el límite mensual de la consola de Anthropic.
 
 ## Contacto
 

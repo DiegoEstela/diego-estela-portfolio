@@ -78,7 +78,7 @@ Detalle y límites del guard en [ADR 0001](decisions/0001-hooks-sobre-instruccio
   - La acción se niega a ejecutarse en un PR que modifica el propio workflow (protección de seguridad), así que los cambios al workflow de revisión se fusionan aparte y solo afectan a los PRs siguientes.
   - Aunque la acción se ejecute, no publica nada por sí sola: el prompt debe pedir el comentario y `claude_args` debe permitir `gh pr comment`. Sin eso, la revisión se hace y el resultado se pierde.
 - El guard de hooks cubre errores honestos, no es una frontera de seguridad.
-- Aún no hay evals del chatbot: llegarán con la migración de la API key a un backend (issue #10).
+- Aún no hay evals del chatbot ni endurecimiento del prompt frente a inyección. La API ya vive en el servidor ([ADR 0004](decisions/0004-api-del-chatbot-en-el-servidor.md)), lo que permite añadirlos.
 
 ## Puesta en marcha
 

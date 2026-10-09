@@ -13,6 +13,7 @@ SPA personal (React 19 + Vite 8 + TypeScript + Tailwind 4) con chatbot basado en
 | Tipos | `npm run typecheck` |
 | Tests | `npm run test` (`test:watch`, `test:coverage`) |
 | Build | `npm run build` |
+| Secretos en el bundle | `npm run check:bundle` (tras `build`) |
 
 Antes de dar algo por terminado: `npm run lint && npm run typecheck && npm run test && npm run build`.
 
@@ -22,7 +23,7 @@ Antes de dar algo por terminado: `npm run lint && npm run typecheck && npm run t
 | ---- | ----- | -------- |
 | `web` | `src/components`, `src/hooks`, `src/context`, `src/styles` | `proyecto:web` |
 | `content` | `src/data/portfolio.ts`, `src/locales/{es,en}.json`, `public/` | `proyecto:content` |
-| `chatbot` | `src/components/Chatbot`, futura `api/` | `proyecto:chatbot` |
+| `chatbot` | `src/components/Chatbot`, `api/`, `server/chat`, `vite-plugins/` | `proyecto:chatbot` |
 | `infra` | `.github`, `.claude`, configuración de build y CI | `proyecto:infra` |
 
 Alias `@` → `src`. Los textos visibles pasan por i18next y **toda clave debe existir en es y en** (lo comprueba `src/locales/locales.test.ts`).
@@ -61,4 +62,4 @@ MCP (`.mcp.json`): **context7** para documentación actualizada de React, Vite, 
 
 ## Secretos
 
-`.claude/settings.local.json` y `.env*` no se versionan. `.env.example` documenta las variables. Los workflows de Claude usan el secreto `CLAUDE_CODE_OAUTH_TOKEN` (*Settings → Secrets*).
+`.claude/settings.local.json` y `.env*` no se versionan. `.env.example` documenta las variables. Los workflows de Claude usan el secreto `CLAUDE_CODE_OAUTH_TOKEN` (*Settings → Secrets*). El chatbot usa `ANTHROPIC_API_KEY`, solo en el servidor (Vercel y `.env.local`); el CI comprueba que no llegue al bundle.
