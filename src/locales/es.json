@@ -200,5 +200,61 @@
       "signed": "Firmado digitalmente",
       "signature_label": "Firma del cliente"
     }
+  },
+  "agentsOffice": {
+    "hint": "Toca un personaje para ver qué hace",
+    "orchestrator": "Orquestador",
+    "toolsLabel": "Herramientas permitidas",
+    "modelLabel": "Modelo",
+    "doingLabel": "Lo que hace",
+    "readOnly": "Solo lectura",
+    "canEdit": "Puede editar",
+    "agents": {
+      "claude": {
+        "name": "Claude",
+        "role": "El orquestador. Lee la issue, redacta el plan, implementa con TDD y pide la revisión a los demás agentes. Nunca hace push, abre PRs ni fusiona sin que yo lo decida.",
+        "doing": [
+          "Leyendo la issue y escribiendo el plan",
+          "Escribiendo primero el test que falla",
+          "Pidiendo la revisión a los agentes"
+        ]
+      },
+      "code-reviewer": {
+        "name": "Revisor de código",
+        "role": "Revisa los cambios antes del PR: corrección, tipos, hooks de React y legibilidad. Solo puede leer; nunca edita código.",
+        "doing": [
+          "Revisando el diff contra main",
+          "Buscando casos límite",
+          "Comprobando que hay tests"
+        ]
+      },
+      "content-copywriter": {
+        "name": "Redactor de contenido",
+        "role": "Mejora los textos del portfolio en español e inglés, sin inventar logros ni cifras. Es el único agente que puede editar, y solo textos.",
+        "doing": [
+          "Puliendo el texto de un proyecto",
+          "Comparando la versión en español y en inglés",
+          "Quitando relleno y superlativos"
+        ]
+      },
+      "web-quality-auditor": {
+        "name": "Auditor de calidad web",
+        "role": "Audita accesibilidad, SEO y rendimiento: semántica, contraste, metadatos y peso del bundle. Solo mide y propone.",
+        "doing": [
+          "Midiendo el tamaño del bundle",
+          "Revisando el contraste en tema claro y oscuro",
+          "Comprobando los metadatos de SEO"
+        ]
+      },
+      "security-auditor": {
+        "name": "Auditor de seguridad",
+        "role": "Busca claves expuestas, dependencias vulnerables y malas prácticas. Solo lee y propone remedios.",
+        "doing": [
+          "Buscando secretos en el historial",
+          "Ejecutando npm audit",
+          "Revisando qué llega al bundle público"
+        ]
+      }
+    }
   }
 }

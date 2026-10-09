@@ -75,7 +75,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** sin selección muestra la pista "Toca un personaje"; con un agente muestra nombre, rol traducido, herramientas como etiquetas y modelo; el orquestador no muestra herramientas ni modelo; el texto cambia al cambiar de idioma. El test de paridad de `locales.test.ts` sigue en verde.
 - **Implementación (green):** componente y claves `agentsOffice.*` en ambos idiomas (rol y "qué está haciendo" de cada personaje).
 - **Commit:** `feat(agents-office): add the agent details card with es/en copy` + `Refs #18`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 5: El modal accesible
 

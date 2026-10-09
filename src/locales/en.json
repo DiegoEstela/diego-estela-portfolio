@@ -200,5 +200,61 @@
       "signed": "Digitally signed",
       "signature_label": "Client signature"
     }
+  },
+  "agentsOffice": {
+    "hint": "Tap a character to see what it does",
+    "orchestrator": "Orchestrator",
+    "toolsLabel": "Allowed tools",
+    "modelLabel": "Model",
+    "doingLabel": "What it does",
+    "readOnly": "Read-only",
+    "canEdit": "Can edit",
+    "agents": {
+      "claude": {
+        "name": "Claude",
+        "role": "The orchestrator. Reads the issue, writes the plan, implements with TDD and asks the other agents for a review. It never pushes, opens PRs or merges unless I decide so.",
+        "doing": [
+          "Reading the issue and writing the plan",
+          "Writing the failing test first",
+          "Asking the agents for a review"
+        ]
+      },
+      "code-reviewer": {
+        "name": "Code reviewer",
+        "role": "Reviews changes before the PR: correctness, types, React hooks and readability. It can only read; it never edits code.",
+        "doing": [
+          "Reviewing the diff against main",
+          "Hunting for edge cases",
+          "Checking that tests exist"
+        ]
+      },
+      "content-copywriter": {
+        "name": "Content copywriter",
+        "role": "Improves the portfolio copy in Spanish and English without inventing achievements or numbers. It is the only agent that can edit, and only text.",
+        "doing": [
+          "Polishing a project description",
+          "Comparing the Spanish and English versions",
+          "Cutting filler and superlatives"
+        ]
+      },
+      "web-quality-auditor": {
+        "name": "Web quality auditor",
+        "role": "Audits accessibility, SEO and performance: semantics, contrast, metadata and bundle size. It only measures and suggests.",
+        "doing": [
+          "Measuring the bundle size",
+          "Checking contrast in light and dark themes",
+          "Verifying the SEO metadata"
+        ]
+      },
+      "security-auditor": {
+        "name": "Security auditor",
+        "role": "Looks for exposed keys, vulnerable dependencies and bad practices. It only reads and suggests fixes.",
+        "doing": [
+          "Searching the history for secrets",
+          "Running npm audit",
+          "Checking what reaches the public bundle"
+        ]
+      }
+    }
   }
 }
