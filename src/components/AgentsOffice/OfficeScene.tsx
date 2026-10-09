@@ -9,7 +9,7 @@ import {
   type Rect,
   type Sprite,
 } from './sprites'
-import { HIT, SCENE_SIZE, STATIONS, WALL_HEIGHT } from './layout'
+import { BUBBLE, HIT, SCENE_SIZE, STATIONS, WALL_HEIGHT, bubbleAnchor } from './layout'
 
 function rects(sprite: Sprite, x: number, y: number): Rect[] {
   return spriteToRects(sprite.rows, sprite.palette, { x, y })
@@ -59,10 +59,39 @@ export interface OfficeSceneProps {
   selectedId: AgentId | null
   /** The character currently "speaking", highlighted by the rotating spotlight. */
   activeId?: AgentId | null
+  /** What the active character is doing, shown as a speech bubble above it. */
+  bubble?: { id: AgentId; text: string } | null
   onSelect: (id: AgentId) => void
 }
 
-export function OfficeScene({ agents, description, selectedId, activeId = null, onSelect }: OfficeSceneProps) {
+function Bubble({ id, text }: { id: AgentId; text: string }) {
+  const { cx, y } = STATIONS[id]
+  const { left, tail } = bubbleAnchor(cx)
+  return (
+    <div
+      data-bubble
+      aria-hidden="true"
+      className="pointer-events-none absolute z-10 rounded-lg px-2 py-1 text-center text-[11px] font-medium leading-snug sm:text-xs"
+      style={{
+        left: `${(left / SCENE_SIZE.width) * 100}%`,
+        top: `${((y + 2) / SCENE_SIZE.height) * 100}%`,
+        width: `${(BUBBLE.width / SCENE_SIZE.width) * 100}%`,
+        transform: 'translate(-50%, -100%)',
+        background: '#F8FAFC',
+        color: '#0F172A',
+        boxShadow: '0 2px 0 rgba(0,0,0,0.35)',
+      }}
+    >
+      {text}
+      <span
+        className="absolute -bottom-1 h-2 w-2 rotate-45"
+        style={{ left: `calc(50% + ${(tail / BUBBLE.width) * 100}% - 4px)`, background: '#F8FAFC' }}
+      />
+    </div>
+  )
+}
+
+export function OfficeScene({ agents, description, selectedId, activeId = null, bubble = null, onSelect }: OfficeSceneProps) {
   const floorId = useId()
   const byId = new Map(agents.map((agent) => [agent.id, agent.label]))
 
@@ -94,12 +123,13 @@ export function OfficeScene({ agents, description, selectedId, activeId = null, 
           <Pixels key={index} items={plant} />
         ))}
 
-        {AGENT_IDS.map((id) => {
+        {AGENT_IDS.map((id, index) => {
           const { cx, y } = STATIONS[id]
           return (
             <g key={id} data-agent={id} className="office-station" data-active={activeId === id || undefined}>
+              <rect className="office-glow" x={cx - 11} y={y - 1} width="22" height="24" style={{ fill: 'var(--accent)' }} />
               <rect x={cx - 8} y={y + 20} width="16" height="2" fill="#000000" opacity="0.25" />
-              <g className="office-character">
+              <g className="office-character" style={{ animationDelay: `${(index * 0.23).toFixed(2)}s` }}>
                 <Pixels items={ART.stations[id].character} />
               </g>
               <Pixels items={ART.stations[id].monitor} />
@@ -108,6 +138,8 @@ export function OfficeScene({ agents, description, selectedId, activeId = null, 
           )
         })}
       </svg>
+
+      {bubble && <Bubble id={bubble.id} text={bubble.text} />}
 
       {/* Real buttons over the drawing: keyboard, screen reader and touch work without extra code. */}
       {AGENT_IDS.map((id) => {

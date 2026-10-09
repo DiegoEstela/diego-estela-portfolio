@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { OfficeScene } from './OfficeScene'
-import { HIT, SCENE_SIZE, STATIONS } from './layout'
+import { BUBBLE, HIT, SCENE_SIZE, STATIONS, bubbleAnchor } from './layout'
 import { AGENT_IDS } from './sprites'
 
 const agents = AGENT_IDS.map((id) => ({ id, label: `Agente ${id}` }))
@@ -96,5 +96,55 @@ describe('station layout', () => {
     const unit = phoneSceneWidth / SCENE_SIZE.width
     expect(HIT_WIDTH * unit).toBeGreaterThanOrEqual(44)
     expect(HIT_HEIGHT * unit).toBeGreaterThanOrEqual(44)
+  })
+})
+
+describe('speech bubble', () => {
+  it('shows what the active character is doing, above that character', () => {
+    setup({ activeId: 'code-reviewer', bubble: { id: 'code-reviewer', text: 'Revisando el diff contra main' } })
+    const bubble = screen.getByText('Revisando el diff contra main')
+    expect(bubble).toBeInTheDocument()
+    const left = parseFloat(bubble.closest('[data-bubble]')!.getAttribute('style')!.match(/left:\s*([\d.]+)%/)![1])
+    expect(left).toBeCloseTo((bubbleAnchor(STATIONS['code-reviewer'].cx).left / SCENE_SIZE.width) * 100, 1)
+  })
+
+  it('is decorative: the same information is in the card, so it is hidden from screen readers', () => {
+    setup({ bubble: { id: 'claude', text: 'Escribiendo el plan' } })
+    expect(screen.getByText('Escribiendo el plan').closest('[data-bubble]')).toHaveAttribute('aria-hidden', 'true')
+  })
+
+  it('is not drawn without a bubble', () => {
+    const { container } = setup({ bubble: null })
+    expect(container.querySelector('[data-bubble]')).toBeNull()
+  })
+
+  it('never lets the bubble stick out of the scene, even for the characters at the edges', () => {
+    for (const [id, { cx }] of Object.entries(STATIONS)) {
+      const { left, tail } = bubbleAnchor(cx)
+      expect(left - BUBBLE.width / 2, `${id} left edge`).toBeGreaterThanOrEqual(0)
+      expect(left + BUBBLE.width / 2, `${id} right edge`).toBeLessThanOrEqual(SCENE_SIZE.width)
+      expect(left + tail, `${id} tail points at the character`).toBeCloseTo(cx)
+      expect(Math.abs(tail), `${id} tail stays on the bubble`).toBeLessThan(BUBBLE.width / 2)
+    }
+  })
+})
+
+describe('spotlight and idle animation', () => {
+  it('highlights only the active station', () => {
+    const { container } = setup({ activeId: 'web-quality-auditor' })
+    const active = Array.from(container.querySelectorAll('.office-station[data-active]')).map((g) => g.getAttribute('data-agent'))
+    expect(active).toEqual(['web-quality-auditor'])
+  })
+
+  it('highlights nobody without a spotlight', () => {
+    const { container } = setup({ activeId: null })
+    expect(container.querySelectorAll('.office-station[data-active]')).toHaveLength(0)
+  })
+
+  it('starts each character at a different moment, so they do not move in unison', () => {
+    const { container } = setup()
+    const delays = Array.from(container.querySelectorAll<SVGGElement>('.office-character')).map((g) => g.style.animationDelay)
+    expect(delays).toHaveLength(5)
+    expect(new Set(delays).size).toBe(5)
   })
 })

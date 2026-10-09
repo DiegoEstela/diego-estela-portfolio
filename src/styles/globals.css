@@ -165,3 +165,41 @@
     background-image: radial-gradient(circle, rgba(29, 78, 104, 0.1) 1px, transparent 1px);
   }
 }
+
+/* ── Agents office: idle animations. Two-frame pixel steps, like an old videogame ── */
+@keyframes office-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1px); }
+}
+
+@keyframes office-glow {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 0.22; }
+}
+
+.office-character {
+  animation: office-bob 1.2s steps(1, end) infinite;
+}
+
+.office-glow {
+  opacity: 0;
+}
+
+.office-station[data-active] .office-character {
+  animation-duration: 0.6s;
+}
+
+.office-station[data-active] .office-glow {
+  animation: office-glow 1.4s steps(1, end) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .office-character,
+  .office-glow {
+    animation: none;
+  }
+
+  .office-station[data-active] .office-glow {
+    opacity: 0.16;
+  }
+}

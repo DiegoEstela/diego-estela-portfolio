@@ -19,3 +19,17 @@ export const STATIONS: Record<AgentId, { cx: number; y: number }> = {
   'web-quality-auditor': { cx: 38, y: 47 },
   'security-auditor': { cx: 74, y: 47 },
 }
+
+/** Speech bubble width, in scene units (about 140 css px on a 360px phone). */
+export const BUBBLE = { width: 48 } as const
+
+/**
+ * Where a bubble goes for a character centered at `cx`. The bubble is clamped inside the scene
+ * so it never gets cut off at the edges; `tail` is how far its pointer shifts to keep aiming
+ * at the character.
+ */
+export function bubbleAnchor(cx: number) {
+  const half = BUBBLE.width / 2
+  const left = Math.min(Math.max(cx, half), SCENE_SIZE.width - half)
+  return { left, tail: cx - left }
+}

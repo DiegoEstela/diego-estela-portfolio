@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { AgentCard } from './AgentCard'
 import { OfficeScene } from './OfficeScene'
 import { AGENT_IDS, type AgentId } from './sprites'
+import { useSpotlight } from './useSpotlight'
 
 const FOCUSABLE = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
@@ -69,6 +70,15 @@ export function AgentsOfficeModal({ open, onClose }: AgentsOfficeModalProps) {
       trigger?.focus()
     }
   }, [open])
+
+  // One bubble at a time keeps a phone screen readable. A picked character keeps it; reduced
+  // motion turns the rotation off entirely.
+  const { activeId, round } = useSpotlight(AGENT_IDS, { enabled: open && !reduceMotion, pinnedId: selectedId })
+  const activities = activeId ? (t(`agentsOffice.agents.${activeId}.doing`, { returnObjects: true }) as unknown) : null
+  const bubble =
+    activeId && Array.isArray(activities) && activities.length > 0
+      ? { id: activeId, text: String(activities[round % activities.length]) }
+      : null
 
   const agents = AGENT_IDS.map((id) => ({ id, label: t(`agentsOffice.agents.${id}.name`) }))
   const duration = reduceMotion ? 0 : 0.2
@@ -137,6 +147,8 @@ export function AgentsOfficeModal({ open, onClose }: AgentsOfficeModalProps) {
                   agents={agents}
                   description={t('agentsOffice.sceneDescription')}
                   selectedId={selectedId}
+                  activeId={activeId}
+                  bubble={bubble}
                   onSelect={setSelectedId}
                 />
               </div>

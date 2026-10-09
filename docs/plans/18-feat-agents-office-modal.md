@@ -91,7 +91,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** con temporizadores simulados, el foco rota por los 5 personajes cada ~3,5 s y vuelve al primero; con `reduced` activo no rota; al seleccionar un personaje el foco se queda en él. La escena muestra un único bocadillo.
 - **Implementación (green):** hook `useSpotlight`, bocadillo con el texto "qué está haciendo", y animaciones CSS pixeladas (`steps()`: teclear, parpadear, balanceo) desactivadas con `@media (prefers-reduced-motion: reduce)`.
 - **Commit:** `feat(agents-office): animate the characters with a rotating spotlight` + `Refs #18`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 7: El botón del Hero y la carga diferida
 
