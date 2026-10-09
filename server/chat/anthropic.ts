@@ -1,5 +1,5 @@
-import { ProviderError } from './providerError'
-import type { ChatTurn } from './validate'
+import { ProviderError } from './providerError.ts'
+import type { ChatTurn } from './validate.ts'
 
 export const DEFAULT_MODEL = 'claude-haiku-4-5'
 export const MAX_TOKENS = 512

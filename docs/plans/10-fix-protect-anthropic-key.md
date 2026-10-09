@@ -133,7 +133,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** todos los imports relativos de `api/` y `server/` (excepto tests) terminan en `.ts`.
 - **Implementación (green):** añadir la extensión; `'../server/chat'` pasa a `'../server/chat/index.ts'`.
 - **Commit:** `fix(chatbot): use explicit import extensions for vercel esm runtime` + `Refs #10`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 13: Endurecimiento menor
 

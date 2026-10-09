@@ -1,7 +1,7 @@
-import { PROVIDER_ERROR_STATUS, ProviderError } from './providerError'
-import type { RateLimiter } from './rateLimit'
-import { SYSTEM_PROMPT } from './systemPrompt'
-import { parseChatRequest, type ChatTurn } from './validate'
+import { PROVIDER_ERROR_STATUS, ProviderError } from './providerError.ts'
+import type { RateLimiter } from './rateLimit.ts'
+import { SYSTEM_PROMPT } from './systemPrompt.ts'
+import { parseChatRequest, type ChatTurn } from './validate.ts'
 
 export interface ChatDeps {
   /** Asks the model for a reply. Injected so the handler can be tested without the network. */
