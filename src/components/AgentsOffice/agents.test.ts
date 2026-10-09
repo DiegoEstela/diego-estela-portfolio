@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { loadAgents, parseAgent, splitTools } from './agents'
+import i18n from '@/i18n'
+import { canEditFiles, loadAgents, parseAgent, splitTools } from './agents'
 
 const SAMPLE = `---
 name: code-reviewer
@@ -76,6 +77,32 @@ describe('loadAgents', () => {
       expect(agent.tools.length, agent.name).toBeGreaterThan(0)
       expect(agent.model, agent.name).not.toBe('')
       expect(agent.description, agent.name).not.toBe('')
+    }
+  })
+})
+
+describe('canEditFiles', () => {
+  it.each([['Edit'], ['Write'], ['MultiEdit'], ['NotebookEdit'], ['Edit(src/**)']])('is true for %s', (tool) => {
+    expect(canEditFiles(['Read', tool])).toBe(true)
+  })
+
+  it.each([[['Read', 'Grep', 'Glob']], [['Bash(git diff:*)', 'Read']], [[]]])('is false for %j', (tools) => {
+    expect(canEditFiles(tools)).toBe(false)
+  })
+
+  it('does not mistake a tool that merely starts with the same letters', () => {
+    expect(canEditFiles(['Editor', 'Writer'])).toBe(false)
+  })
+})
+
+describe('what the cards say versus what the agent files grant', () => {
+  const claimsToEdit = /puede editar|can edit/i
+
+  it.each(['es', 'en'])('only claims that an agent can edit when its tools include an edit tool (%s)', (lng) => {
+    const t = i18n.getFixedT(lng)
+    for (const agent of loadAgents()) {
+      const role = t(`agentsOffice.agents.${agent.name}.role`)
+      expect(claimsToEdit.test(role), `${agent.name}: "${role}"`).toBe(canEditFiles(agent.tools))
     }
   })
 })

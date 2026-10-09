@@ -15,7 +15,13 @@ describe('office animations', () => {
 
   it('gives the hero button a gentle pulse', () => {
     expect(css).toMatch(/@keyframes agents-cta-pulse/)
-    expect(css).toMatch(/\.agents-cta\s*\{[^}]*animation:[^}]*agents-cta-pulse/)
+    expect(css).toMatch(/\.agents-cta::after\s*\{[^}]*animation:[^}]*agents-cta-pulse/)
+  })
+
+  it('pulses by fading a glow in and out, never by animating box-shadow, which repaints every frame', () => {
+    const keyframes = css.match(/@keyframes agents-cta-pulse\s*\{([\s\S]*?)\n\}/)?.[1] ?? ''
+    expect(keyframes).toMatch(/opacity:/)
+    expect(keyframes).not.toMatch(/box-shadow/)
   })
 
   it('moves in whole pixel steps, like an old videogame', () => {
@@ -26,7 +32,7 @@ describe('office animations', () => {
     const block = css.match(/@media \(prefers-reduced-motion: reduce\)\s*\{([\s\S]*?)\n\}/)?.[1] ?? ''
     expect(block).toContain('.office-character')
     expect(block).toContain('.office-glow')
-    expect(block).toContain('.agents-cta')
+    expect(block).toContain('.agents-cta::after')
     expect(block).toMatch(/animation:\s*none/)
   })
 })

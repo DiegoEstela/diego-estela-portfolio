@@ -136,7 +136,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** el pulso se anima sobre un pseudo-elemento con `opacity` (no sobre `box-shadow`); para cada agente real, "puede editar" en su texto coincide con tener una herramienta de edición.
 - **Implementación (green):** `.agents-cta::after`; `canEditFiles` pasa a `agents.ts` y se prueba.
 - **Commit:** `fix(agents-office): pulse the hero button without repaints` + `Refs #18`
-- [ ] Hecho
+- [x] Hecho
 
 ## Riesgos y verificación
 

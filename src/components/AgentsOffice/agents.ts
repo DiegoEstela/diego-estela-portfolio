@@ -5,6 +5,11 @@ export interface AgentDefinition {
   model: string
 }
 
+/** An agent can change files only if one of its tools is Edit or Write (or a variant of them). */
+export function canEditFiles(tools: readonly string[]): boolean {
+  return tools.some((tool) => /^(Edit|Write|MultiEdit|NotebookEdit)(\(|$)/.test(tool))
+}
+
 /**
  * Splits "Read, Bash(git diff:*), Edit" into tools. Commas inside parentheses belong to a
  * single tool, e.g. Bash(npm run a, b).

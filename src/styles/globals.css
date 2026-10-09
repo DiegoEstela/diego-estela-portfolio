@@ -169,12 +169,26 @@
 }
 
 /* ── Hero button that opens the agents office: a gentle pulse to catch the eye ── */
+/* The glow is a fixed box-shadow on a pseudo-element whose opacity fades: opacity is composited
+   on the GPU, while animating box-shadow itself would repaint the hero on every frame. */
 @keyframes agents-cta-pulse {
-  0%, 100% { box-shadow: 0 0 10px var(--glow); }
-  50% { box-shadow: 0 0 24px var(--glow), 0 0 4px var(--accent); }
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
 }
 
 .agents-cta {
+  position: relative;
+  box-shadow: 0 0 10px var(--glow);
+}
+
+.agents-cta::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  box-shadow: 0 0 24px var(--glow), 0 0 4px var(--accent);
+  opacity: 0.35;
+  pointer-events: none;
   animation: agents-cta-pulse 2.4s ease-in-out infinite;
 }
 
@@ -208,7 +222,7 @@
 @media (prefers-reduced-motion: reduce) {
   .office-character,
   .office-glow,
-  .agents-cta {
+  .agents-cta::after {
     animation: none;
   }
 

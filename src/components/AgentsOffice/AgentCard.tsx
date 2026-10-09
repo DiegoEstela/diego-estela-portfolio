@@ -2,16 +2,11 @@ import { useEffect, useId, useRef } from 'react'
 import { useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { Hand } from 'lucide-react'
-import { loadAgents, type AgentDefinition } from './agents'
+import { canEditFiles, loadAgents, type AgentDefinition } from './agents'
 import type { AgentId } from './sprites'
 
 // Read once, when the module loads: the agent files cannot change while the page is open.
 const REAL_AGENTS = loadAgents()
-
-/** An agent can change files only if one of its tools is Edit or Write. */
-function canEditFiles(tools: readonly string[]): boolean {
-  return tools.some((tool) => /^(Edit|Write|MultiEdit|NotebookEdit)(\(|$)/.test(tool))
-}
 
 interface AgentCardProps {
   selectedId: AgentId | null
