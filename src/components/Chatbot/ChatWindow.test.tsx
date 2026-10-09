@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { act, fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitForElementToBeRemoved } from '@testing-library/react'
 import i18n from '@/i18n'
 import { ChatContext } from '@/context/ChatContext'
 import { ChatWindow } from './ChatWindow'
@@ -54,5 +54,15 @@ describe('ChatWindow conversation', () => {
     await sendMessage('hola desde el test')
     await act(() => i18n.changeLanguage('en'))
     expect(screen.getByText('hola desde el test')).toBeInTheDocument()
+  })
+
+  it('keeps the conversation when the chat is closed and reopened', async () => {
+    await act(() => i18n.changeLanguage('es'))
+    const { setOpen } = renderChat()
+    await sendMessage('mensaje persistente')
+    setOpen(false)
+    await waitForElementToBeRemoved(() => screen.queryByText('mensaje persistente'))
+    setOpen(true)
+    expect(await screen.findByText('mensaje persistente')).toBeInTheDocument()
   })
 })

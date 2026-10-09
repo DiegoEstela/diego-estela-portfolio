@@ -76,7 +76,7 @@ Cada tarea: 5-10 min, con su test; el proyecto funciona tras cada una.
 - **Ficheros:** `src/components/Chatbot/ChatWindow.test.tsx`
 - **Test:** con `rerender` alternando `isOpen` de `true` a `false` y `true`, el mensaje del usuario sigue ahí (protege el bug que evitamos al no añadir `isOpen` a los efectos).
 - **Commit:** `test(chatbot): keep conversation when chat is closed and reopened` + `Refs #11`
-- [ ] Hecho
+- [x] Hecho
 
 ## Riesgos y verificación
 
