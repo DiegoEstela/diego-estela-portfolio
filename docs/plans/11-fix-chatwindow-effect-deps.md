@@ -78,6 +78,22 @@ Cada tarea: 5-10 min, con su test; el proyecto funciona tras cada una.
 - **Commit:** `test(chatbot): keep conversation when chat is closed and reopened` + `Refs #11`
 - [x] Hecho
 
+### Tarea 6: Test rojo, los mensajes de error siguen el idioma
+
+- **Ficheros:** `src/components/Chatbot/ChatWindow.test.tsx`
+- **Test (red):** enviar un mensaje sin API key, ver el error en es, cambiar a en y esperar el error en inglés. Falla porque el error se guarda ya traducido.
+- **Commit:** se une al de la tarea 7.
+- [x] Hecho
+
+### Tarea 7: Guardar la clave de traducción en los mensajes del sistema
+
+- **Ficheros:** `src/types/index.ts`, `src/components/Chatbot/ChatWindow.tsx`, `src/components/Chatbot/ChatMessage.tsx`
+- **Implementación (green):** `ChatMessage` gana `contentKey?`; los errores (`error`, `no_credits`, `rate_limit`) lo rellenan y `ChatMessage` traduce con `t(contentKey)` al renderizar.
+- **Commit:** `fix(chatbot): translate system messages when language changes` + `Refs #11`
+- [x] Hecho
+
+> Tareas 6 y 7 añadidas tras la prueba manual en la preview: al conservar la conversación al cambiar de idioma, los errores quedaban en el idioma antiguo.
+
 ## Riesgos y verificación
 
 - Comandos: `npm run lint` (0 warnings), `npm run typecheck`, `npm run test`, `npm run build`.

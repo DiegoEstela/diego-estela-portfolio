@@ -43,7 +43,7 @@ export function ChatWindow() {
     if (!apiKey) {
       setMessages((prev) => [
         ...prev,
-        { id: Date.now().toString(), role: 'assistant', content: t('chatbot.error'), timestamp: new Date() },
+        { id: Date.now().toString(), role: 'assistant', content: t('chatbot.error'), contentKey: 'chatbot.error', timestamp: new Date() },
       ]);
       setLoading(false);
       return;
@@ -76,7 +76,7 @@ export function ChatWindow() {
       if (res.status === 402 || data?.error?.type === 'billing_error' || data?.error?.message?.toLowerCase().includes('credit')) {
         setMessages((prev) => [
           ...prev,
-          { id: Date.now().toString(), role: 'assistant', content: t('chatbot.no_credits'), timestamp: new Date() },
+          { id: Date.now().toString(), role: 'assistant', content: t('chatbot.no_credits'), contentKey: 'chatbot.no_credits', timestamp: new Date() },
         ]);
         return;
       }
@@ -85,20 +85,22 @@ export function ChatWindow() {
       if (res.status === 429) {
         setMessages((prev) => [
           ...prev,
-          { id: Date.now().toString(), role: 'assistant', content: t('chatbot.rate_limit'), timestamp: new Date() },
+          { id: Date.now().toString(), role: 'assistant', content: t('chatbot.rate_limit'), contentKey: 'chatbot.rate_limit', timestamp: new Date() },
         ]);
         return;
       }
 
-      const reply = data.content?.[0]?.text ?? t('chatbot.error');
+      const reply: string | undefined = data.content?.[0]?.text;
       setMessages((prev) => [
         ...prev,
-        { id: Date.now().toString(), role: 'assistant', content: reply, timestamp: new Date() },
+        reply
+          ? { id: Date.now().toString(), role: 'assistant', content: reply, timestamp: new Date() }
+          : { id: Date.now().toString(), role: 'assistant', content: t('chatbot.error'), contentKey: 'chatbot.error', timestamp: new Date() },
       ]);
     } catch {
       setMessages((prev) => [
         ...prev,
-        { id: Date.now().toString(), role: 'assistant', content: t('chatbot.error'), timestamp: new Date() },
+        { id: Date.now().toString(), role: 'assistant', content: t('chatbot.error'), contentKey: 'chatbot.error', timestamp: new Date() },
       ]);
     } finally {
       setLoading(false);

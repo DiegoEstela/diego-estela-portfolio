@@ -41,6 +41,8 @@ export interface ChatMessage {
   id: string;
   role: 'user' | 'assistant';
   content: string;
+  /** i18n key for system messages; translated at render time so it follows the language */
+  contentKey?: string;
   timestamp: Date;
 }
 

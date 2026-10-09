@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import type { ChatMessage as ChatMessageType } from '@/types';
 
 interface Props {
@@ -6,6 +7,7 @@ interface Props {
 }
 
 export function ChatMessage({ message }: Props) {
+  const { t } = useTranslation();
   const isUser = message.role === 'user';
 
   return (
@@ -31,7 +33,7 @@ export function ChatMessage({ message }: Props) {
             : { background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--border)', borderBottomLeftRadius: 4 }
         }
       >
-        {message.content}
+        {message.contentKey ? t(message.contentKey) : message.content}
       </div>
     </motion.div>
   );

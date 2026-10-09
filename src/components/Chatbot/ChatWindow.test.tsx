@@ -65,4 +65,14 @@ describe('ChatWindow conversation', () => {
     setOpen(true)
     expect(await screen.findByText('mensaje persistente')).toBeInTheDocument()
   })
+
+  it('translates error messages when the language changes', async () => {
+    await act(() => i18n.changeLanguage('es'))
+    renderChat()
+    await sendMessage('hola')
+    expect(await screen.findByText(i18n.t('chatbot.error'))).toBeInTheDocument()
+    await act(() => i18n.changeLanguage('en'))
+    expect(await screen.findByText(i18n.t('chatbot.error'))).toBeInTheDocument()
+    expect(i18n.t('chatbot.error')).not.toBe(i18n.getFixedT('es')('chatbot.error'))
+  })
 })
