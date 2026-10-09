@@ -4,7 +4,7 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'nod
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
-import { findSecrets } from './check-bundle-secrets.mjs'
+import { findSecrets, promptFingerprints } from './check-bundle-secrets.mjs'
 
 const SCRIPT = join(import.meta.dirname, 'check-bundle-secrets.mjs')
 const dirs = []
@@ -44,13 +44,41 @@ describe('findSecrets', () => {
   })
 
   it('finds the server-side system prompt', () => {
-    const dir = bundle({ 'assets/app.js': 'x="Eres el asistente virtual del portfolio de Diego"' })
+    const dir = bundle({ 'assets/app.js': `x="${promptFingerprints()[0]}"` })
     expect(findSecrets(dir)).toHaveLength(1)
   })
 
   it('does not echo the secret itself', () => {
     const dir = bundle({ 'app.js': 'sk-ant-api03-abcdefghijklmnop' })
     expect(JSON.stringify(findSecrets(dir))).not.toContain('abcdefghijklmnop')
+  })
+})
+
+describe('findSecrets: patterns derived from the real system prompt', () => {
+  const promptSource = readFileSync(join(import.meta.dirname, '..', 'server', 'chat', 'systemPrompt.ts'), 'utf8')
+  const longLines = promptSource
+    .split('\n')
+    .map((l) => l.trim())
+    .filter((l) => l.length >= 60 && !l.startsWith('//'))
+
+  it('has long lines to derive fragments from', () => {
+    expect(longLines.length).toBeGreaterThan(2)
+  })
+
+  it('finds a line from the middle of the prompt, not only its first sentence', () => {
+    const middle = longLines[longLines.length - 1].replace(/^[-\s]+/, '').replace(/`;?$/, '')
+    const dir = bundle({ 'assets/app.js': 'x="' + middle.slice(0, 80) + '"' })
+    expect(findSecrets(dir).map((f) => f.rule)).toContain('Server-side system prompt')
+  })
+
+  it('finds generic provider keys, not only Anthropic ones', () => {
+    const dir = bundle({ 'assets/app.js': 'k="sk-proj-abcdefghijklmnopqrstuvwxyz0123456789"' })
+    expect(findSecrets(dir)).toHaveLength(1)
+  })
+
+  it('does not flag short, ordinary text that merely resembles a key prefix', () => {
+    const dir = bundle({ 'assets/app.js': 'const style = "sk-ip-this"; const n = "task-list-item"' })
+    expect(findSecrets(dir)).toEqual([])
   })
 })
 

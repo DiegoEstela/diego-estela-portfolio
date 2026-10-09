@@ -163,7 +163,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** la guardia detecta fragmentos de **cualquier** línea larga del prompt real (leído de `server/chat/systemPrompt.ts`), no solo la frase inicial, y claves con formato `sk-<proveedor>-…`.
 - **Implementación (green):** los fragmentos se derivan del fichero del prompt, así que editar el prompt no desactiva la guardia.
 - **Commit:** `ci: derive bundle guard patterns from the real system prompt` + `Refs #10`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 16: Vite sin la vulnerabilidad de `server.fs.deny`
 
