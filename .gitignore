@@ -33,3 +33,6 @@ dist-ssr
 *.sw?
 
 .vercel
+
+# Test coverage
+coverage

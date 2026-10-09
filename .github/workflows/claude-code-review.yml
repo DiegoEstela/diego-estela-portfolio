@@ -3,25 +3,19 @@ name: Claude Code Review
 on:
   pull_request:
     types: [opened, synchronize, ready_for_review, reopened]
-    # Optional: Only run on specific file changes
-    # paths:
-    #   - "src/**/*.ts"
-    #   - "src/**/*.tsx"
-    #   - "src/**/*.js"
-    #   - "src/**/*.jsx"
+
+concurrency:
+  group: claude-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
   claude-review:
-    # Optional: Filter by PR author
-    # if: |
-    #   github.event.pull_request.user.login == 'external-contributor' ||
-    #   github.event.pull_request.user.login == 'new-developer' ||
-    #   github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR'
-
+    # Los PRs desde forks no tienen acceso a secretos.
+    if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pull-requests: read
+      pull-requests: write
       issues: read
       id-token: write
 
@@ -32,14 +26,29 @@ jobs:
           fetch-depth: 1
 
       - name: Run Claude Code Review
-        id: claude-review
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          plugin_marketplaces: 'https://github.com/anthropics/claude-code.git'
-          plugins: 'code-review@claude-code-plugins'
-          prompt: '/code-review:code-review --comment ${{ github.repository }}/pull/${{ github.event.pull_request.number }}'
-          claude_args: '--allowedTools "mcp__github_inline_comment__create_inline_comment"'
-          # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
-          # or https://code.claude.com/docs/en/cli-reference for available options
+          # Comentario único que se actualiza en cada push y se publica SIEMPRE,
+          # también cuando no hay hallazgos: así la revisión es verificable.
+          use_sticky_comment: true
+          prompt: |
+            Revisa el PR #${{ github.event.pull_request.number }} de ${{ github.repository }}
+            (portfolio React 19 + Vite + TypeScript + Tailwind 4 + i18next).
+            Responde en español. Lee CLAUDE.md antes de empezar.
 
+            Comprueba, en este orden:
+            1. Corrección y casos límite; reglas de hooks y dependencias de efectos.
+            2. Tipos (sin `any` innecesarios) y accesibilidad (semántica, foco, teclado, `prefers-reduced-motion`).
+            3. i18n: todo texto visible usa i18next y la clave existe en `es.json` y `en.json`.
+            4. Seguridad: nada de claves privadas en `VITE_*`, ni secretos en el diff; `target="_blank"` con `rel`.
+            5. Tests: el cambio de comportamiento tiene un test que lo cubre.
+            6. Si el PR incluye la sección "Asistido por IA", comprueba que sea coherente con el diff.
+
+            Formato del comentario:
+            - Veredicto en una línea (aprobable / con cambios sugeridos / bloqueante).
+            - Hallazgos agrupados por severidad con `fichero:línea` y una propuesta concreta.
+            - Si no hay hallazgos, indica explícitamente qué revisaste y que no encontraste problemas.
+            No inventes problemas ni repitas lo que ya comprueban lint, tipos y tests.
+          claude_args: >-
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr diff:*),Bash(gh pr view:*)"
