@@ -82,7 +82,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** `toWebRequest` convierte una petición de Node (método, URL, cabeceras, cuerpo) en un `Request` web y `sendWebResponse` escribe estado, cabeceras y cuerpo de un `Response`.
 - **Implementación (green):** plugin que atiende `/api/chat` con el mismo handler y lee `ANTHROPIC_API_KEY` de `.env.local` con `loadEnv(mode, cwd, '')`.
 - **Commit:** `feat(chatbot): serve /api/chat in vite dev` + `Refs #10`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 7: El cliente usa /api/chat
 
