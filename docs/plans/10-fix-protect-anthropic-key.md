@@ -113,7 +113,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Ficheros:** `docs/decisions/0004-api-del-chatbot-en-el-servidor.md`, `docs/decisions/README.md`, `README.md`, `CLAUDE.md`, `docs/AI-WORKFLOW.md`
 - **Contenido:** ADR 0004 con las decisiones y las alternativas; quitar "Limitaciones conocidas" del README; actualizar el área `chatbot` (`server/`, `api/`) y la variable `ANTHROPIC_API_KEY`.
 - **Commit:** `docs(chatbot): document server-side chat api` + `Refs #10`
-- [ ] Hecho
+- [x] Hecho
 
 ## Pasos manuales (los haces tú, antes de fusionar)
 
