@@ -137,3 +137,11 @@ describe('ChatWindow server contract', () => {
     expect(await screen.findByText(i18n.t('chatbot.error'))).toBeInTheDocument()
   })
 })
+
+describe('ChatWindow input', () => {
+  it('limits how much text can be typed in one message', async () => {
+    await act(() => i18n.changeLanguage('es'))
+    renderChat()
+    expect(screen.getByPlaceholderText(i18n.t('chatbot.placeholder'))).toHaveAttribute('maxlength', '1000')
+  })
+})

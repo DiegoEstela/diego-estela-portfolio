@@ -17,7 +17,7 @@ Detalle que despista: **sin** la variable definida en el build, el minificador e
 El navegador llama a `/api/chat` y el servidor guarda la clave y el prompt.
 
 - `api/chat.ts` es una función de Vercel fina; la lógica vive en `server/chat/` (validación, límite de uso, orquestación, adaptador del SDK) y se prueba sin red inyectando el cliente del proveedor.
-- **Topes duros** por petición: 10 mensajes, 2000 caracteres por mensaje, 6000 en total, `max_tokens` 512 y solo roles `user`/`assistant`. El cliente no puede elegir el prompt del sistema.
+- **Topes duros** por petición: 10 mensajes, 4000 caracteres por mensaje, 16000 en total, `max_tokens` 512 y solo roles `user`/`assistant`. El cliente no puede elegir el prompt del sistema.
 - **Límite de uso en memoria por IP** (10/min y 40/h) y comprobación de que `Origin` coincide con el `Host`.
 - Los errores del proveedor se reducen a códigos estables (`no_credits`, `rate_limit`, `upstream`); nunca se devuelven mensajes ni trazas.
 - En desarrollo, un plugin de Vite sirve `/api/chat` con el mismo handler, así `npm run dev` no cambia.

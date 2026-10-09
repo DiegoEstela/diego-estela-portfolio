@@ -8,8 +8,9 @@ export type ParsedChatRequest = { ok: true; messages: ChatTurn[] } | { ok: false
 /** Hard caps that bound the cost of a single request. */
 export const LIMITS = {
   maxMessages: 10,
-  maxMessageChars: 2000,
-  maxTotalChars: 6000,
+  // Bot replies (max_tokens 512) can reach ~2000 chars, so a full history must fit comfortably.
+  maxMessageChars: 4000,
+  maxTotalChars: 16000,
 } as const
 
 const INVALID: ParsedChatRequest = { ok: false }

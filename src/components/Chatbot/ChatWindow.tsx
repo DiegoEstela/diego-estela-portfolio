@@ -142,6 +142,7 @@ export function ChatWindow() {
             <div className="flex gap-2">
               <input
                 ref={inputRef}
+                maxLength={1000}
                 className="flex-1 px-3.5 py-2 rounded-xl text-sm outline-none"
                 style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--border)' }}
                 placeholder={t('chatbot.placeholder')}

@@ -25,7 +25,7 @@ Documentación de Vercel consultada con context7: en un proyecto Vite, los fiche
 - **`api/chat.ts` fino, lógica en `server/chat/`.** La lógica (validación, límite, orquestación) va en módulos puros y testeables fuera de `api/`, para no depender de cómo Vercel trata los ficheros auxiliares dentro de `api/`.
 - **Cliente del proveedor inyectado.** El handler recibe una función `complete(messages)`; los tests usan un doble y el adaptador de `@anthropic-ai/sdk` (ya está en `dependencies` y hoy no se usa) se prueba aparte.
 - **Contrato de respuesta estable:** `200 {reply}`; errores `{error: <código>}` con códigos `invalid_request`, `forbidden_origin`, `rate_limit`, `no_credits`, `upstream`, `not_configured`. Nunca se devuelve el mensaje del proveedor.
-- **Topes duros (decisión acordada):** máximo 10 mensajes de historial, 2000 caracteres por mensaje, 6000 en total, `max_tokens` 512 y roles solo `user`/`assistant`.
+- **Topes duros (decisión acordada):** máximo 10 mensajes de historial, 4000 caracteres por mensaje, 16000 en total (ajustado en la tarea 11), `max_tokens` 512 y roles solo `user`/`assistant`.
 - **Límite de uso en memoria por IP** (decisión acordada): 10 peticiones/minuto y 40/hora. Es de **mejor esfuerzo**: cada instancia serverless tiene su propia memoria. La defensa real contra el gasto es el límite mensual de la consola de Anthropic (ver pasos manuales).
 - **Comprobación de origen:** si llega `Origin`, debe coincidir con el `Host` de la petición. Frena el uso desde otras webs; no es una barrera contra scripts.
 - **Dev local (decisión acordada):** un plugin de Vite sirve `/api/chat` con el mismo handler, así `npm run dev` no cambia.
@@ -114,6 +114,36 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Contenido:** ADR 0004 con las decisiones y las alternativas; quitar "Limitaciones conocidas" del README; actualizar el área `chatbot` (`server/`, `api/`) y la variable `ANTHROPIC_API_KEY`.
 - **Commit:** `docs(chatbot): document server-side chat api` + `Refs #10`
 - [x] Hecho
+
+### Tarea 11: Los topes no deben rechazar conversaciones normales
+
+> Añadida tras la revisión de `code-reviewer`.
+
+- **Ficheros:** `server/chat/validate.ts`, `server/chat/validate.test.ts`, `src/components/Chatbot/ChatWindow.tsx`, `src/components/Chatbot/ChatWindow.test.tsx`
+- **Test (red):** un historial de 10 turnos con respuestas del bot de 1500 caracteres es válido; el campo de texto limita la entrada a 1000 caracteres.
+- **Implementación (green):** `maxMessageChars` 4000 y `maxTotalChars` 16000 (cota de coste sigue acotada); `maxLength={1000}` en el `<input>`.
+- **Commit:** `fix(chatbot): raise request caps so normal conversations are accepted` + `Refs #10`
+- [x] Hecho
+
+### Tarea 12: Imports con extensión para el runtime ESM de Vercel
+
+> Añadida tras la revisión. La documentación de Vercel usa imports con extensión en funciones TypeScript con `"type": "module"`.
+
+- **Ficheros:** `api/chat.ts`, `server/chat/*.ts` (no tests), `server/esmImports.test.ts`
+- **Test (red):** todos los imports relativos de `api/` y `server/` (excepto tests) terminan en `.ts`.
+- **Implementación (green):** añadir la extensión; `'../server/chat'` pasa a `'../server/chat/index.ts'`.
+- **Commit:** `fix(chatbot): use explicit import extensions for vercel esm runtime` + `Refs #10`
+- [ ] Hecho
+
+### Tarea 13: Endurecimiento menor
+
+> Añadida tras la revisión.
+
+- **Ficheros:** `server/chat/handleChat.ts`, `server/chat/handleChat.test.ts`, `server/chat/index.ts`, `api/chat.test.ts`, `package.json`
+- **Test (red):** cuerpo de más de 100 KB → 413 sin llegar al modelo; `api/chat.ts` exporta `POST` y un `GET` devuelve 405.
+- **Implementación (green):** comprobar `content-length` antes de leer el cuerpo; el cliente del SDK con `timeout` de 20 s y `maxRetries` 1; `npm run build` ejecuta la guardia de secretos, para que Vercel también falle si hay una fuga.
+- **Commit:** `fix(chatbot): bound body size and provider latency` + `Refs #10`
+- [ ] Hecho
 
 ## Pasos manuales (los haces tú, antes de fusionar)
 

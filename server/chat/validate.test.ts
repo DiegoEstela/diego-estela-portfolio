@@ -55,4 +55,11 @@ describe('parseChatRequest', () => {
     const result = parseChatRequest({ messages: [{ role: 'user', content: 'hola', id: 'x', timestamp: 1 }] })
     expect(result).toEqual({ ok: true, messages: [user('hola')] })
   })
+
+  it('accepts a long but realistic conversation of full-length bot replies', () => {
+    const reply = 'a'.repeat(1500)
+    const messages = Array.from({ length: LIMITS.maxMessages - 1 }, (_, i) => (i % 2 === 0 ? user('pregunta') : assistant(reply)))
+    messages.push(user('última pregunta'))
+    expect(parseChatRequest({ messages }).ok).toBe(true)
+  })
 })
