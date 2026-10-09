@@ -50,7 +50,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** con un reloj falso, permite 10 peticiones por minuto y rechaza la 11.ª; se recupera al pasar la ventana; cuenta cada IP por separado; aplica el tope de 40/hora; limpia entradas antiguas.
 - **Implementación (green):** `createRateLimiter({perMinute, perHour, now})` con ventana deslizante en un `Map`.
 - **Commit:** `feat(chatbot): add in-memory rate limiter` + `Refs #10`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 3: Handler: método, origen, validación y límite
 
