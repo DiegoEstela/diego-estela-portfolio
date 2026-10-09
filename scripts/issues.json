@@ -1,0 +1,47 @@
+{
+  "labels": [
+    { "name": "bug", "color": "d73a4a", "description": "Algo no funciona" },
+    { "name": "feature", "color": "0e8a16", "description": "Nueva funcionalidad o mejora" },
+    { "name": "proyecto:web", "color": "1d76db", "description": "Componentes, hooks, estilos" },
+    { "name": "proyecto:content", "color": "fbca04", "description": "Textos, datos, traducciones" },
+    { "name": "proyecto:chatbot", "color": "5319e7", "description": "Chatbot y su backend" },
+    { "name": "proyecto:infra", "color": "c5def5", "description": "CI/CD, tooling, configuración" }
+  ],
+  "issues": [
+    {
+      "title": "Proteger la API key de Anthropic: mover el chatbot a una función serverless",
+      "labels": ["bug", "proyecto:chatbot"],
+      "body": "## Problema\n`VITE_ANTHROPIC_API_KEY` se incluye en el bundle público del cliente: cualquiera puede extraerla.\n\n## Propuesta\n- Crear `api/chat.ts` (función serverless de Vercel) que llame a Anthropic con `ANTHROPIC_API_KEY` solo en servidor.\n- El cliente llama a `/api/chat`.\n- Rate limiting y límite de tokens y de longitud de entrada.\n- Retirar `VITE_ANTHROPIC_API_KEY` y actualizar `.env.example`.\n\n## Criterios de aceptación\n- [ ] La clave no aparece en `dist/`\n- [ ] Tests del handler (entrada inválida, límite, error del proveedor)\n- [ ] El chatbot sigue funcionando en es y en"
+    },
+    {
+      "title": "Corregir dependencias del useEffect en ChatWindow",
+      "labels": ["bug", "proyecto:web"],
+      "body": "ESLint avisa en `src/components/Chatbot/ChatWindow.tsx` (`react-hooks/exhaustive-deps`: faltan `isOpen` y `t`).\n\n## Criterios de aceptación\n- [ ] `npm run lint` sin warnings\n- [ ] Test que cubra el mensaje inicial al cambiar de idioma"
+    },
+    {
+      "title": "Añadir tests de componentes clave (Navbar, Projects, Contact)",
+      "labels": ["feature", "proyecto:web"],
+      "body": "Ampliar la cobertura con Testing Library: navegación, renderizado de proyectos y validación del formulario de contacto.\n\n## Criterios de aceptación\n- [ ] Tests por componente\n- [ ] Cobertura reportada en CI"
+    },
+    {
+      "title": "Auditoría de accesibilidad y SEO (objetivo Lighthouse >= 90)",
+      "labels": ["feature", "proyecto:web"],
+      "body": "Usar el agente `web-quality-auditor` y corregir hallazgos: landmarks, contraste, foco, meta/OG, `prefers-reduced-motion`.\n\n## Criterios de aceptación\n- [ ] Lighthouse accesibilidad y SEO >= 90 en CI"
+    },
+    {
+      "title": "Revisión de copy del portfolio (es/en)",
+      "labels": ["feature", "proyecto:content"],
+      "body": "Usar el agente `content-copywriter` para revisar proyectos, experiencia y CV, manteniendo paridad es/en.\n\n## Criterios de aceptación\n- [ ] Textos orientados a resultados\n- [ ] `locales.test.ts` en verde"
+    },
+    {
+      "title": "Deploy a Vercel con preview por PR",
+      "labels": ["feature", "proyecto:infra"],
+      "body": "Documentar y automatizar el despliegue: preview por PR y producción desde `main`. Añadir badges de CI al README.\n\n## Criterios de aceptación\n- [ ] Preview enlazada en cada PR\n- [ ] README con badges y enlace al sitio"
+    },
+    {
+      "title": "Reescribir el README como carta de presentación técnica",
+      "labels": ["feature", "proyecto:infra"],
+      "body": "Sustituir el README de la plantilla de Vite por: descripción, stack, capturas, arquitectura, flujo de IA (`docs/AI-WORKFLOW.md`) y cómo ejecutar el proyecto.\n\n## Criterios de aceptación\n- [ ] README con badges de CI\n- [ ] Enlace a `docs/AI-WORKFLOW.md`"
+    }
+  ]
+}
