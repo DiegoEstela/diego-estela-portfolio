@@ -13,6 +13,11 @@ describe('office animations', () => {
     expect(css).toMatch(/@keyframes office-glow/)
   })
 
+  it('gives the hero button a gentle pulse', () => {
+    expect(css).toMatch(/@keyframes agents-cta-pulse/)
+    expect(css).toMatch(/\.agents-cta\s*\{[^}]*animation:[^}]*agents-cta-pulse/)
+  })
+
   it('moves in whole pixel steps, like an old videogame', () => {
     expect(css).toMatch(/office-bob[^;]*steps\(/)
   })
@@ -21,6 +26,7 @@ describe('office animations', () => {
     const block = css.match(/@media \(prefers-reduced-motion: reduce\)\s*\{([\s\S]*?)\n\}/)?.[1] ?? ''
     expect(block).toContain('.office-character')
     expect(block).toContain('.office-glow')
+    expect(block).toContain('.agents-cta')
     expect(block).toMatch(/animation:\s*none/)
   })
 })

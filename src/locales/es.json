@@ -202,6 +202,7 @@
     }
   },
   "agentsOffice": {
+    "cta": "¿Cómo trabaja la IA por mí?",
     "title": "Así trabaja la IA por mí",
     "subtitle": "Una oficina pixel art con los agentes reales de este repositorio. Toca un personaje.",
     "close": "Cerrar",

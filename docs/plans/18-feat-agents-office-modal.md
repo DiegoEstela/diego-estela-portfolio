@@ -99,7 +99,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** el botón muestra "¿Cómo trabaja la IA por mí?" / "How does AI work for me?" según el idioma; al pulsarlo aparece el diálogo (esperando a la carga diferida); al cerrarlo desaparece; pasar el ratón o el foco por encima precarga el modal.
 - **Implementación (green):** componente con `React.lazy` y precarga; se inserta en la fila de botones del Hero, que pasa a `flex-wrap` para que tres botones no se rompan entre 640 y 768 px.
 - **Commit:** `feat(agents-office): add the hero button that opens the office` + `Refs #18`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 8: Documentación
 

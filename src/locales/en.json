@@ -202,6 +202,7 @@
     }
   },
   "agentsOffice": {
+    "cta": "How does AI work for me?",
     "title": "How AI works for me",
     "subtitle": "A pixel art office with this repository's real agents. Tap a character.",
     "close": "Close",

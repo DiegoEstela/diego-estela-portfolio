@@ -166,6 +166,16 @@
   }
 }
 
+/* ── Hero button that opens the agents office: a gentle pulse to catch the eye ── */
+@keyframes agents-cta-pulse {
+  0%, 100% { box-shadow: 0 0 10px var(--glow); }
+  50% { box-shadow: 0 0 24px var(--glow), 0 0 4px var(--accent); }
+}
+
+.agents-cta {
+  animation: agents-cta-pulse 2.4s ease-in-out infinite;
+}
+
 /* ── Agents office: idle animations. Two-frame pixel steps, like an old videogame ── */
 @keyframes office-bob {
   0%, 100% { transform: translateY(0); }
@@ -195,7 +205,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .office-character,
-  .office-glow {
+  .office-glow,
+  .agents-cta {
     animation: none;
   }
 
