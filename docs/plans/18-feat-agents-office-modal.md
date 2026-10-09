@@ -106,7 +106,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Ficheros:** `docs/decisions/0005-oficina-de-agentes-pixel-art-con-codigo.md`, `docs/decisions/README.md`, `README.md`, `docs/AI-WORKFLOW.md`
 - **Contenido:** ADR 0005 con las decisiones y alternativas; la web enseña los agentes reales a partir de sus ficheros; mención en el README y en el flujo de IA.
 - **Commit:** `docs(agents-office): document the office and its design decisions` + `Refs #18`
-- [ ] Hecho
+- [x] Hecho
 
 ## Riesgos y verificación
 

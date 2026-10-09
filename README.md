@@ -16,7 +16,14 @@ Portfolio personal de un desarrollador de software especializado en IA. Es tambi
 - Demos interactivas de proyectos (componentes propios con animaciones de `framer-motion`).
 - Internacionalización **es/en** con i18next; un test garantiza que ambos idiomas tienen las mismas claves.
 - Tema claro y oscuro.
+- **La oficina de agentes:** un botón del Hero abre una escena pixel art, dibujada con código y responsive, donde los agentes de IA de este repositorio trabajan en sus escritorios. Al tocar un personaje se ve su ficha, con las herramientas y el modelo **leídos de `.claude/agents/`**, así que nunca se desactualiza ([ADR 0005](docs/decisions/0005-oficina-de-agentes-pixel-art-con-codigo.md)).
 - Chatbot sobre la API de Anthropic que responde preguntas sobre mi experiencia. La clave y el prompt viven en el servidor (`api/chat.ts`), con validación, límites de uso y una guardia en CI que impide que se filtren al bundle ([ADR 0004](docs/decisions/0004-api-del-chatbot-en-el-servidor.md)).
+
+### La oficina de agentes
+
+| Móvil (360 px) | Escritorio |
+| :------------: | :--------: |
+| <img src="docs/images/agents-office-mobile.png" alt="La oficina de agentes en un móvil: escena pixel art y ficha del auditor de seguridad" width="240"> | <img src="docs/images/agents-office-desktop.png" alt="La oficina de agentes en escritorio: escena a la izquierda y ficha a la derecha" width="520"> |
 
 ## Stack
 
