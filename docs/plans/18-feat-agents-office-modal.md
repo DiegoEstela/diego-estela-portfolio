@@ -67,7 +67,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** la escena renderiza un SVG con `role="img"` y descripción, y 5 botones con nombre accesible (nombre y rol); pulsar uno, o usar Enter o Espacio, llama a `onSelect(id)`; el botón del personaje seleccionado tiene `aria-pressed="true"`.
 - **Implementación (green):** SVG compuesto por los sprites, y botones posicionados en porcentajes sobre cada personaje.
 - **Commit:** `feat(agents-office): render the office scene with accessible characters` + `Refs #18`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 4: La ficha del agente
 
