@@ -24,10 +24,10 @@ export function toProviderError(error: unknown): ProviderError {
     message?: string
   }
   if (status === 402 || type === 'billing_error' || message?.toLowerCase().includes('credit')) {
-    return new ProviderError('no_credits')
+    return new ProviderError('no_credits', status)
   }
-  if (status === 429) return new ProviderError('rate_limit')
-  return new ProviderError('upstream')
+  if (status === 429) return new ProviderError('rate_limit', status)
+  return new ProviderError('upstream', status)
 }
 
 export function createAnthropicCompleter(client: MessagesClient, model: string = DEFAULT_MODEL) {

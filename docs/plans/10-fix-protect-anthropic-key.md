@@ -145,6 +145,35 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Commit:** `fix(chatbot): bound body size and provider latency` + `Refs #10`
 - [x] Hecho
 
+### Tarea 14: El handler no se fía de las cabeceras para limitar el cuerpo
+
+> Añadida tras la auditoría de `security-auditor`.
+
+- **Ficheros:** `server/chat/handleChat.ts`, `server/chat/providerError.ts`, `server/chat/anthropic.ts`, y sus tests
+- **Test (red):** un cuerpo en streaming sin `content-length` se corta con 413 tras leer ~100 KB (no se consume entero); una petición con `Sec-Fetch-Site: cross-site` recibe 403; un fallo del proveedor se registra con `kind` y `status` sin incluir mensajes ni claves.
+- **Implementación (green):** lectura del cuerpo con contador y cancelación; comprobación de `Sec-Fetch-Site`; `console.error` mínimo; `ProviderError` conserva el `status` original.
+- **Commit:** `fix(chatbot): bound the request body even without content-length` + `Refs #10`
+- [x] Hecho
+
+### Tarea 15: Guardia de secretos más difícil de eludir
+
+> Añadida tras la auditoría.
+
+- **Ficheros:** `scripts/check-bundle-secrets.mjs`, `scripts/check-bundle-secrets.test.mjs`
+- **Test (red):** la guardia detecta fragmentos de **cualquier** línea larga del prompt real (leído de `server/chat/systemPrompt.ts`), no solo la frase inicial, y claves con formato `sk-<proveedor>-…`.
+- **Implementación (green):** los fragmentos se derivan del fichero del prompt, así que editar el prompt no desactiva la guardia.
+- **Commit:** `ci: derive bundle guard patterns from the real system prompt` + `Refs #10`
+- [ ] Hecho
+
+### Tarea 16: Vite sin la vulnerabilidad de `server.fs.deny`
+
+> Añadida tras la auditoría: `vite` 8.0.0–8.0.15 permite saltarse `server.fs.deny` en rutas alternativas de Windows, y el servidor de desarrollo ahora maneja `.env.local` con una clave real.
+
+- **Ficheros:** `package.json`, `package-lock.json`, `README.md`, `.env.example`
+- **Verificación:** `npm audit --omit=dev` ya no lista `vite`; lint, tests y build en verde. Documentar no usar `--host` con una clave real.
+- **Commit:** `build(deps): update vite to fix the dev server fs.deny bypass` + `Refs #10`
+- [ ] Hecho
+
 ## Pasos manuales (los haces tú, antes de fusionar)
 
 1. **Rotar la clave actual.** Estuvo en el bundle público, así que hay que darla por comprometida: crea una nueva en https://console.anthropic.com/settings/keys y revoca la anterior.

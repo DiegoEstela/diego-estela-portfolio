@@ -145,3 +145,66 @@ describe('handleChat body size', () => {
     expect(res.status).toBe(200)
   })
 })
+
+describe('handleChat body size without content-length', () => {
+  it('stops reading an endless streamed body and answers 413 without calling the model', async () => {
+    let pulls = 0
+    const chunk = new TextEncoder().encode('a'.repeat(1024))
+    const body = new ReadableStream<Uint8Array>({
+      pull(controller) {
+        pulls++
+        controller.enqueue(chunk)
+      },
+    })
+    const request = new Request(URL_, {
+      method: 'POST',
+      headers: { host: 'diego.example' },
+      body,
+      duplex: 'half',
+    } as RequestInit)
+    const deps = makeDeps()
+
+    const res = await handleChat(request, deps)
+
+    expect(res.status).toBe(413)
+    expect(deps.complete).not.toHaveBeenCalled()
+    expect(pulls).toBeLessThan(300) // ~100 chunks of 1 KB, never the whole (infinite) stream
+  })
+})
+
+describe('handleChat fetch metadata', () => {
+  it.each(['cross-site', 'same-site'])('rejects Sec-Fetch-Site: %s', async (site) => {
+    const deps = makeDeps()
+    const res = await handleChat(post(validBody, { 'sec-fetch-site': site }), deps)
+    expect(res.status).toBe(403)
+    expect(deps.complete).not.toHaveBeenCalled()
+  })
+
+  it.each(['same-origin', 'none'])('accepts Sec-Fetch-Site: %s', async (site) => {
+    const res = await handleChat(post(validBody, { 'sec-fetch-site': site }), makeDeps())
+    expect(res.status).toBe(200)
+  })
+})
+
+describe('handleChat error logging', () => {
+  it('logs the kind and status of a provider failure without leaking details', async () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const error = new ProviderError('upstream', 503)
+    await handleChat(post(validBody), makeDeps({ complete: vi.fn().mockRejectedValue(error) }))
+
+    expect(spy).toHaveBeenCalledTimes(1)
+    const logged = JSON.stringify(spy.mock.calls[0])
+    expect(logged).toContain('upstream')
+    expect(logged).toContain('503')
+    spy.mockRestore()
+  })
+
+  it('does not log the content of unexpected errors', async () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const leaky = new Error('key sk-ant-api03-SECRETVALUE leaked')
+    await handleChat(post(validBody), makeDeps({ complete: vi.fn().mockRejectedValue(leaky) }))
+
+    expect(JSON.stringify(spy.mock.calls)).not.toContain('SECRETVALUE')
+    spy.mockRestore()
+  })
+})

@@ -51,6 +51,7 @@ describe('toProviderError', () => {
     const error = toProviderError(Object.assign(new Error('boom'), props))
     expect(error).toBeInstanceOf(ProviderError)
     expect(error.kind).toBe(kind)
+    expect(error.status).toBe((props as { status?: number }).status)
   })
 
   it('maps non-error values to upstream', () => {
