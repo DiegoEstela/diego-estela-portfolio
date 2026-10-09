@@ -44,9 +44,9 @@ function buildArt() {
   return {
     stations,
     tile: rects(DECOR.floorTile, 0, 0),
-    windows: [rects(DECOR.window, 12, 7), rects(DECOR.window, 134, 7)],
-    board: rects(DECOR.board, 71, 9),
-    plants: [rects(DECOR.plant, 10, 70), rects(DECOR.plant, 144, 70)],
+    windows: [rects(DECOR.window, 3, 4), rects(DECOR.window, 95, 4)],
+    board: rects(DECOR.board, 47, 5),
+    plants: [rects(DECOR.plant, 3, 56), rects(DECOR.plant, 103, 56)],
   }
 }
 
