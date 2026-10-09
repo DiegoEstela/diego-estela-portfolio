@@ -108,6 +108,36 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Commit:** `docs(agents-office): document the office and its design decisions` + `Refs #18`
 - [x] Hecho
 
+### Tarea 9: Resistencia y respuesta de la carga diferida
+
+> Añadida tras la revisión de `code-reviewer`.
+
+- **Ficheros:** `src/components/AgentsOffice/AgentsOffice.tsx`, `AgentsOfficeModal.tsx`, `AgentsOffice.resilience.test.tsx`, `src/locales/*.json`
+- **Test (red):** si falla la descarga del chunk, la página sigue viva, aparece un aviso `role="alert"` y un segundo clic reintenta; el precargado fallido no deja un `unhandledrejection`; mientras carga se ve un indicador `role="status"` y desaparece al abrir; el foco vuelve al botón aunque el visitante lo moviera mientras cargaba.
+- **Implementación (green):** *error boundary* local, `.catch` en el precargado, fallback con indicador, y el botón se pasa al modal como destino del foco.
+- **Commit:** `fix(agents-office): survive a failed chunk load and show progress` + `Refs #18`
+- [x] Hecho
+
+### Tarea 10: Pulido del modal
+
+> Añadida tras la revisión.
+
+- **Ficheros:** `AgentsOfficeModal.tsx`, `AgentCard.tsx`, sus tests, `src/styles/globals.css`, `src/locales/*.json`
+- **Test (red):** al reabrir, la rotación y la selección empiezan de cero; al elegir un personaje la ficha se desplaza a la vista; la selección se anuncia con una línea breve (`role="status"`) y no con toda la ficha; la página reserva el hueco de la barra de scroll (`scrollbar-gutter: stable`).
+- **Implementación (green):** el contenido del diálogo pasa a un componente interno que solo existe mientras está abierto; `scrollIntoView({ block: 'nearest' })`; `overscroll-contain`; claves de lista por índice.
+- **Commit:** `fix(agents-office): reset the dialog on reopen and announce selections briefly` + `Refs #18`
+- [ ] Hecho
+
+### Tarea 11: Brillo del botón sin repintados y textos coherentes con los datos
+
+> Añadida tras la revisión.
+
+- **Ficheros:** `src/styles/globals.css`, `animations.test.ts`, `agents.ts`, `agents.test.ts`, `AgentCard.tsx`
+- **Test (red):** el pulso se anima sobre un pseudo-elemento con `opacity` (no sobre `box-shadow`); para cada agente real, "puede editar" en su texto coincide con tener una herramienta de edición.
+- **Implementación (green):** `.agents-cta::after`; `canEditFiles` pasa a `agents.ts` y se prueba.
+- **Commit:** `fix(agents-office): pulse the hero button without repaints` + `Refs #18`
+- [ ] Hecho
+
 ## Riesgos y verificación
 
 - Comandos: `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build` (incluye `check:bundle`).

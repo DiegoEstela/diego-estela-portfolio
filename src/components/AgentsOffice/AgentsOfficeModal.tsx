@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState, type RefObject } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { X } from 'lucide-react'
@@ -13,9 +13,11 @@ const FOCUSABLE = 'button:not([disabled]), [href], input:not([disabled]), select
 interface AgentsOfficeModalProps {
   open: boolean
   onClose: () => void
+  /** Where the focus goes on close. The lazy chunk may load after the visitor moved the focus. */
+  returnFocusTo?: RefObject<HTMLElement | null>
 }
 
-export function AgentsOfficeModal({ open, onClose }: AgentsOfficeModalProps) {
+export function AgentsOfficeModal({ open, onClose, returnFocusTo }: AgentsOfficeModalProps) {
   const { t } = useTranslation()
   const reduceMotion = useReducedMotion()
   const titleId = useId()
@@ -32,7 +34,7 @@ export function AgentsOfficeModal({ open, onClose }: AgentsOfficeModalProps) {
   // While open: lock the page scroll, move the focus in, and put everything back on close.
   useEffect(() => {
     if (!open) return
-    const trigger = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const trigger = returnFocusTo?.current ?? (document.activeElement instanceof HTMLElement ? document.activeElement : null)
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     closeRef.current?.focus()
@@ -69,7 +71,7 @@ export function AgentsOfficeModal({ open, onClose }: AgentsOfficeModalProps) {
       document.body.style.overflow = previousOverflow
       trigger?.focus()
     }
-  }, [open])
+  }, [open, returnFocusTo])
 
   // One bubble at a time keeps a phone screen readable. A picked character keeps it; reduced
   // motion turns the rotation off entirely.

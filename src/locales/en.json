@@ -202,6 +202,8 @@
     }
   },
   "agentsOffice": {
+    "loading": "Opening the office…",
+    "loadError": "Couldn't load the office. Check your connection and press the button again.",
     "cta": "How does AI work for me?",
     "title": "How AI works for me",
     "subtitle": "A pixel art office with this repository's real agents. Tap a character.",
