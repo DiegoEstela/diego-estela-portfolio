@@ -8,7 +8,8 @@ import { Recommendations } from '@/components/Recommendations/Recommendations';
 import { Education } from '@/components/Education/Education';
 import { Contact } from '@/components/Contact/Contact';
 import { Clients } from '@/components/Clients/Clients';
-import { ChatButton, ChatContext } from '@/components/Chatbot/ChatButton';
+import { ChatButton } from '@/components/Chatbot/ChatButton';
+import { ChatContext } from '@/context/ChatContext';
 import { Cursor } from '@/components/Cursor/Cursor';
 import { WelcomeModal } from '@/components/WelcomeModal/WelcomeModal';
 

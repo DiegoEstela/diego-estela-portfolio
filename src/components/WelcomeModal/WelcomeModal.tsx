@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { useChatContext } from '@/components/Chatbot/ChatButton';
+import { useChatContext } from '@/context/ChatContext';
 
 const STORAGE_KEY = 'diezte_welcomed_v1';
 

@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send } from 'lucide-react';
-import { useChatContext } from './ChatButton';
+import { useChatContext } from '@/context/ChatContext';
 import { ChatMessage } from './ChatMessage';
 import type { ChatMessage as ChatMessageType } from '@/types';
 import { CHATBOT_SYSTEM_PROMPT } from '@/data/portfolio';

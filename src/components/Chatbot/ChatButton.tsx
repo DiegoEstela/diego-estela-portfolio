@@ -1,18 +1,8 @@
-import { useState, createContext, useContext } from 'react';
+import { useState } from 'react';
 import { MessageCircle, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-
-interface ChatContextValue {
-  isOpen: boolean;
-  setIsOpen: (v: boolean) => void;
-}
-
-export const ChatContext = createContext<ChatContextValue>({ isOpen: false, setIsOpen: () => {} });
-
-export function useChatContext() {
-  return useContext(ChatContext);
-}
+import { useChatContext } from '@/context/ChatContext';
 
 export function ChatButton() {
   const { t } = useTranslation();
