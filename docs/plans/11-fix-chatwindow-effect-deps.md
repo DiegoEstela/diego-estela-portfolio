@@ -39,7 +39,7 @@ Cada tarea: 5-10 min, con su test; el proyecto funciona tras cada una.
 - **Test (red):** un test trivial que renderiza `ChatWindow` falla porque jsdom no implementa `Element.prototype.scrollIntoView`.
 - **Implementación (green):** definir `scrollIntoView` como `vi.fn()` en `setup.ts`.
 - **Commit:** `test(chatbot): mock scrollIntoView in jsdom setup` + `Refs #11`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 2: Test de caracterización del saludo y del cambio de idioma
 
