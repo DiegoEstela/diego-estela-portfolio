@@ -2,7 +2,7 @@ import { useEffect, useId, useRef } from 'react'
 import { useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { CheckCircle2, Circle, ExternalLink } from 'lucide-react'
-import { progress, type Plan } from './plans'
+import { progress, type Plan } from './planParser'
 
 interface PlanCardProps {
   /** The latest plan of the repository, or null when there is none. */

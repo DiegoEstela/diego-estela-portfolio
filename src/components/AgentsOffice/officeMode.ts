@@ -1,4 +1,4 @@
-import { progress, type Plan } from './plans'
+import { progress, type Plan } from './planParser'
 
 export type OfficeMode = 'working' | 'resting'
 

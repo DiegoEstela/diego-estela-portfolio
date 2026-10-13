@@ -30,7 +30,7 @@ import {
   type Box,
 } from './layout'
 import type { OfficeMode } from './officeMode'
-import { progress, type Plan } from './plans'
+import { progress, type Plan } from './planParser'
 
 function rects(sprite: Sprite, x: number, y: number): Rect[] {
   return spriteToRects(sprite.rows, sprite.palette, { x, y })

@@ -5,7 +5,7 @@ import { OfficeScene } from './OfficeScene'
 import { BOARD_HIT_BOX, BUBBLE, REST_STATIONS, SCENE_SIZE, SOFA, STATIONS, bubbleAnchor, hitBoxFor, stationsFor, type Box } from './layout'
 import type { OfficeMode } from './officeMode'
 import { AGENT_IDS, REST_POSE, boardFilledCells, type AgentId } from './sprites'
-import type { Plan } from './plans'
+import type { Plan } from './planParser'
 
 const agents = AGENT_IDS.map((id) => ({ id, label: `Agente ${id}` }))
 

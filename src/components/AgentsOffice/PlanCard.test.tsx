@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, render, screen, within } from '@testing-library/react'
 import i18n from '@/i18n'
 import { PlanCard } from './PlanCard'
-import type { Plan } from './plans'
+import type { Plan } from './planParser'
 
 const plan: Plan = {
   issue: 24,

@@ -1,4 +1,4 @@
-import type { Plan } from '@/components/AgentsOffice/plans'
+import type { Plan } from '@/components/AgentsOffice/planParser'
 
 /**
  * A plan with `total` tasks of which the first `done` are done. Tests use it instead of the real

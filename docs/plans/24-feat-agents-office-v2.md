@@ -32,7 +32,7 @@ Lo que sale del código actual (`src/components/AgentsOffice/`):
 - **Ficha del plan.** `PlanCard` con título, enlace a la issue (`rel="noopener noreferrer"`), barra con `role="progressbar"` y `aria-valuenow/max`, y la lista de tareas con texto "Hecha / Pendiente" (nunca solo color). Estado vacío si no hay planes. La seleccion pasa de `AgentId | null` a `AgentId | 'board' | null`.
 - **Textos en español dentro de la versión en inglés.** Los títulos de tareas vienen de los planes, escritos en español. Se muestran tal cual con `lang="es"` (para que el lector de pantalla los pronuncie bien) y una nota en la ficha en inglés.
 - **Conmutador manual** (decidido: manda el plan y el visitante puede forzar el otro modo): un botón con `aria-pressed` bajo la escena para forzar trabajo o descanso; por defecto manda el plan.
-- **Peso.** `eager` incluye el texto de todos los planes en el chunk diferido (hoy unos 48 KB sin comprimir). Es aceptable ahora; si crece, se cambia el origen por un módulo virtual de Vite que entregue solo el último plan, sin tocar el parser.
+- **Peso: solo llega el último plan, ya analizado.** La primera versión usaba `import.meta.glob` con `eager` y metía en el cliente el texto completo de todos los planes: el chunk diferido pasó de 18 kB a 92 kB (7 → 31 kB gzip), y la guardia de secretos falló porque el plan #10 cita en su prosa el bug que arregló. Un plugin de Vite (`virtual:latest-plan`) lee `docs/plans/` al compilar, elige el último y entrega solo `{ issue, title, issueUrl, tasks }`. El parser es puro y vive en `planParser.ts`, sin `import.meta.glob`, para poder usarlo desde el plugin.
 - **El README no se queda atrás.** `officeSvg.ts` dibuja la misma escena, así que debe adoptar el nuevo tamaño, la pizarra y el sofá; el test de sincronización obliga a regenerar `docs/images/agents-office.svg`.
 
 Alternativas descartadas: leer los planes por red (la issue lo deja para el nivel 2), un sofá de 3 plazas con el resto de pie (rompe la regla de zonas táctiles sin solape o deja a dos personajes sueltos) y una pizarra nueva además del kanban (más elementos en una escena que ya es pequeña en móvil).
@@ -121,10 +121,21 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Commit:** `docs(agents-office): update the readme animation with the board and the sofa` + `Refs #24`
 - [x] Hecho
 
-### Tarea 11: ADR 0006 y verificación visual
+### Tarea 11: El último plan llega al cliente por un módulo virtual
 
-- **Ficheros:** `docs/decisions/0006-oficina-de-agentes-v2.md`, `docs/decisions/README.md`
-- **Contenido:** el ADR recoge las decisiones de este plan (derivación del estado, sofá largo, pizarra que sustituye al kanban, tareas en español, peso del `glob` y su salida) y los resultados de la verificación. Capturas de la web real en 360 px y en escritorio, en los dos modos y en los dos temas, con Chrome automatizado, para detectar lo que los tests no ven (la lección de la v1).
+> Añadida al ver el build: el `glob` con `eager` metía todos los planes en el bundle (ver decisiones).
+
+- **Ficheros:** `src/components/AgentsOffice/planParser.ts` (el parser, sin `glob`), `src/components/AgentsOffice/planParser.test.ts`, `src/components/AgentsOffice/plans.ts`, `src/components/AgentsOffice/plans.test.ts`, `vite-plugins/latestPlan.ts`, `vite-plugins/latestPlan.test.ts`, `vite.config.ts`, `src/virtual-modules.d.ts`, `src/components/AgentsOffice/AgentsOfficeModal.tsx`
+- **Test (red):** `readPlans(dir)` lee solo los `.md` con número de issue y título (ignora el resto) y, sobre los planes reales, encuentra el #10, el #11 y el #18 con todas las tareas hechas. El módulo virtual exporta **solo** el último plan, sin texto de los demás (una prosa centinela de un plan anterior no aparece). `resolveId` solo atiende `virtual:latest-plan`. En el cliente, `LATEST_PLAN` es el plan del número de issue más alto de `docs/plans/` y ningún fichero de `AgentsOffice` hace `glob` sobre `docs/plans`.
+- **Implementación (green):** mover el parser a `planParser.ts`, crear el plugin con `readPlans` y `latestPlanModule`, declarar el módulo y sustituir `loadPlans()` por `LATEST_PLAN`.
+- **Verificación:** `npm run build` pasa con la guardia de secretos y el chunk diferido vuelve a un tamaño parecido al de antes.
+- **Commit:** `fix(agents-office): ship only the latest plan to the client` + `Refs #24`
+- [x] Hecho
+
+### Tarea 12: ADR 0006 y verificación visual
+
+- **Ficheros:** `docs/decisions/0006-oficina-de-agentes-v2.md`, `docs/decisions/README.md`, `README.md`, `README.es.md` (enlace al ADR)
+- **Contenido:** el ADR recoge las decisiones de este plan (derivación del estado, sofá largo, pizarra que sustituye al kanban, tareas en español, el `glob` descartado por peso y el módulo virtual) y los resultados de la verificación. Capturas de la web real en 360 px y en escritorio, en los dos modos y en los dos temas, con Chrome automatizado, para detectar lo que los tests no ven (la lección de la v1).
 - **Commit:** `docs(agents-office): add ADR 0006 for the office v2` + `Refs #24`
 - [ ] Hecho
 
@@ -134,7 +145,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - Verificación manual (la hace una persona en la preview): en es y en, claro y oscuro, móvil de 360 px y escritorio: la pizarra se ve y abre el plan correcto; el conmutador cambia entre trabajo y descanso; ningún personaje queda tapado; el teclado recorre todo; el foco vuelve al botón del Hero al cerrar.
 - **Riesgo: la escena más alta** empuja el panel de la ficha hacia abajo en móvil. Mitigación: la v1 ya lleva la ficha a la vista al seleccionar; se comprueba en las capturas.
 - **Riesgo: el plan #24 es "el último plan"** mientras se trabaja en él, así que la pizarra mostrará su propio progreso. Es el comportamiento pedido y sirve de prueba real.
-- **Riesgo: `eager` y el peso del chunk.** Se mide con `npm run build` antes y después; si el chunk diferido crece de forma notable, se pasa al módulo virtual (ver decisiones).
+- **Riesgo: el peso del chunk.** Se midió con `npm run build`: el `glob` lo multiplicó por cinco y se resolvió con el módulo virtual (tarea 11).
 - **Riesgo: tests de colocación** de la v1 asumen una escena de 72 de alto y 5 estaciones; se adaptan en la tarea 4 y deben seguir probando las mismas reglas.
 - Fuera de alcance: GitHub como fuente (nivel 2), estado en tiempo real (nivel 3) y el botón "Ejecutar pipeline".
 

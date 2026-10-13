@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { deriveMode, otherMode, resolveMode } from './officeMode'
-import type { Plan } from './plans'
+import type { Plan } from './planParser'
 
 const plan = (...done: boolean[]): Plan => ({
   issue: 1,

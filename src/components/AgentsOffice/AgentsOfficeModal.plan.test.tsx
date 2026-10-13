@@ -3,7 +3,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import i18n from '@/i18n'
 import { FINISHED_PLAN, WORKING_PLAN, planWithTasks } from '@/test/plans'
-import type { Plan } from './plans'
+import type { Plan } from './planParser'
 import { AgentsOfficeModal } from './AgentsOfficeModal'
 import { AGENT_IDS } from './sprites'
 

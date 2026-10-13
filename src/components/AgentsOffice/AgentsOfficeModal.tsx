@@ -7,12 +7,10 @@ import { AgentCard } from './AgentCard'
 import { deriveMode, otherMode, resolveMode, type OfficeMode } from './officeMode'
 import { OfficeScene } from './OfficeScene'
 import { PlanCard } from './PlanCard'
-import { latestPlan, loadPlans, progress, type Plan } from './plans'
+import { progress, type Plan } from './planParser'
+import { LATEST_PLAN } from './plans'
 import { AGENT_IDS, type AgentId } from './sprites'
 import { useSpotlight } from './useSpotlight'
-
-// Read once, when the module loads: the plans cannot change while the page is open.
-const REAL_PLAN = latestPlan(loadPlans())
 
 const FOCUSABLE = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
@@ -218,7 +216,7 @@ export function AgentsOfficeModal({ open, onClose, returnFocusTo, plan }: Agents
               </button>
             </header>
 
-            <OfficeBody active={open} plan={plan === undefined ? REAL_PLAN : plan} />
+            <OfficeBody active={open} plan={plan === undefined ? LATEST_PLAN : plan} />
           </motion.div>
         </motion.div>
       )}
