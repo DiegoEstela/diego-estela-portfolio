@@ -1,15 +1,36 @@
-import { useId } from 'react'
+import { useId, useMemo } from 'react'
 import {
   AGENT_IDS,
   DECOR,
+  REST_POSE,
+  boardSprite,
   characterLayers,
   monitorSprite,
+  restingLayers,
+  sofaSprites,
   spriteToRects,
   type AgentId,
   type Rect,
   type Sprite,
 } from './sprites'
-import { BUBBLE, FOCUS_RING, HIT, SCENE_SIZE, STATIONS, WALL_COLOR, WALL_HEIGHT, bubbleAnchor } from './layout'
+import {
+  BOARD,
+  BOARD_HIT_BOX,
+  BUBBLE,
+  FOCUS_RING,
+  REST_STATIONS,
+  SCENE_SIZE,
+  SOFA,
+  STATIONS,
+  WALL_COLOR,
+  WALL_HEIGHT,
+  bubbleAnchor,
+  hitBoxFor,
+  stationsFor,
+  type Box,
+} from './layout'
+import type { OfficeMode } from './officeMode'
+import { progress, type Plan } from './planParser'
 
 function rects(sprite: Sprite, x: number, y: number): Rect[] {
   return spriteToRects(sprite.rows, sprite.palette, { x, y })
@@ -41,11 +62,24 @@ function buildArt() {
     }),
   ) as Record<AgentId, { character: Rect[]; monitor: Rect[]; desk: Rect[] }>
 
+  // The last layer of a resting pose is the zZz or the steam: it moves on its own.
+  const resting = Object.fromEntries(
+    AGENT_IDS.map((id) => {
+      const { cx, y } = REST_STATIONS[id]
+      const layers = restingLayers(id)
+      const draw = (items: Sprite[]) => items.flatMap((layer) => rects(layer, cx - 5, y))
+      return [id, { body: draw(layers.slice(0, -1)), overlay: draw(layers.slice(-1)) }]
+    }),
+  ) as Record<AgentId, { body: Rect[]; overlay: Rect[] }>
+
+  const sofa = sofaSprites(SOFA.width)
+
   return {
     stations,
+    resting,
+    sofa: { back: rects(sofa.back, SOFA.x, SOFA.y), seat: rects(sofa.seat, SOFA.x, SOFA.y + SOFA.seatOffset) },
     tile: rects(DECOR.floorTile, 0, 0),
     windows: [rects(DECOR.window, 3, 4), rects(DECOR.window, 95, 4)],
-    board: rects(DECOR.board, 47, 5),
     plants: [rects(DECOR.plant, 3, 56), rects(DECOR.plant, 103, 56)],
   }
 }
@@ -56,16 +90,23 @@ export interface OfficeSceneProps {
   agents: ReadonlyArray<{ id: AgentId; label: string }>
   /** Describes the whole picture for screen readers. */
   description: string
-  selectedId: AgentId | null
+  /** A character, the plan board, or nothing. */
+  selectedId: AgentId | 'board' | null
   /** The character currently "speaking", highlighted by the rotating spotlight. */
   activeId?: AgentId | null
   /** What the active character is doing, shown as a speech bubble above it. */
   bubble?: { id: AgentId; text: string } | null
-  onSelect: (id: AgentId) => void
+  onSelect: (id: AgentId | 'board') => void
+  /** At their desks or on the sofa. */
+  mode?: OfficeMode
+  /** The plan the board shows: its bar fills with the tasks that are done. */
+  plan?: Plan | null
+  /** Name of the board button. It carries the progress, so the caller writes it in the active language. */
+  boardLabel: string
 }
 
-function Bubble({ id, text }: { id: AgentId; text: string }) {
-  const { cx, bubbleY } = STATIONS[id]
+function Bubble({ id, text, mode }: { id: AgentId; text: string; mode: OfficeMode }) {
+  const { cx, bubbleY } = stationsFor(mode)[id]
   const { left, tail } = bubbleAnchor(cx)
   return (
     <div
@@ -91,9 +132,34 @@ function Bubble({ id, text }: { id: AgentId; text: string }) {
   )
 }
 
-export function OfficeScene({ agents, description, selectedId, activeId = null, bubble = null, onSelect }: OfficeSceneProps) {
+const percent = (value: number, of: number) => `${(value / of) * 100}%`
+
+function hitStyle({ left, top, right, bottom }: Box) {
+  return {
+    left: percent(left, SCENE_SIZE.width),
+    top: percent(top, SCENE_SIZE.height),
+    width: percent(right - left, SCENE_SIZE.width),
+    height: percent(bottom - top, SCENE_SIZE.height),
+    outlineColor: FOCUS_RING,
+  }
+}
+
+export function OfficeScene({
+  agents,
+  description,
+  selectedId,
+  activeId = null,
+  bubble = null,
+  onSelect,
+  mode = 'working',
+  plan = null,
+  boardLabel,
+}: OfficeSceneProps) {
   const floorId = useId()
   const byId = new Map(agents.map((agent) => [agent.id, agent.label]))
+  const { done, total } = plan ? progress(plan) : { done: 0, total: 0 }
+  const board = useMemo(() => rects(boardSprite(done, total), BOARD.x, BOARD.y), [done, total])
+  const resting = mode === 'resting'
 
   return (
     <div className="relative w-full select-none" style={{ aspectRatio: `${SCENE_SIZE.width} / ${SCENE_SIZE.height}` }}>
@@ -118,13 +184,23 @@ export function OfficeScene({ agents, description, selectedId, activeId = null, 
         {ART.windows.map((window, index) => (
           <Pixels key={index} items={window} />
         ))}
-        <Pixels items={ART.board} />
+        <g data-board="">
+          <Pixels items={board} />
+        </g>
         {ART.plants.map((plant, index) => (
           <Pixels key={index} items={plant} />
         ))}
 
+        {/* The desks. At work each one has its character; at rest they stay, empty. */}
         {AGENT_IDS.map((id, index) => {
           const { cx, y } = STATIONS[id]
+          const desk = (
+            <g data-desk={id}>
+              <Pixels items={ART.stations[id].monitor} />
+              <Pixels items={ART.stations[id].desk} />
+            </g>
+          )
+          if (resting) return <g key={id}>{desk}</g>
           return (
             <g key={id} data-agent={id} className="office-station" data-active={activeId === id || undefined}>
               <rect className="office-glow" x={cx - 11} y={y - 1} width="22" height="24" style={{ fill: 'var(--accent)' }} />
@@ -132,18 +208,41 @@ export function OfficeScene({ agents, description, selectedId, activeId = null, 
               <g className="office-character" style={{ animationDelay: `${(index * 0.23).toFixed(2)}s` }}>
                 <Pixels items={ART.stations[id].character} />
               </g>
-              <Pixels items={ART.stations[id].monitor} />
-              <Pixels items={ART.stations[id].desk} />
+              {desk}
             </g>
           )
         })}
+
+        <g data-sofa="back">
+          <Pixels items={ART.sofa.back} />
+        </g>
+
+        {resting &&
+          AGENT_IDS.map((id, index) => {
+            const { cx, y } = REST_STATIONS[id]
+            return (
+              <g key={id} data-agent={id} data-pose={REST_POSE[id]} className="office-station" data-active={activeId === id || undefined}>
+                <rect className="office-glow" x={cx - 11} y={y - 1} width="22" height="17" style={{ fill: 'var(--accent)' }} />
+                <g className="office-character office-resting" style={{ animationDelay: `${(index * 0.23).toFixed(2)}s` }}>
+                  <Pixels items={ART.resting[id].body} />
+                  <g className="office-zzz" style={{ animationDelay: `${(index * 0.37).toFixed(2)}s` }}>
+                    <Pixels items={ART.resting[id].overlay} />
+                  </g>
+                </g>
+              </g>
+            )
+          })}
+
+        {/* The seat goes last: it hides the legs of whoever sits. */}
+        <g data-sofa="seat">
+          <Pixels items={ART.sofa.seat} />
+        </g>
       </svg>
 
-      {bubble && <Bubble id={bubble.id} text={bubble.text} />}
+      {bubble && <Bubble id={bubble.id} text={bubble.text} mode={mode} />}
 
       {/* Real buttons over the drawing: keyboard, screen reader and touch work without extra code. */}
       {AGENT_IDS.map((id) => {
-        const { cx, y } = STATIONS[id]
         const selected = selectedId === id
         return (
           <button
@@ -154,17 +253,21 @@ export function OfficeScene({ agents, description, selectedId, activeId = null, 
             aria-pressed={selected}
             onClick={() => onSelect(id)}
             className="absolute rounded-md bg-transparent transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-1"
-            style={{
-              left: `${((cx - HIT.width / 2) / SCENE_SIZE.width) * 100}%`,
-              top: `${(y / SCENE_SIZE.height) * 100}%`,
-              width: `${(HIT.width / SCENE_SIZE.width) * 100}%`,
-              height: `${(HIT.height / SCENE_SIZE.height) * 100}%`,
-              outlineColor: FOCUS_RING,
-              boxShadow: selected ? `inset 0 0 0 2px ${FOCUS_RING}` : undefined,
-            }}
+            style={{ ...hitStyle(hitBoxFor(mode, id)), boxShadow: selected ? `inset 0 0 0 2px ${FOCUS_RING}` : undefined }}
           />
         )
       })}
+
+      {/* The board comes after the characters in tab order, the way the eye reads the scene. */}
+      <button
+        type="button"
+        data-board-button=""
+        aria-label={boardLabel}
+        aria-pressed={selectedId === 'board'}
+        onClick={() => onSelect('board')}
+        className="absolute rounded-md bg-transparent transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-1"
+        style={{ ...hitStyle(BOARD_HIT_BOX), boxShadow: selectedId === 'board' ? `inset 0 0 0 2px ${FOCUS_RING}` : undefined }}
+      />
     </div>
   )
 }

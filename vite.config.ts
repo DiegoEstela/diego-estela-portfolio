@@ -4,9 +4,10 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 import { apiDev } from './vite-plugins/apiDev'
+import { latestPlanPlugin } from './vite-plugins/latestPlan'
 
 export default defineConfig({
-  plugins: [react(), tailwindcss(), apiDev()],
+  plugins: [react(), tailwindcss(), apiDev(), latestPlanPlugin()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

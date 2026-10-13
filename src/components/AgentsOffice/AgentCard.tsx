@@ -40,12 +40,6 @@ export function AgentCard({ selectedId, agents = REAL_AGENTS }: AgentCardProps) 
       className="rounded-2xl p-4 sm:p-5"
       style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', minHeight: 168 }}
     >
-      {/* One short line for screen readers: a live region around the whole card would read it all aloud. */}
-      {/* Always mounted and only its text changes: some screen readers ignore a live region that
-          is created already holding its content. */}
-      <p role="status" className="sr-only">
-        {selectedId !== null ? t('agentsOffice.selected', { name: t(`agentsOffice.agents.${selectedId}.name`) }) : ''}
-      </p>
       {selectedId === null ? (
         <p className="flex items-center gap-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
           <Hand size={16} aria-hidden="true" style={{ color: 'var(--accent)' }} />

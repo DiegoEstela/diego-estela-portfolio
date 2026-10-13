@@ -221,8 +221,34 @@
   animation: office-glow 1.4s steps(1, end) infinite;
 }
 
+/* The team at rest: slower than at work, so the sofa reads as calm next to the desks. */
+@keyframes office-breathe {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(1px); }
+}
+
+@keyframes office-zzz {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  50% { transform: translateY(-1px); opacity: 0.55; }
+}
+
+.office-resting {
+  animation: office-breathe 2.8s steps(1, end) infinite;
+}
+
+.office-zzz {
+  animation: office-zzz 1.6s steps(1, end) infinite;
+}
+
+/* Without this, the spotlight's rule for .office-character would speed the breathing up. */
+.office-station[data-active] .office-resting {
+  animation-duration: 2.8s;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .office-character,
+  .office-resting,
+  .office-zzz,
   .office-glow,
   .agents-cta::after {
     animation: none;

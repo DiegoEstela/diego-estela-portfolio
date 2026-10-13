@@ -151,6 +151,121 @@ export function monitorSprite(id: AgentId): Sprite {
   }
 }
 
+/* ── Resting poses ──────────────────────────────────────────────────────── */
+
+/** Part of the team naps and the rest drink a coffee, so the sofa does not look like a copy. */
+export const REST_POSE: Record<AgentId, 'sleep' | 'coffee'> = {
+  claude: 'coffee',
+  'code-reviewer': 'sleep',
+  'content-copywriter': 'sleep',
+  'web-quality-auditor': 'coffee',
+  'security-auditor': 'sleep',
+}
+
+/** Eyelids: the skin tone, darker, so a sleeper keeps the face and loses the eyes. */
+function darken(hex: string, amount: number): string {
+  const channel = (offset: number) =>
+    Math.round(parseInt(hex.slice(offset, offset + 2), 16) * (1 - amount))
+      .toString(16)
+      .padStart(2, '0')
+  return `#${channel(1)}${channel(3)}${channel(5)}`
+}
+
+// A pixel Z needs 3x5 to read as a letter; at 3x3 it looks like an "I".
+const ZZZ: Sprite = {
+  rows: ['.......zzz', '.........z', '........z.', '.......z..', '.......zzz', ...blankRows(7)],
+  palette: { z: '#E2E8F0' },
+}
+
+// The coffee and the steam sit on rows 7-9, the part of the body that stays above the sofa.
+const MUG: Sprite = {
+  rows: [...blankRows(7), '........s.', '.......cc.', '.......mmm', '.......mm.', ...blankRows(1)],
+  palette: { s: '#CBD5E1', c: '#6B3F1D', m: '#F8FAFC' },
+}
+
+/** The same character, with the same accessory, drawn for the sofa: asleep or with a coffee. */
+export function restingLayers(id: AgentId): Sprite[] {
+  const look = LOOKS[id]
+  const asleep = REST_POSE[id] === 'sleep'
+  const [base, accessory] = characterLayers(id)
+  return [
+    asleep ? { ...base, palette: { ...base.palette, E: darken(look.skin, 0.4) } } : base,
+    accessory,
+    asleep ? ZZZ : MUG,
+  ]
+}
+
+/* ── Sofa ───────────────────────────────────────────────────────────────── */
+
+/** A seat every 20 units, the width of a touch target; a seam falls between two seats. */
+const SEAT_WIDTH = 20
+
+/**
+ * A long sofa in two layers: the back goes behind the characters and the seat in front of
+ * them, so whoever sits is hidden from the waist down.
+ */
+export function sofaSprites(width: number): { back: Sprite; seat: Sprite } {
+  const seams = (row: string, letter: string) =>
+    row
+      .split('')
+      .map((c, x) => (x > 0 && x < width - 1 && x % SEAT_WIDTH === 0 ? letter : c))
+      .join('')
+  const full = (letter: string) => letter.repeat(width)
+  const cushion = seams('AAA' + 'C'.repeat(Math.max(0, width - 6)) + 'AAA', 's')
+  const legs = '..LL' + '.'.repeat(Math.max(0, width - 8)) + 'LL..'
+
+  return {
+    back: {
+      rows: ['.' + 'B'.repeat(Math.max(0, width - 2)) + '.', seams(full('B'), 's'), seams(full('B'), 's'), seams(full('B'), 's')],
+      palette: { B: '#7A3D50', s: '#5E2F43' },
+    },
+    seat: {
+      rows: [cushion, cushion, cushion, full('D'), legs.slice(0, width), legs.slice(0, width)],
+      palette: { A: '#8A4A5F', C: '#84465A', s: '#6E3446', D: '#4A2331', L: '#2B1620' },
+    },
+  }
+}
+
+/* ── Plan board ─────────────────────────────────────────────────────────── */
+
+export const BOARD_SIZE = { width: 18, height: 9 } as const
+const BAR_CELLS = 14
+
+/** Where the first cell of the progress bar is drawn, in the pixels of the board sprite. */
+export const BOARD_BAR = { x: 2, y: 6 } as const
+
+/** The green of the filled cells: shared with the animated drawing of the readme, so they cannot drift apart. */
+export const BOARD_BAR_FILL = '#15803D'
+
+/**
+ * Cells of the progress bar to fill. A bar is full only when every task is done: 12 of 13
+ * rounds to 13 cells, never to 14, so "almost" never reads as "finished".
+ */
+export function boardFilledCells(done: number, total: number): number {
+  if (total <= 0 || done <= 0) return 0
+  if (done >= total) return BAR_CELLS
+  return Math.min(BAR_CELLS - 1, Math.round((BAR_CELLS * done) / total))
+}
+
+/** The board of the wall: sticky notes on top and, below them, a bar with the plan's progress. */
+export function boardSprite(done: number, total: number): Sprite {
+  const filled = boardFilledCells(done, total)
+  const bar = 'p' + 'f'.repeat(filled) + 't'.repeat(BAR_CELLS - filled) + 'p'
+  const interior = [
+    'ppyyppooopppggpp',
+    'ppyyppooopppggpp',
+    'pppppppppppppppp',
+    'pppppppppppppppp',
+    'pppppppppppppppp',
+    bar,
+    'pppppppppppppppp',
+  ]
+  return {
+    rows: ['B'.repeat(BOARD_SIZE.width), ...interior.map((row) => `B${row}B`), 'B'.repeat(BOARD_SIZE.width)],
+    palette: { B: '#475569', p: '#F8FAFC', y: '#FDE047', o: '#FB923C', g: '#4ADE80', t: '#CBD5E1', f: BOARD_BAR_FILL },
+  }
+}
+
 /* ── Decor ──────────────────────────────────────────────────────────────── */
 
 export const DECOR: Record<'desk' | 'plant' | 'window' | 'board' | 'floorTile', Sprite> = {

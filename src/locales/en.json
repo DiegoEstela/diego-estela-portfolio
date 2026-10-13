@@ -217,6 +217,28 @@
     "doingLabel": "What it does",
     "readOnly": "Read-only",
     "canEdit": "Can edit",
+    "mode": {
+      "toggle": "Let the team rest",
+      "fromPlan": "State from the latest plan: {{state}}",
+      "manual": "Your choice: {{state}}",
+      "working": "working",
+      "resting": "resting"
+    },
+    "plan": {
+      "selected": "Plan board selected",
+      "latest": "Latest plan in the repository",
+      "issueLink": "Open issue #{{number}}",
+      "progressLabel": "Plan progress",
+      "progressText": "{{done}} of {{total}} tasks done",
+      "tasksLabel": "Tasks",
+      "done": "Done",
+      "pending": "Pending",
+      "noTasks": "This plan has no tasks yet.",
+      "empty": "There are no plans in the repository yet.",
+      "spanishNote": "Plans are written in Spanish.",
+      "boardLabel": "Plan board: {{done}} of {{total}} tasks done",
+      "boardLabelEmpty": "Plan board: there are no plans yet"
+    },
     "agents": {
       "claude": {
         "name": "Claude",
@@ -225,6 +247,11 @@
           "Reading the issue and writing the plan",
           "Writing the failing test first",
           "Asking the agents for a review"
+        ],
+        "resting": [
+          "Having a coffee",
+          "Going over what went well",
+          "Waiting for the next issue"
         ]
       },
       "code-reviewer": {
@@ -234,6 +261,11 @@
           "Reviewing the diff against main",
           "Hunting for edge cases",
           "Checking that tests exist"
+        ],
+        "resting": [
+          "Taking a nap",
+          "Dreaming of small diffs",
+          "Nothing left to review"
         ]
       },
       "content-copywriter": {
@@ -243,6 +275,11 @@
           "Polishing a project description",
           "Comparing the Spanish and English versions",
           "Cutting filler and superlatives"
+        ],
+        "resting": [
+          "Dreaming of headlines",
+          "Resting their eyes",
+          "No superlatives, for once"
         ]
       },
       "web-quality-auditor": {
@@ -252,6 +289,11 @@
           "Measuring the bundle size",
           "Checking contrast in light and dark themes",
           "Verifying the SEO metadata"
+        ],
+        "resting": [
+          "Having a coffee",
+          "Counting sheep in kilobytes",
+          "Contrast at rest"
         ]
       },
       "security-auditor": {
@@ -261,6 +303,11 @@
           "Searching the history for secrets",
           "Running npm audit",
           "Checking what reaches the public bundle"
+        ],
+        "resting": [
+          "Sleeping with one eye open",
+          "Dreaming of rotated keys",
+          "Taking a break from secrets"
         ]
       }
     }

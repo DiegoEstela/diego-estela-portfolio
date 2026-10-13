@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, fireEvent, render, screen, waitForElementToBeRemoved } from '@testing-library/react'
 import i18n from '@/i18n'
+import { WORKING_PLAN } from '@/test/plans'
 import { AgentsOfficeModal } from './AgentsOfficeModal'
 
 // A visitor who asked the system for less motion must get a calm, still scene.
@@ -22,14 +23,14 @@ afterEach(() => {
 
 describe('AgentsOfficeModal with reduced motion', () => {
   it('shows no rotating bubble and starts no timer', () => {
-    render(<AgentsOfficeModal open onClose={() => {}} />)
+    render(<AgentsOfficeModal open onClose={() => {}} plan={WORKING_PLAN} />)
     expect(bubbleText()).toBeNull()
     act(() => void vi.advanceTimersByTime(3500 * 5))
     expect(bubbleText()).toBeNull()
   })
 
   it('still lets the visitor pick a character and read its bubble and card', () => {
-    render(<AgentsOfficeModal open onClose={() => {}} />)
+    render(<AgentsOfficeModal open onClose={() => {}} plan={WORKING_PLAN} />)
     fireEvent.click(screen.getByRole('button', { name: i18n.t('agentsOffice.agents.code-reviewer.name') }))
     expect(bubbleText()).not.toBeNull()
     expect(screen.getByRole('heading', { level: 3, name: i18n.t('agentsOffice.agents.code-reviewer.name') })).toBeInTheDocument()
@@ -39,7 +40,7 @@ describe('AgentsOfficeModal with reduced motion', () => {
 describe('AgentsOfficeModal scrolling with reduced motion', () => {
   it('jumps to the card instead of animating the scroll', () => {
     vi.mocked(Element.prototype.scrollIntoView).mockClear()
-    render(<AgentsOfficeModal open onClose={() => {}} />)
+    render(<AgentsOfficeModal open onClose={() => {}} plan={WORKING_PLAN} />)
     fireEvent.click(screen.getByRole('button', { name: i18n.t('agentsOffice.agents.claude.name') }))
     expect(Element.prototype.scrollIntoView).toHaveBeenCalledWith({ block: 'nearest', behavior: 'auto' })
   })
@@ -48,14 +49,14 @@ describe('AgentsOfficeModal scrolling with reduced motion', () => {
 describe('AgentsOfficeModal reopening', () => {
   it('starts from scratch: the selection of the last visit is gone', async () => {
     vi.useRealTimers() // with reduced motion the closing animation is instant, so real time is enough
-    const { rerender } = render(<AgentsOfficeModal open onClose={() => {}} />)
+    const { rerender } = render(<AgentsOfficeModal open onClose={() => {}} plan={WORKING_PLAN} />)
     fireEvent.click(screen.getByRole('button', { name: i18n.t('agentsOffice.agents.security-auditor.name') }))
     expect(screen.getAllByRole('button', { pressed: true })).toHaveLength(1)
 
-    rerender(<AgentsOfficeModal open={false} onClose={() => {}} />)
+    rerender(<AgentsOfficeModal open={false} onClose={() => {}} plan={WORKING_PLAN} />)
     await waitForElementToBeRemoved(() => screen.queryByRole('dialog'))
 
-    rerender(<AgentsOfficeModal open onClose={() => {}} />)
+    rerender(<AgentsOfficeModal open onClose={() => {}} plan={WORKING_PLAN} />)
     expect(screen.queryAllByRole('button', { pressed: true })).toHaveLength(0)
     expect(screen.getByText(i18n.t('agentsOffice.hint'))).toBeInTheDocument()
   })

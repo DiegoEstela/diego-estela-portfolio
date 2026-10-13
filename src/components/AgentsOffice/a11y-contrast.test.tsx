@@ -6,7 +6,9 @@ import i18n from '@/i18n'
 import { AgentCard } from './AgentCard'
 import { OfficeScene } from './OfficeScene'
 import { FOCUS_RING, WALL_COLOR } from './layout'
-import { AGENT_IDS, DECOR } from './sprites'
+import { AGENT_IDS, DECOR, boardSprite, sofaSprites } from './sprites'
+import { PlanCard } from './PlanCard'
+import { planWithTasks } from '@/test/plans'
 
 const css = readFileSync('src/styles/globals.css', 'utf8')
 
@@ -94,7 +96,7 @@ describe('focus and selection ring of the characters', () => {
 
   function renderScene() {
     const agents = AGENT_IDS.map((id) => ({ id, label: id }))
-    render(<OfficeScene agents={agents} description="x" selectedId="claude" onSelect={() => {}} />)
+    render(<OfficeScene agents={agents} description="x" selectedId="claude" boardLabel="Pizarra" onSelect={() => {}} />)
     return screen.getAllByRole('button')
   }
 
@@ -114,5 +116,74 @@ describe('focus and selection ring of the characters', () => {
 
   it.each(Object.entries(sceneBackgrounds))('stands out against the %s by at least 3:1', (_name, background) => {
     expect(contrast(FOCUS_RING, background)).toBeGreaterThanOrEqual(3)
+  })
+})
+
+describe('plan card', () => {
+  it.each(THEMES)('keeps every kind of text at 4.5:1 or better over the card (%s theme)', (_name, vars) => {
+    const card = vars['--bg-card']
+    expect(card).toBeDefined()
+    expect(contrast(vars['--text-primary'], card), 'text').toBeGreaterThanOrEqual(4.5)
+    expect(contrast(vars['--text-secondary'], card), 'secondary text').toBeGreaterThanOrEqual(4.5)
+    expect(contrast(vars['--accent'], card), 'labels and link').toBeGreaterThanOrEqual(4.5)
+  })
+
+  it('takes every one of those colors from the theme, so both themes are covered', () => {
+    render(<PlanCard plan={planWithTasks(1, 2)} />)
+    const html = document.body.innerHTML
+    expect(html).toContain('var(--text-primary)')
+    expect(html).toContain('var(--text-secondary)')
+    expect(html).toContain('var(--accent)')
+    expect(html).toContain('var(--bg-card)')
+    expect(html).not.toMatch(/#[0-9a-fA-F]{6}/)
+  })
+
+  it.each(THEMES)('draws the progress bar at 3:1 or better against its track and its card (%s theme)', (_name, vars) => {
+    expect(contrast(vars['--accent'], vars['--bg-primary']), 'fill over track').toBeGreaterThanOrEqual(3)
+    expect(contrast(vars['--accent'], vars['--bg-card']), 'fill over card').toBeGreaterThanOrEqual(3)
+  })
+})
+
+describe('rest toggle', () => {
+  it.each(THEMES)('reads at 4.5:1 or better both pressed and not (%s theme)', (_name, vars) => {
+    expect(contrast(vars['--bg-primary'], vars['--accent']), 'pressed').toBeGreaterThanOrEqual(4.5)
+    expect(contrast(vars['--text-primary'], vars['--bg-card']), 'not pressed').toBeGreaterThanOrEqual(4.5)
+  })
+})
+
+describe('board of the wall', () => {
+  const { palette } = boardSprite(7, 13)
+
+  it('shows the filled part of the bar at 3:1 or better against the rest of the bar and the panel', () => {
+    expect(contrast(palette.f, palette.t), 'fill over track').toBeGreaterThanOrEqual(3)
+    expect(contrast(palette.f, palette.p), 'fill over panel').toBeGreaterThanOrEqual(3)
+  })
+
+  it('stands out from the wall it hangs on', () => {
+    expect(contrast(palette.p, WALL_COLOR)).toBeGreaterThanOrEqual(3)
+  })
+
+  it('is marked with the same ring as the characters when it is selected', () => {
+    render(<OfficeScene agents={AGENT_IDS.map((id) => ({ id, label: id }))} description="x" selectedId="board" boardLabel="Pizarra" onSelect={() => {}} />)
+    const board = screen.getByRole('button', { name: 'Pizarra' })
+    expect(toHex(board.style.outlineColor)).toBe(FOCUS_RING.toUpperCase())
+    const [r, g, b] = rgb(FOCUS_RING)
+    const shadow = board.style.boxShadow.toUpperCase()
+    expect(shadow.includes(FOCUS_RING.toUpperCase()) || shadow.includes(`RGB(${r}, ${g}, ${b})`)).toBe(true)
+  })
+})
+
+describe('focus ring over the sofa', () => {
+  const { back, seat } = sofaSprites(100)
+  const colors = Object.entries({ ...back.palette, ...seat.palette })
+
+  it.each(colors)('stands out against the sofa color %s by at least 3:1', (_letter, color) => {
+    expect(contrast(FOCUS_RING, color)).toBeGreaterThanOrEqual(3)
+  })
+
+  it('uses the same ring for a character that sits on the sofa', () => {
+    render(<OfficeScene agents={AGENT_IDS.map((id) => ({ id, label: id }))} description="x" selectedId="claude" mode="resting" boardLabel="Pizarra" onSelect={() => {}} />)
+    const selected = screen.getAllByRole('button').find((b) => b.getAttribute('aria-pressed') === 'true')!
+    expect(toHex(selected.style.outlineColor)).toBe(FOCUS_RING.toUpperCase())
   })
 })
