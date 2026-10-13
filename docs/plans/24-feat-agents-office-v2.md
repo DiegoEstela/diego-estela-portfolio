@@ -55,7 +55,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** `deriveMode`: todas las tareas hechas → `resting`; alguna pendiente → `working`; sin tareas → `working`; sin plan (`null`) → `working`. `resolveMode(derived, override)`: sin override manda lo derivado; con override gana el visitante.
 - **Implementación (green):** dos funciones puras.
 - **Commit:** `feat(agents-office): derive the office mode from the latest plan` + `Refs #24`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 3: Sprites de descanso, sofá y pizarra con progreso
 
