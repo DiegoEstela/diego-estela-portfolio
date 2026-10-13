@@ -35,7 +35,7 @@ El build de Vercel termina bien, pero al compilar las funciones muestra dos erro
 - **Test (red):** nuevo caso en `esmImports.test.ts`: ningún fichero de `api/` termina en `.test.ts`. Falla hoy por `api/chat.test.ts`.
 - **Implementación (green):** `git mv api/chat.test.ts server/apiEntrypoint.test.ts` y los imports pasan a `../api/chat.js`.
 - **Commit:** `fix(chatbot): move the entrypoint test out of api/ so vercel does not deploy it`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 3: Documentación
 
