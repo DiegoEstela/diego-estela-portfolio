@@ -10,7 +10,15 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 // own, and Node 24 can even run .ts directly, so neither notices a specifier that only
 // works before compiling. This test reproduces that pipeline: tsc, then plain Node.
 const ROOT = resolve('.')
-const OUT = join(ROOT, 'node_modules', '.tmp', 'vercel-compile-smoke')
+
+// Vercel compiles with its own options, not ours, and `strict` is off there (TypeScript 6
+// defaults it to on, so it must be disabled explicitly): a type that only
+// narrows under strict (e.g. a discriminated union on a boolean) compiles here and fails there.
+// Only the strict family is reproduced; other Vercel defaults (checked with tsc 6.0.2) are not.
+const MODES = [
+  { name: 'strict', flags: ['--strict', 'true'] },
+  { name: 'non-strict', flags: ['--strict', 'false'] },
+]
 
 function node(code: string, env: Record<string, string> = {}) {
   const base = Object.fromEntries(Object.entries(process.env).filter(([name]) => name !== 'ANTHROPIC_API_KEY'))
@@ -20,13 +28,15 @@ function node(code: string, env: Record<string, string> = {}) {
   })
 }
 
-const callPost = (body: string) => `
-  const { POST } = await import(${JSON.stringify(pathToFileURL(join(OUT, 'api', 'chat.js')).href)})
+const callPost = (out: string, body: string) => `
+  const { POST } = await import(${JSON.stringify(pathToFileURL(join(out, 'api', 'chat.js')).href)})
   const res = await POST(new Request('https://diego.example/api/chat', { method: 'POST', body: ${JSON.stringify(body)} }))
   console.log(res.status + ' ' + (await res.text()))
 `
 
-describe('api/chat.ts compiled the way Vercel does and run as native ESM', () => {
+describe.each(MODES)('api/chat.ts compiled the way Vercel does ($name) and run as native ESM', ({ name, flags }) => {
+  const OUT = join(ROOT, 'node_modules', '.tmp', `vercel-compile-smoke-${name}`)
+
   beforeAll(() => {
     rmSync(OUT, { recursive: true, force: true })
     mkdirSync(OUT, { recursive: true })
@@ -36,7 +46,7 @@ describe('api/chat.ts compiled the way Vercel does and run as native ESM', () =>
     const compile = spawnSync(
       process.execPath,
       [tsc, 'api/chat.ts', '--ignoreConfig', '--outDir', OUT, '--module', 'nodenext', '--moduleResolution', 'nodenext',
-       '--target', 'es2023', '--types', 'node', '--skipLibCheck', '--strict'],
+       '--target', 'es2023', '--types', 'node', '--skipLibCheck', ...flags],
       { cwd: ROOT, encoding: 'utf8' },
     )
     if (compile.status !== 0) throw new Error(`tsc failed:\n${compile.stdout}${compile.stderr}`)
@@ -45,13 +55,13 @@ describe('api/chat.ts compiled the way Vercel does and run as native ESM', () =>
   afterAll(() => rmSync(OUT, { recursive: true, force: true }))
 
   it('loads every module of the import chain, including the SDK', () => {
-    const run = node(callPost('{}'), { ANTHROPIC_API_KEY: 'test-key' })
+    const run = node(callPost(OUT, '{}'), { ANTHROPIC_API_KEY: 'test-key' })
     expect(run.stderr).not.toContain('ERR_MODULE_NOT_FOUND')
     expect(run.stdout.trim()).toBe('400 {"error":"invalid_request"}')
   }, 30_000)
 
   it('answers not_configured when the key is missing', () => {
-    const run = node(callPost('{}'))
+    const run = node(callPost(OUT, '{}'))
     expect(run.stdout.trim()).toBe('500 {"error":"not_configured"}')
   }, 30_000)
 })

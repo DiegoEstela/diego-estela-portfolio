@@ -40,14 +40,16 @@ function isForeignOrigin(request: Request): boolean {
   }
 }
 
-type BodyResult = { tooLarge: true } | { tooLarge: false; value: unknown }
+// null means the body went over the cap. A plain null check narrows without `strict`, which
+// Vercel's compiler does not enable; a discriminated union on a boolean would not.
+type BodyResult = { value: unknown } | null
 
 /**
  * Reads the JSON body with a hard cap. content-length is only a hint (chunked requests
  * omit it), so the stream itself is counted and cancelled once it passes the limit.
  */
 async function readJsonBody(request: Request): Promise<BodyResult> {
-  if (!request.body) return { tooLarge: false, value: null }
+  if (!request.body) return { value: null }
   const reader = request.body.getReader()
   const chunks: Uint8Array<ArrayBuffer>[] = []
   let total = 0
@@ -57,14 +59,14 @@ async function readJsonBody(request: Request): Promise<BodyResult> {
     total += value.byteLength
     if (total > MAX_BODY_BYTES) {
       await reader.cancel()
-      return { tooLarge: true }
+      return null
     }
     chunks.push(value as Uint8Array<ArrayBuffer>)
   }
   try {
-    return { tooLarge: false, value: JSON.parse(await new Blob(chunks).text()) }
+    return { value: JSON.parse(await new Blob(chunks).text()) }
   } catch {
-    return { tooLarge: false, value: null }
+    return { value: null }
   }
 }
 
@@ -77,7 +79,7 @@ export async function handleChat(request: Request, deps: ChatDeps): Promise<Resp
   if (Number(request.headers.get('content-length')) > MAX_BODY_BYTES) return json(413, { error: 'invalid_request' })
 
   const body = await readJsonBody(request)
-  if (body.tooLarge) return json(413, { error: 'invalid_request' })
+  if (body === null) return json(413, { error: 'invalid_request' })
   const parsed = parseChatRequest(body.value)
   if (!parsed.ok) return json(400, { error: 'invalid_request' })
 
