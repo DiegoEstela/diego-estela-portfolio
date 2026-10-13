@@ -92,6 +92,7 @@ export function PlanCard({ plan }: PlanCardProps) {
                   {t('agentsOffice.plan.tasksLabel')}
                 </p>
                 <ol aria-labelledby={tasksId} className="space-y-1 text-sm" style={{ color: 'var(--text-primary)' }}>
+                  {/* Titles can repeat and the list never reorders, so the index is a fine key. */}
                   {plan.tasks.map((task, index) => (
                     <li key={index} className="flex items-start gap-2">
                       {task.done ? (

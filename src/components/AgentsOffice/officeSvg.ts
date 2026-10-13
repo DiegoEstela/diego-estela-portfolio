@@ -13,6 +13,7 @@ import {
 import {
   AGENT_IDS,
   BOARD_BAR,
+  BOARD_BAR_FILL,
   DECOR,
   REST_POSE,
   boardFilledCells,
@@ -56,7 +57,6 @@ const MAX_LINE = 22
 const FONT_SIZE = 3.2
 const LINE_HEIGHT = 4
 
-const BAR_FILL = '#15803D'
 
 const escapeXml = (text: string) =>
   text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
@@ -133,7 +133,7 @@ function bubble(id: AgentId, text: string, index: number): string {
 
 /** The board of the wall: the sprite with an empty bar, and a bar on top that fills pixel by pixel. */
 function board(): string {
-  const bar = `<rect class="office-bar" x="${BOARD.x + BOARD_BAR.x}" y="${BOARD.y + BOARD_BAR.y}" width="${CELLS}" height="1" fill="${BAR_FILL}"/>`
+  const bar = `<rect class="office-bar" x="${BOARD.x + BOARD_BAR.x}" y="${BOARD.y + BOARD_BAR.y}" width="${CELLS}" height="1" fill="${BOARD_BAR_FILL}"/>`
   return `<g data-board="">${draw(rectsOf(boardSprite(0, 1), BOARD.x, BOARD.y))}${bar}</g>`
 }
 

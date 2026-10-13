@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import en from '../../locales/en.json'
 import { REST_STATIONS, SCENE_SIZE } from './layout'
 import { renderOfficeSvg } from './officeSvg'
-import { AGENT_IDS, REST_POSE, boardFilledCells, characterLayers, spriteToRects, type AgentId } from './sprites'
+import { AGENT_IDS, BOARD_BAR_FILL, REST_POSE, boardFilledCells, characterLayers, spriteToRects, type AgentId } from './sprites'
 
 const agents = Object.fromEntries(
   AGENT_IDS.map((id) => [id, { doing: en.agentsOffice.agents[id].doing[0] }]),
@@ -98,7 +98,7 @@ describe('the board and the sofa in the animation', () => {
   it('hangs the plan board on the wall, with the bar empty underneath the one that fills', () => {
     const board = doc.querySelector('[data-board]')
     expect(board).not.toBeNull()
-    const filled = [...board!.querySelectorAll('rect')].filter((r) => r.getAttribute('fill') === '#15803D' && !r.classList.contains('office-bar'))
+    const filled = [...board!.querySelectorAll('rect')].filter((r) => r.getAttribute('fill') === BOARD_BAR_FILL && !r.classList.contains('office-bar'))
     expect(filled).toHaveLength(boardFilledCells(0, 1))
   })
 
@@ -106,6 +106,8 @@ describe('the board and the sofa in the animation', () => {
     const bar = doc.querySelector('[data-board] .office-bar')
     expect(bar).not.toBeNull()
     expect(Number(bar!.getAttribute('width'))).toBe(boardFilledCells(1, 1))
+    // The same green as the board of the web scene, from one place, so the two cannot drift apart.
+    expect(bar!.getAttribute('fill')).toBe(BOARD_BAR_FILL)
     expect(css).toMatch(/@keyframes office-bar/)
     expect(css).toMatch(new RegExp(`\\.office-bar\\s*\\{[^}]*steps\\(${boardFilledCells(1, 1)}, end\\)`))
   })

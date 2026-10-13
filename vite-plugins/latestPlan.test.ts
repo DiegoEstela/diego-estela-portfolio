@@ -123,11 +123,54 @@ describe('latestPlanPlugin in a project without plans yet', () => {
     expect(load(latestPlanPlugin(join(tmpdir(), 'plans-that-do-not-exist')))?.trim()).toBe('export default null')
   })
 
-  it('watches the folder itself, so a plan created while the dev server runs refreshes the board', () => {
-    const dir = plansDir({})
+  it('only asks Vite to watch files: a folder is resolved as an import and breaks every module that loads the plan', () => {
+    const dir = plansDir({ '1-a.md': plan('Uno', 1, true) })
     const addWatchFile = vi.fn()
     load(latestPlanPlugin(dir), addWatchFile)
-    expect(addWatchFile).toHaveBeenCalledWith(dir)
+    expect(addWatchFile).toHaveBeenCalledWith(join(dir, '1-a.md'))
+    expect(addWatchFile).not.toHaveBeenCalledWith(dir)
+  })
+
+  describe('in the dev server', () => {
+    const MODULE_ID = '\0virtual:latest-plan'
+
+    function devServer() {
+      const handlers = new Map<string, (file: string) => void>()
+      const server = {
+        watcher: {
+          add: vi.fn(),
+          on: vi.fn((event: string, handler: (file: string) => void) => void handlers.set(event, handler)),
+        },
+        moduleGraph: { getModuleById: vi.fn(() => ({ id: MODULE_ID })), invalidateModule: vi.fn() },
+        ws: { send: vi.fn() },
+      }
+      return { server, handlers }
+    }
+    const configure = (plugin: ReturnType<typeof latestPlanPlugin>, server: unknown) =>
+      (plugin.configureServer as (server: unknown) => void)(server)
+
+    it('watches the folder, so a plan created or deleted while it runs refreshes the board', () => {
+      const dir = plansDir({})
+      const { server, handlers } = devServer()
+      configure(latestPlanPlugin(dir), server)
+      expect(server.watcher.add).toHaveBeenCalledWith(dir)
+
+      handlers.get('add')!(join(dir, '9-nuevo.md'))
+      expect(server.moduleGraph.invalidateModule).toHaveBeenCalledTimes(1)
+      expect(server.ws.send).toHaveBeenCalledWith({ type: 'full-reload' })
+
+      handlers.get('unlink')!(join(dir, '9-nuevo.md'))
+      expect(server.moduleGraph.invalidateModule).toHaveBeenCalledTimes(2)
+    })
+
+    it('ignores files that appear anywhere else in the project', () => {
+      const dir = plansDir({})
+      const { server, handlers } = devServer()
+      configure(latestPlanPlugin(dir), server)
+      handlers.get('add')!(join(tmpdir(), 'otra-cosa', 'x.md'))
+      expect(server.moduleGraph.invalidateModule).not.toHaveBeenCalled()
+      expect(server.ws.send).not.toHaveBeenCalled()
+    })
   })
 
   it('looks for the plans from the root of the project, not from the folder the command was run in', () => {

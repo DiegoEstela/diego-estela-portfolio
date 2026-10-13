@@ -1,6 +1,6 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
-import type { Plugin } from 'vite'
+import { normalizePath, type Plugin } from 'vite'
 import { latestPlan, parsePlan, planIssueNumber, type Plan } from '../src/components/AgentsOffice/planParser'
 
 const VIRTUAL_ID = 'virtual:latest-plan'
@@ -45,12 +45,28 @@ export function latestPlanPlugin(folder?: string): Plugin {
     resolveId(id) {
       return id === VIRTUAL_ID ? RESOLVED_ID : null
     },
+    configureServer(server) {
+      // A plan created or deleted while `npm run dev` runs: `addWatchFile` below only covers the
+      // files that exist when the module loads.
+      server.watcher.add(dir)
+      const refresh = (file: string) => {
+        if (!normalizePath(file).startsWith(`${normalizePath(dir)}/`)) return
+        const module = server.moduleGraph.getModuleById(RESOLVED_ID)
+        if (!module) return
+        server.moduleGraph.invalidateModule(module)
+        server.ws.send({ type: 'full-reload' })
+      }
+      server.watcher.on('add', refresh)
+      server.watcher.on('unlink', refresh)
+    },
     load(id) {
       if (id !== RESOLVED_ID) return null
-      // Watching the folder as well as each file means a plan created while `npm run dev` runs
-      // refreshes the board too.
-      this.addWatchFile(dir)
-      if (existsSync(dir)) for (const file of readdirSync(dir)) this.addWatchFile(join(dir, file))
+      // Files only: Vite resolves what it is asked to watch as an import, so a folder would fail.
+      if (existsSync(dir)) {
+        for (const entry of readdirSync(dir, { withFileTypes: true })) {
+          if (entry.isFile()) this.addWatchFile(join(dir, entry.name))
+        }
+      }
       return latestPlanModule(readPlans(dir))
     },
   }

@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { OfficeScene } from './OfficeScene'
 import { BOARD_HIT_BOX, BUBBLE, REST_STATIONS, SCENE_SIZE, SOFA, STATIONS, bubbleAnchor, hitBoxFor, stationsFor, type Box } from './layout'
 import type { OfficeMode } from './officeMode'
-import { AGENT_IDS, REST_POSE, boardFilledCells, type AgentId } from './sprites'
+import { AGENT_IDS, BOARD_BAR_FILL, REST_POSE, boardFilledCells, type AgentId } from './sprites'
 import type { Plan } from './planParser'
 
 const agents = AGENT_IDS.map((id) => ({ id, label: `Agente ${id}` }))
@@ -12,7 +12,7 @@ const agents = AGENT_IDS.map((id) => ({ id, label: `Agente ${id}` }))
 function setup(props: Partial<React.ComponentProps<typeof OfficeScene>> = {}) {
   const onSelect = vi.fn()
   const utils = render(
-    <OfficeScene agents={agents} description="Una oficina con cinco asistentes" selectedId={null} onSelect={onSelect} {...props} />,
+    <OfficeScene agents={agents} description="Una oficina con cinco asistentes" selectedId={null} boardLabel="Pizarra del plan" onSelect={onSelect} {...props} />,
   )
   return { onSelect, ...utils }
 }
@@ -357,7 +357,7 @@ describe('the plan board', () => {
 
   const filledWidth = (container: HTMLElement) =>
     Array.from(container.querySelectorAll('[data-board] rect'))
-      .filter((r) => r.getAttribute('fill') === '#15803D')
+      .filter((r) => r.getAttribute('fill') === BOARD_BAR_FILL)
       .reduce((sum, r) => sum + Number(r.getAttribute('width')), 0)
 
   it.each([
@@ -374,10 +374,5 @@ describe('the plan board', () => {
     const { container } = setup({ plan: null })
     expect(container.querySelector('[data-board]')).not.toBeNull()
     expect(filledWidth(container)).toBe(0)
-  })
-
-  it('has a default name, in case nobody provides one', () => {
-    setup()
-    expect(screen.getAllByRole('button').at(-1)).toHaveAttribute('aria-label')
   })
 })

@@ -102,7 +102,7 @@ export interface OfficeSceneProps {
   /** The plan the board shows: its bar fills with the tasks that are done. */
   plan?: Plan | null
   /** Name of the board button. It carries the progress, so the caller writes it in the active language. */
-  boardLabel?: string
+  boardLabel: string
 }
 
 function Bubble({ id, text, mode }: { id: AgentId; text: string; mode: OfficeMode }) {
@@ -153,7 +153,7 @@ export function OfficeScene({
   onSelect,
   mode = 'working',
   plan = null,
-  boardLabel = 'Plan board',
+  boardLabel,
 }: OfficeSceneProps) {
   const floorId = useId()
   const byId = new Map(agents.map((agent) => [agent.id, agent.label]))

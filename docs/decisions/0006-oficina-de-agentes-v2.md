@@ -33,6 +33,8 @@ La oficina de la v1 enseña *quiénes* son los agentes. La v2 enseña *qué est�
 - El estado de la escena es el del **último despliegue**, no el de este instante. La actividad en vivo (GitHub o los hooks de Claude Code) queda para los niveles 2 y 3 de la issue.
 - Un plan que no siga la plantilla de `/new-feature` (`### Tarea N:` y `- [x] Hecho`) no tiene tareas y no puede dejar a nadie descansando: falla hacia el lado seguro (trabajando).
 - Los bocadillos de los personajes de la fila de arriba pueden tapar la pizarra mientras hablan (el bocadillo no intercepta el toque, así que sigue siendo pulsable).
+- La ficha de un agente sigue describiendo lo que hace en su mesa aunque el equipo esté descansando: es su definición (el rol, las herramientas y lo que hace cuando trabaja), no su estado del momento. Solo los bocadillos de la escena cambian con el modo.
+- El parser ignora los bloques de código, acepta variantes del encabezado de tarea (`### Tarea 3 - X`) y solo conserva enlaces a GitHub por https: los planes son texto libre y el enlace acaba en un `href`.
 - Cada cambio de personajes o de textos exige `npm run docs:office`; un test lo recuerda comparando el SVG con el generador.
 
 ## Verificación

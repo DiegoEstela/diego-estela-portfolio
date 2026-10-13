@@ -96,7 +96,7 @@ describe('focus and selection ring of the characters', () => {
 
   function renderScene() {
     const agents = AGENT_IDS.map((id) => ({ id, label: id }))
-    render(<OfficeScene agents={agents} description="x" selectedId="claude" onSelect={() => {}} />)
+    render(<OfficeScene agents={agents} description="x" selectedId="claude" boardLabel="Pizarra" onSelect={() => {}} />)
     return screen.getAllByRole('button')
   }
 
@@ -182,7 +182,7 @@ describe('focus ring over the sofa', () => {
   })
 
   it('uses the same ring for a character that sits on the sofa', () => {
-    render(<OfficeScene agents={AGENT_IDS.map((id) => ({ id, label: id }))} description="x" selectedId="claude" mode="resting" onSelect={() => {}} />)
+    render(<OfficeScene agents={AGENT_IDS.map((id) => ({ id, label: id }))} description="x" selectedId="claude" mode="resting" boardLabel="Pizarra" onSelect={() => {}} />)
     const selected = screen.getAllByRole('button').find((b) => b.getAttribute('aria-pressed') === 'true')!
     expect(toHex(selected.style.outlineColor)).toBe(FOCUS_RING.toUpperCase())
   })

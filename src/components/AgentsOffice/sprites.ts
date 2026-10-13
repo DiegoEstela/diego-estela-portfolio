@@ -234,6 +234,9 @@ const BAR_CELLS = 14
 /** Where the first cell of the progress bar is drawn, in the pixels of the board sprite. */
 export const BOARD_BAR = { x: 2, y: 6 } as const
 
+/** The green of the filled cells: shared with the animated drawing of the readme, so they cannot drift apart. */
+export const BOARD_BAR_FILL = '#15803D'
+
 /**
  * Cells of the progress bar to fill. A bar is full only when every task is done: 12 of 13
  * rounds to 13 cells, never to 14, so "almost" never reads as "finished".
@@ -259,7 +262,7 @@ export function boardSprite(done: number, total: number): Sprite {
   ]
   return {
     rows: ['B'.repeat(BOARD_SIZE.width), ...interior.map((row) => `B${row}B`), 'B'.repeat(BOARD_SIZE.width)],
-    palette: { B: '#475569', p: '#F8FAFC', y: '#FDE047', o: '#FB923C', g: '#4ADE80', t: '#CBD5E1', f: '#15803D' },
+    palette: { B: '#475569', p: '#F8FAFC', y: '#FDE047', o: '#FB923C', g: '#4ADE80', t: '#CBD5E1', f: BOARD_BAR_FILL },
   }
 }
 

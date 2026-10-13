@@ -4,6 +4,7 @@ import {
   CHARACTER_SIZE,
   DECOR,
   BOARD_BAR,
+  BOARD_BAR_FILL,
   BOARD_SIZE,
   MONITOR_SIZE,
   REST_POSE,
@@ -189,6 +190,10 @@ describe('plan board', () => {
   it('never shows a full bar until every task is done', () => {
     expect(boardFilledCells(12, 13)).toBeLessThan(boardFilledCells(13, 13))
     expect(boardFilledCells(99, 100)).toBeLessThan(boardFilledCells(100, 100))
+  })
+
+  it('paints the filled cells with the color that is exported for drawings that fill the bar themselves', () => {
+    expect(boardSprite(1, 1).palette.f).toBe(BOARD_BAR_FILL)
   })
 
   it('tells where the bar starts, so other drawings can fill it', () => {
