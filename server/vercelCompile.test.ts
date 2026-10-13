@@ -14,6 +14,7 @@ const ROOT = resolve('.')
 // Vercel compiles with its own options, not ours, and `strict` is off there (TypeScript 6
 // defaults it to on, so it must be disabled explicitly): a type that only
 // narrows under strict (e.g. a discriminated union on a boolean) compiles here and fails there.
+// Only the strict family is reproduced; other Vercel defaults (checked with tsc 6.0.2) are not.
 const MODES = [
   { name: 'strict', flags: ['--strict', 'true'] },
   { name: 'non-strict', flags: ['--strict', 'false'] },
@@ -48,8 +49,7 @@ describe.each(MODES)('api/chat.ts compiled the way Vercel does ($name) and run a
        '--target', 'es2023', '--types', 'node', '--skipLibCheck', ...flags],
       { cwd: ROOT, encoding: 'utf8' },
     )
-    if (compile.status !== 0) throw new Error(`tsc failed:
-${compile.stdout}${compile.stderr}`)
+    if (compile.status !== 0) throw new Error(`tsc failed:\n${compile.stdout}${compile.stderr}`)
   }, 60_000)
 
   afterAll(() => rmSync(OUT, { recursive: true, force: true }))

@@ -29,7 +29,7 @@ describe('function entrypoints and their dependencies', () => {
   })
 
   it('keep tests out of api/, because Vercel deploys every file there as a function', () => {
-    const tests = readdirSync('api', { recursive: true, encoding: 'utf8' }).filter((file) => /\.test\.ts$/.test(file))
+    const tests = readdirSync('api', { recursive: true, encoding: 'utf8' }).filter((file) => /\.(test|spec)\.[cm]?[jt]sx?$/.test(file))
     expect(tests).toEqual([])
   })
 })
