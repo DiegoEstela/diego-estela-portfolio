@@ -102,7 +102,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Ficheros:** `src/components/AgentsOffice/AgentsOfficeModal.tsx`, `src/components/AgentsOffice/AgentsOfficeModal.test.tsx`, `src/components/AgentsOffice/AgentCard.tsx`, `src/locales/es.json`, `src/locales/en.json`
 - **Test (red):** al abrir, el modo sale del plan inyectado (completo → descansan; pendiente → trabajan); tocar la pizarra abre la ficha del plan en lugar de la de un agente; el conmutador (`aria-pressed`) fuerza el otro modo y otra vez lo devuelve al derivado, y su nombre accesible dice qué hará; con `prefers-reduced-motion` no rota el foco; Tab recorre personajes, pizarra y conmutador sin salir del modal; los bocadillos del descanso usan las frases de descanso de cada agente.
 - **Implementación (green):** `OfficeBody` lee el último plan, mantiene `selection` y `override`, y las claves `agentsOffice.mode.*` y `agentsOffice.agents.*.resting`.
-- **Commit:** `feat(agents-office): wire the plan board and the rest toggle into the modal` + `Refs #24`
+- **Commit:** `feat(agents-office): wire the plan board and rest toggle into the modal` + `Refs #24`
 - [x] Hecho
 
 ### Tarea 9: Contraste de lo nuevo
@@ -111,7 +111,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** en tema claro y oscuro, el texto de la ficha del plan >= 4,5:1; el relleno y el fondo de la barra de progreso >= 3:1 entre sí y contra su tarjeta; el color de las celdas llenas de la pizarra >= 3:1 contra el muro; el anillo de la pizarra seleccionada usa `FOCUS_RING`.
 - **Implementación (green):** ajustar solo los colores que fallen, midiendo con los valores reales de `globals.css`.
 - **Commit:** `test(agents-office): measure the contrast of the board and the plan card` + `Refs #24`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 10: La animación del README sigue a la escena
 

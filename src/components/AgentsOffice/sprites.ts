@@ -217,11 +217,11 @@ export function sofaSprites(width: number): { back: Sprite; seat: Sprite } {
   return {
     back: {
       rows: ['.' + 'B'.repeat(Math.max(0, width - 2)) + '.', seams(full('B'), 's'), seams(full('B'), 's'), seams(full('B'), 's')],
-      palette: { B: '#8B4A5C', s: '#6E3446' },
+      palette: { B: '#7A3D50', s: '#5E2F43' },
     },
     seat: {
       rows: [cushion, cushion, cushion, full('D'), legs.slice(0, width), legs.slice(0, width)],
-      palette: { A: '#A5596E', C: '#B96A80', s: '#8B4A5C', D: '#4A2331', L: '#2B1620' },
+      palette: { A: '#8A4A5F', C: '#84465A', s: '#6E3446', D: '#4A2331', L: '#2B1620' },
     },
   }
 }
