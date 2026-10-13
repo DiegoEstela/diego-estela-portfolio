@@ -3,9 +3,15 @@ import {
   AGENT_IDS,
   CHARACTER_SIZE,
   DECOR,
+  BOARD_SIZE,
   MONITOR_SIZE,
+  REST_POSE,
+  boardFilledCells,
+  boardSprite,
   characterLayers,
   monitorSprite,
+  restingLayers,
+  sofaSprites,
   spriteToRects,
   type Sprite,
 } from './sprites'
@@ -101,5 +107,94 @@ describe('agents', () => {
     const [base, ...accessories] = characterLayers('claude')
     expect(base.rows.join('')).toContain('H')
     expect(accessories.length).toBeGreaterThan(0)
+  })
+})
+
+describe('resting poses', () => {
+  it.each(AGENT_IDS)('%s has a well formed resting pose', (id) => {
+    for (const [index, layer] of restingLayers(id).entries()) {
+      assertWellFormed(`${id} resting layer ${index}`, layer, CHARACTER_SIZE.width, CHARACTER_SIZE.height)
+    }
+  })
+
+  it.each(AGENT_IDS)('%s looks different when resting than when working', (id) => {
+    expect(JSON.stringify(restingLayers(id))).not.toBe(JSON.stringify(characterLayers(id)))
+  })
+
+  it('keeps every agent recognizable while resting', () => {
+    const looks = AGENT_IDS.map((id) => JSON.stringify(restingLayers(id)))
+    expect(new Set(looks).size).toBe(AGENT_IDS.length)
+  })
+
+  it('has some of the team asleep and some awake with a coffee', () => {
+    const poses = AGENT_IDS.map((id) => REST_POSE[id])
+    expect(poses).toContain('sleep')
+    expect(poses).toContain('coffee')
+  })
+
+  it('shows the sleepers with a zZz and the others with a cup', () => {
+    for (const id of AGENT_IDS) {
+      const letters = restingLayers(id).flatMap((layer) => layer.rows).join('')
+      if (REST_POSE[id] === 'sleep') {
+        expect(letters, id).toContain('z')
+        expect(letters, id).not.toContain('m')
+      } else {
+        expect(letters, id).toContain('m')
+        expect(letters, id).not.toContain('z')
+      }
+    }
+  })
+
+  it('draws the base character first, so the overlay ends up on top', () => {
+    const [base] = restingLayers('claude')
+    expect(base.rows.join('')).toContain('H')
+  })
+})
+
+describe('sofa', () => {
+  it.each([40, 100])('is rectangular at a width of %i, in two layers', (width) => {
+    const { back, seat } = sofaSprites(width)
+    assertWellFormed('sofa back', back, width)
+    assertWellFormed('sofa seat', seat, width)
+  })
+
+  it('draws a seat that is taller than the back rest is thick, so it can hide the legs of whoever sits', () => {
+    const { back, seat } = sofaSprites(60)
+    expect(seat.rows.length).toBeGreaterThanOrEqual(4)
+    expect(back.rows.length).toBeGreaterThanOrEqual(3)
+  })
+})
+
+describe('plan board', () => {
+  it('has the same size whatever the progress', () => {
+    for (const [done, total] of [[0, 0], [0, 13], [7, 13], [13, 13]] as const) {
+      assertWellFormed(`board ${done}/${total}`, boardSprite(done, total), BOARD_SIZE.width, BOARD_SIZE.height)
+    }
+  })
+
+  it.each([
+    [0, 13, 0],
+    [1, 13, 1],
+    [7, 13, 8],
+    [12, 13, 13],
+    [13, 13, 14],
+    [0, 0, 0],
+    [5, 0, 0],
+    [20, 13, 14],
+  ])('fills the bar for %i of %i tasks with %i cells', (done, total, cells) => {
+    expect(boardFilledCells(done, total)).toBe(cells)
+  })
+
+  it('never shows a full bar until every task is done', () => {
+    expect(boardFilledCells(12, 13)).toBeLessThan(boardFilledCells(13, 13))
+    expect(boardFilledCells(99, 100)).toBeLessThan(boardFilledCells(100, 100))
+  })
+
+  it('paints exactly the filled cells in the bar', () => {
+    for (const [done, total] of [[0, 13], [1, 13], [7, 13], [13, 13]] as const) {
+      const sprite = boardSprite(done, total)
+      const painted = sprite.rows.join('').split('').filter((letter) => letter === 'f').length
+      expect(painted, `${done}/${total}`).toBe(boardFilledCells(done, total))
+    }
   })
 })

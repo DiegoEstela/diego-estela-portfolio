@@ -63,7 +63,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** `restingLayers(id)` devuelve capas con filas del mismo ancho, solo letras de su paleta y **distintas** de `characterLayers(id)` (ojos cerrados); existen `DECOR.sofa`, el sprite de "zZz" y el de la taza; `boardSprite(done, total)` pinta tantas celdas llenas como correspondan (0/13, 12/13, 13/13, y `total` 0 sin celdas llenas) y siempre tiene el mismo tamaño.
 - **Implementación (green):** variantes de los sprites existentes, sofá largo y generador de la pizarra.
 - **Commit:** `feat(agents-office): add resting poses, sofa and progress board sprites` + `Refs #24`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 4: Colocación de los elementos nuevos
 
