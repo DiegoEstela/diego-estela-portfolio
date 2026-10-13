@@ -2,8 +2,9 @@ import { describe, expect, it, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { OfficeScene } from './OfficeScene'
-import { BUBBLE, HIT, SCENE_SIZE, STATIONS, bubbleAnchor } from './layout'
-import { AGENT_IDS } from './sprites'
+import { BOARD_HIT_BOX, BUBBLE, SCENE_SIZE, SOFA, STATIONS, bubbleAnchor, hitBoxFor, stationsFor, type Box } from './layout'
+import type { OfficeMode } from './officeMode'
+import { AGENT_IDS, type AgentId } from './sprites'
 
 const agents = AGENT_IDS.map((id) => ({ id, label: `Agente ${id}` }))
 
@@ -63,39 +64,86 @@ describe('OfficeScene', () => {
   })
 })
 
-describe('station layout', () => {
-  const HIT_WIDTH = HIT.width
-  const HIT_HEIGHT = HIT.height
+const MODES: OfficeMode[] = ['working', 'resting']
+
+// A modal on a 360 px phone leaves 328 px for the scene.
+const PHONE_UNIT = (360 - 2 * 16) / SCENE_SIZE.width
+
+const overlaps = (a: Box, b: Box) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom
+
+describe.each(MODES)('station layout (%s)', (mode) => {
+  const stations = stationsFor(mode)
+  const boxes = AGENT_IDS.map((id) => ({ id, ...hitBoxFor(mode, id) }))
 
   it('has a station for every agent', () => {
-    expect(Object.keys(STATIONS).sort()).toEqual([...AGENT_IDS].sort())
+    expect(Object.keys(stations).sort()).toEqual([...AGENT_IDS].sort())
   })
 
   it('keeps every touch target inside the scene', () => {
-    for (const [id, { cx, y }] of Object.entries(STATIONS)) {
-      expect(cx - HIT_WIDTH / 2, `${id} left`).toBeGreaterThanOrEqual(0)
-      expect(cx + HIT_WIDTH / 2, `${id} right`).toBeLessThanOrEqual(SCENE_SIZE.width)
-      expect(y, `${id} top`).toBeGreaterThanOrEqual(0)
-      expect(y + HIT_HEIGHT, `${id} bottom`).toBeLessThanOrEqual(SCENE_SIZE.height)
+    for (const { id, left, right, top, bottom } of boxes) {
+      expect(left, `${id} left`).toBeGreaterThanOrEqual(0)
+      expect(right, `${id} right`).toBeLessThanOrEqual(SCENE_SIZE.width)
+      expect(top, `${id} top`).toBeGreaterThanOrEqual(0)
+      expect(bottom, `${id} bottom`).toBeLessThanOrEqual(SCENE_SIZE.height)
     }
   })
 
   it('never lets two touch targets overlap, so a finger always hits the right character', () => {
-    const boxes = Object.entries(STATIONS).map(([id, { cx, y }]) => ({ id, left: cx - HIT_WIDTH / 2, top: y, right: cx + HIT_WIDTH / 2, bottom: y + HIT_HEIGHT }))
     for (const a of boxes) {
       for (const b of boxes) {
         if (a.id >= b.id) continue
-        const overlaps = a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom
-        expect(overlaps, `${a.id} overlaps ${b.id}`).toBe(false)
+        expect(overlaps(a, b), `${a.id} overlaps ${b.id}`).toBe(false)
       }
     }
   })
 
-  it('makes the touch targets at least 44 css px wide on a 360px phone', () => {
-    const phoneSceneWidth = 360 - 2 * 16 // modal gutter
-    const unit = phoneSceneWidth / SCENE_SIZE.width
-    expect(HIT_WIDTH * unit).toBeGreaterThanOrEqual(44)
-    expect(HIT_HEIGHT * unit).toBeGreaterThanOrEqual(44)
+  it('makes the touch targets at least 44 css px on a 360px phone', () => {
+    for (const { id, left, right, top, bottom } of boxes) {
+      expect((right - left) * PHONE_UNIT, `${id} width`).toBeGreaterThanOrEqual(44)
+      expect((bottom - top) * PHONE_UNIT, `${id} height`).toBeGreaterThanOrEqual(44)
+    }
+  })
+
+  it('keeps the plan board clear of every character', () => {
+    for (const box of boxes) expect(overlaps(BOARD_HIT_BOX, box), `the board overlaps ${box.id}`).toBe(false)
+  })
+})
+
+describe('plan board layout', () => {
+  it('stays inside the scene and is at least 44 css px on a 360px phone', () => {
+    const { left, right, top, bottom } = BOARD_HIT_BOX
+    expect(left).toBeGreaterThanOrEqual(0)
+    expect(right).toBeLessThanOrEqual(SCENE_SIZE.width)
+    expect(top).toBeGreaterThanOrEqual(0)
+    expect(bottom).toBeLessThanOrEqual(SCENE_SIZE.height)
+    expect((right - left) * PHONE_UNIT).toBeGreaterThanOrEqual(44)
+    expect((bottom - top) * PHONE_UNIT).toBeGreaterThanOrEqual(44)
+  })
+})
+
+describe('sofa layout', () => {
+  const seat = { left: SOFA.x, right: SOFA.x + SOFA.width, top: SOFA.y + SOFA.seatOffset, bottom: SOFA.y + SOFA.height }
+  // The head of a character: columns 3-8 of its sprite, rows 3-8 below the top of the station.
+  const head = ({ cx, y }: { cx: number; y: number }) => ({ left: cx - 5 + 2, right: cx - 5 + 8, top: y + 3, bottom: y + 8 })
+
+  it('fits inside the scene', () => {
+    expect(SOFA.x).toBeGreaterThanOrEqual(0)
+    expect(SOFA.x + SOFA.width).toBeLessThanOrEqual(SCENE_SIZE.width)
+    expect(SOFA.y + SOFA.height).toBeLessThanOrEqual(SCENE_SIZE.height)
+  })
+
+  it('sits below the desks of the working team, without touching them', () => {
+    const lowestDesk = Math.max(...Object.values(STATIONS).map(({ y }) => y + 22))
+    expect(SOFA.y).toBeGreaterThan(lowestDesk)
+  })
+
+  it('has a seat under every resting character and never covers a head', () => {
+    for (const id of AGENT_IDS) {
+      const { cx, y } = stationsFor('resting')[id]
+      expect(cx - 5, `${id} starts on the sofa`).toBeGreaterThanOrEqual(seat.left)
+      expect(cx + 5, `${id} ends on the sofa`).toBeLessThanOrEqual(seat.right)
+      expect(overlaps(seat, head({ cx, y })), `the seat covers the head of ${id}`).toBe(false)
+    }
   })
 })
 
@@ -149,29 +197,29 @@ describe('spotlight and idle animation', () => {
   })
 })
 
-describe('speech bubble placement', () => {
-  const overlaps = (a: { left: number; top: number; right: number; bottom: number }, b: typeof a) =>
-    a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom
+describe.each(MODES)('speech bubble placement (%s)', (mode) => {
+  const stations = stationsFor(mode)
+  const ids = Object.keys(stations) as AgentId[]
 
-  const bubbleBox = (id: keyof typeof STATIONS) => {
-    const { left } = bubbleAnchor(STATIONS[id].cx)
-    const bottom = STATIONS[id].bubbleY
+  const bubbleBox = (id: AgentId) => {
+    const { left } = bubbleAnchor(stations[id].cx)
+    const bottom = stations[id].bubbleY
     return { left: left - BUBBLE.width / 2, right: left + BUBBLE.width / 2, top: bottom - BUBBLE.height, bottom }
   }
   // The head of a character: columns 3-8 of its sprite, rows 3-8 below the top of the station.
   const headBox = ({ cx, y }: { cx: number; y: number }) => ({ left: cx - 5 + 2, right: cx - 5 + 8, top: y + 3, bottom: y + 8 })
 
-  it.each(Object.keys(STATIONS) as Array<keyof typeof STATIONS>)('the bubble of %s stays inside the scene', (id) => {
+  it.each(ids)('the bubble of %s stays inside the scene', (id) => {
     const box = bubbleBox(id)
     expect(box.top).toBeGreaterThanOrEqual(0)
     expect(box.bottom).toBeLessThanOrEqual(SCENE_SIZE.height)
   })
 
   it('never covers the head of another character, so everybody stays recognizable while one speaks', () => {
-    for (const speaker of Object.keys(STATIONS) as Array<keyof typeof STATIONS>) {
-      for (const [other, station] of Object.entries(STATIONS)) {
+    for (const speaker of ids) {
+      for (const other of ids) {
         if (other === speaker) continue
-        expect(overlaps(bubbleBox(speaker), headBox(station)), `${speaker}'s bubble covers ${other}'s head`).toBe(false)
+        expect(overlaps(bubbleBox(speaker), headBox(stations[other])), `${speaker}'s bubble covers ${other}'s head`).toBe(false)
       }
     }
   })

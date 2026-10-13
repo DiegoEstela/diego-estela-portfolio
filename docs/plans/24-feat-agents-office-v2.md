@@ -71,7 +71,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** en los dos modos, las 5 zonas de personajes y la de la pizarra están dentro de la escena, miden >= 44 px a 360 px, **no se solapan** entre sí y el sofá no tapa ninguna cabeza; los bocadillos siguen sin tapar cabezas ni salirse. Los tests de colocación existentes se parametrizan por modo.
 - **Implementación (green):** `SCENE_SIZE` más alto, `REST_STATIONS`, `SOFA` y `BOARD_HIT`, y las constantes de modo.
 - **Commit:** `feat(agents-office): lay out the sofa, the board and the resting seats` + `Refs #24`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 5: La escena dibuja pizarra, sofá y descanso
 
