@@ -13,10 +13,10 @@
 **Live site:** https://diego-estela-lopez.vercel.app · **Contact:** die.estela@gmail.com
 
 <p align="center">
-  <img src="docs/images/agents-office.svg" alt="Pixel art office with five AI agents at their desks. A spotlight moves from one to the next and a speech bubble shows what each one is doing." width="760">
+  <img src="docs/images/agents-office.svg" alt="Pixel art office with five AI agents at their desks. A spotlight moves from one to the next while the progress bar of the plan board fills; when it is full, the team rests on the sofa." width="760">
 </p>
 
-<p align="center"><sub>The AI team of this repository, drawn from code. On the site, the Hero button <b>“How does AI work for me?”</b> opens it, and tapping a character shows its real definition.</sub></p>
+<p align="center"><sub>The AI team of this repository, drawn from code. On the site, the Hero button <b>“How does AI work for me?”</b> opens it, and tapping a character shows its real definition. The loop: the team works while the plan board fills, then rests on the sofa.</sub></p>
 
 ## What this repository demonstrates
 
@@ -27,6 +27,8 @@
 ## Meet the team
 
 The pixel art characters are not decoration. Each one is an agent defined in [`.claude/agents/`](.claude/agents), and the site reads those files at build time, so what you see is what the repository really configures ([ADR 0005](docs/decisions/0005-oficina-de-agentes-pixel-art-con-codigo.md)).
+
+The office also reads the repository's own plans. The board on the wall opens the latest plan in [`docs/plans`](docs/plans) with its real progress, and when every task is done the team goes to rest on the sofa. A toggle lets a visitor override that.
 
 | Character | Agent | Model | What it does | Can it edit files? |
 | --------- | ----- | ----- | ------------ | ------------------ |

@@ -13,10 +13,10 @@
 **Sitio en producción:** https://diego-estela-lopez.vercel.app · **Contacto:** die.estela@gmail.com
 
 <p align="center">
-  <img src="docs/images/agents-office.svg" alt="Oficina pixel art con cinco agentes de IA en sus escritorios. Un foco pasa de uno a otro y un bocadillo muestra lo que hace cada uno." width="760">
+  <img src="docs/images/agents-office.svg" alt="Oficina pixel art con cinco agentes de IA en sus escritorios. Un foco pasa de uno a otro mientras se llena la barra de progreso de la pizarra del plan; cuando está llena, el equipo descansa en el sofá." width="760">
 </p>
 
-<p align="center"><sub>El equipo de IA de este repositorio, dibujado con código. En el sitio, el botón del Hero <b>«¿Cómo trabaja la IA por mí?»</b> lo abre, y al tocar un personaje se ve su definición real.</sub></p>
+<p align="center"><sub>El equipo de IA de este repositorio, dibujado con código. En el sitio, el botón del Hero <b>«¿Cómo trabaja la IA por mí?»</b> lo abre, y al tocar un personaje se ve su definición real. El bucle: el equipo trabaja mientras se llena la pizarra del plan y después descansa en el sofá.</sub></p>
 
 ## Qué demuestra este repositorio
 
@@ -27,6 +27,8 @@
 ## Conoce al equipo
 
 Los personajes pixel art no son decoración. Cada uno es un agente definido en [`.claude/agents/`](.claude/agents), y el sitio lee esos ficheros al compilar, así que lo que ves es lo que el repositorio configura de verdad ([ADR 0005](docs/decisions/0005-oficina-de-agentes-pixel-art-con-codigo.md)).
+
+La oficina también lee los planes del propio repositorio. La pizarra de la pared abre el último plan de [`docs/plans`](docs/plans) con su progreso real, y cuando todas las tareas están hechas el equipo se va a descansar al sofá. Un conmutador permite a quien visita cambiarlo.
 
 | Personaje | Agente | Modelo | Qué hace | ¿Puede editar ficheros? |
 | --------- | ------ | ------ | -------- | ----------------------- |

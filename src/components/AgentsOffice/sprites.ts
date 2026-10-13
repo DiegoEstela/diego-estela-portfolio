@@ -231,6 +231,9 @@ export function sofaSprites(width: number): { back: Sprite; seat: Sprite } {
 export const BOARD_SIZE = { width: 18, height: 9 } as const
 const BAR_CELLS = 14
 
+/** Where the first cell of the progress bar is drawn, in the pixels of the board sprite. */
+export const BOARD_BAR = { x: 2, y: 6 } as const
+
 /**
  * Cells of the progress bar to fill. A bar is full only when every task is done: 12 of 13
  * rounds to 13 cells, never to 14, so "almost" never reads as "finished".

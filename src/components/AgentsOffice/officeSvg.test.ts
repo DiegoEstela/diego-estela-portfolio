@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import en from '../../locales/en.json'
-import { SCENE_SIZE } from './layout'
+import { REST_STATIONS, SCENE_SIZE } from './layout'
 import { renderOfficeSvg } from './officeSvg'
-import { AGENT_IDS, characterLayers, spriteToRects, type AgentId } from './sprites'
+import { AGENT_IDS, REST_POSE, boardFilledCells, characterLayers, spriteToRects, type AgentId } from './sprites'
 
 const agents = Object.fromEntries(
   AGENT_IDS.map((id) => [id, { doing: en.agentsOffice.agents[id].doing[0] }]),
@@ -11,6 +11,7 @@ const agents = Object.fromEntries(
 const input = { title: en.agentsOffice.sceneDescription, agents }
 const svg = renderOfficeSvg(input)
 const doc = new DOMParser().parseFromString(svg, 'image/svg+xml')
+const css = doc.querySelector('style')?.textContent ?? ''
 
 describe('renderOfficeSvg', () => {
   it('is well-formed XML with the scene size and crisp edges', () => {
@@ -72,7 +73,6 @@ describe('renderOfficeSvg', () => {
   })
 
   it('animates in pixel steps and spotlights the five characters in turn', () => {
-    const css = doc.querySelector('style')?.textContent ?? ''
     expect(css).toMatch(/@keyframes office-bob/)
     expect(css).toMatch(/steps\(1, end\)/)
 
@@ -84,19 +84,89 @@ describe('renderOfficeSvg', () => {
     expect(new Set(delays).size).toBe(AGENT_IDS.length)
   })
 
-  it('respects prefers-reduced-motion by showing a still frame', () => {
-    const css = doc.querySelector('style')?.textContent ?? ''
-    const reduced = css.match(/@media \(prefers-reduced-motion: reduce\)\s*\{([\s\S]*)\}\s*$/)?.[1] ?? ''
-    expect(reduced).toMatch(/animation:\s*none/)
-    expect(reduced).toMatch(/\[data-first\]/)
+  it('is deterministic', () => {
+    expect(renderOfficeSvg(input)).toBe(svg)
   })
 
   // The README embeds this file. If the sprites change, `npm run docs:office` regenerates it.
   it('matches the committed docs/images/agents-office.svg', async () => {
     await expect(svg).toMatchFileSnapshot('../../../docs/images/agents-office.svg')
   })
+})
 
-  it('is deterministic', () => {
-    expect(renderOfficeSvg(input)).toBe(svg)
+describe('the board and the sofa in the animation', () => {
+  it('hangs the plan board on the wall, with the bar empty underneath the one that fills', () => {
+    const board = doc.querySelector('[data-board]')
+    expect(board).not.toBeNull()
+    const filled = [...board!.querySelectorAll('rect')].filter((r) => r.getAttribute('fill') === '#15803D' && !r.classList.contains('office-bar'))
+    expect(filled).toHaveLength(boardFilledCells(0, 1))
+  })
+
+  it('fills the bar one pixel at a time, as many steps as the bar has cells', () => {
+    const bar = doc.querySelector('[data-board] .office-bar')
+    expect(bar).not.toBeNull()
+    expect(Number(bar!.getAttribute('width'))).toBe(boardFilledCells(1, 1))
+    expect(css).toMatch(/@keyframes office-bar/)
+    expect(css).toMatch(new RegExp(`\\.office-bar\\s*\\{[^}]*steps\\(${boardFilledCells(1, 1)}, end\\)`))
+  })
+
+  it('draws the sofa, whose seat goes after everybody who sits', () => {
+    const back = doc.querySelector('[data-sofa="back"]')!
+    const seat = doc.querySelector('[data-sofa="seat"]')!
+    const lastSeated = doc.querySelector(`[data-seated="${AGENT_IDS.at(-1)}"]`)!
+    expect(back.compareDocumentPosition(lastSeated) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(lastSeated.compareDocumentPosition(seat) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+})
+
+describe('the team at rest in the animation', () => {
+  it('sits every agent on the sofa, each with its pose', () => {
+    for (const id of AGENT_IDS) {
+      const seated = doc.querySelector(`[data-seated="${id}"]`)
+      expect(seated, id).not.toBeNull()
+      expect(seated!.getAttribute('data-pose')).toBe(REST_POSE[id])
+      const tops = [...seated!.querySelectorAll('rect')].map((r) => Number(r.getAttribute('y')))
+      expect(Math.min(...tops), id).toBeGreaterThanOrEqual(REST_STATIONS[id].y)
+    }
+  })
+
+  it('keeps the desks drawn in both phases, because they belong to neither', () => {
+    expect(doc.querySelectorAll('[data-desk]')).toHaveLength(AGENT_IDS.length)
+    for (const desk of doc.querySelectorAll('[data-desk]')) {
+      expect(desk.closest('[data-phase]'), 'a desk must not disappear with a phase').toBeNull()
+    }
+  })
+
+  it('floats the zZz and the steam in pixel steps', () => {
+    expect(doc.querySelectorAll('[data-seated] .office-zzz')).toHaveLength(AGENT_IDS.length)
+    expect(css).toMatch(/\.office-zzz\s*\{[^}]*steps\(1, end\)/)
+  })
+})
+
+describe('the story the animation tells', () => {
+  const seconds = (name: string) => Number(css.match(new RegExp(`\\.${name}\\s*\\{[^}]*animation(?:-duration)?:[^;]*?([\\d.]+)s`))?.[1])
+
+  it('works first and rests after, in one loop: the work phase and the rest phase share a clock', () => {
+    const work = doc.querySelector('[data-phase="work"]')
+    const rest = doc.querySelector('[data-phase="rest"]')
+    expect(work).not.toBeNull()
+    expect(rest).not.toBeNull()
+    expect(rest!.contains(doc.querySelector('[data-seated="claude"]'))).toBe(true)
+    expect(work!.contains(doc.querySelector('[data-agent="claude"]'))).toBe(true)
+    expect(seconds('phase')).toBe(seconds('spot'))
+    expect(seconds('office-bar')).toBe(seconds('phase'))
+  })
+
+  it('gives each character a turn, then a round of rest, inside the loop', () => {
+    expect(seconds('spot')).toBeGreaterThan(AGENT_IDS.length * 3)
+  })
+
+  it('shows a calm still frame for prefers-reduced-motion: at work, the first one in the spotlight', () => {
+    const reduced = css.match(/@media \(prefers-reduced-motion: reduce\)\s*\{([\s\S]*)\}\s*$/)?.[1] ?? ''
+    expect(reduced).toMatch(/animation:\s*none/)
+    expect(reduced).toContain('.office-bar')
+    expect(reduced).toContain('.phase')
+    expect(reduced).toMatch(/\[data-first\]/)
+    expect(reduced).toMatch(/\.phase-rest\s*\{[^}]*opacity:\s*0/)
   })
 })

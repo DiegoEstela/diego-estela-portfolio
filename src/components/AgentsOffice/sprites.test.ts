@@ -3,6 +3,7 @@ import {
   AGENT_IDS,
   CHARACTER_SIZE,
   DECOR,
+  BOARD_BAR,
   BOARD_SIZE,
   MONITOR_SIZE,
   REST_POSE,
@@ -188,6 +189,13 @@ describe('plan board', () => {
   it('never shows a full bar until every task is done', () => {
     expect(boardFilledCells(12, 13)).toBeLessThan(boardFilledCells(13, 13))
     expect(boardFilledCells(99, 100)).toBeLessThan(boardFilledCells(100, 100))
+  })
+
+  it('tells where the bar starts, so other drawings can fill it', () => {
+    const { rows } = boardSprite(0, 1)
+    expect(rows[BOARD_BAR.y][BOARD_BAR.x]).toBe('t')
+    expect(rows[BOARD_BAR.y][BOARD_BAR.x - 1]).toBe('p')
+    expect(rows[BOARD_BAR.y].slice(BOARD_BAR.x).replace(/p/, '').length).toBeGreaterThanOrEqual(boardFilledCells(1, 1))
   })
 
   it('paints exactly the filled cells in the bar', () => {

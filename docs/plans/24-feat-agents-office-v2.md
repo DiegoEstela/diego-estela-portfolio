@@ -119,7 +119,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** el SVG usa el nuevo tamaño de escena, dibuja la pizarra con el progreso del último plan y el sofá, y sigue siendo XML válido, sin recursos externos; el test de sincronización falla hasta regenerar con `npm run docs:office`. Los tests de `scripts/readme.test.mjs` siguen en verde.
 - **Implementación (green):** `renderOfficeSvg` reutiliza el layout y los sprites nuevos; una frase en los dos README sobre la pizarra y el descanso. Se retiran las capturas PNG de la v1 (`docs/images/agents-office-mobile.png` y `agents-office-desktop.png`), que el README ya no usa.
 - **Commit:** `docs(agents-office): update the readme animation with the board and the sofa` + `Refs #24`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 11: ADR 0006 y verificación visual
 
