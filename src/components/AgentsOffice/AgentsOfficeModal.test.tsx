@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { act, render, screen, waitForElementToBeRemoved } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import i18n from '@/i18n'
+import { WORKING_PLAN } from '@/test/plans'
 import { AgentsOfficeModal } from './AgentsOfficeModal'
 
 function Harness({ onClose }: { onClose?: () => void }) {
@@ -12,6 +13,7 @@ function Harness({ onClose }: { onClose?: () => void }) {
       <button onClick={() => setOpen(true)}>abrir</button>
       <AgentsOfficeModal
         open={open}
+        plan={WORKING_PLAN}
         onClose={() => {
           onClose?.()
           setOpen(false)
@@ -69,8 +71,8 @@ describe('AgentsOfficeModal semantics', () => {
   it('shows the office and a hint, so there is something to do right away', async () => {
     render(<Harness />)
     await openModal()
-    // Five characters and the plan board.
-    expect(screen.getAllByRole('button', { pressed: false })).toHaveLength(6)
+    // Five characters, the plan board and the rest toggle.
+    expect(screen.getAllByRole('button', { pressed: false })).toHaveLength(7)
     expect(screen.getByText(i18n.t('agentsOffice.hint'))).toBeInTheDocument()
   })
 

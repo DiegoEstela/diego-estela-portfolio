@@ -103,7 +103,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** al abrir, el modo sale del plan inyectado (completo → descansan; pendiente → trabajan); tocar la pizarra abre la ficha del plan en lugar de la de un agente; el conmutador (`aria-pressed`) fuerza el otro modo y otra vez lo devuelve al derivado, y su nombre accesible dice qué hará; con `prefers-reduced-motion` no rota el foco; Tab recorre personajes, pizarra y conmutador sin salir del modal; los bocadillos del descanso usan las frases de descanso de cada agente.
 - **Implementación (green):** `OfficeBody` lee el último plan, mantiene `selection` y `override`, y las claves `agentsOffice.mode.*` y `agentsOffice.agents.*.resting`.
 - **Commit:** `feat(agents-office): wire the plan board and the rest toggle into the modal` + `Refs #24`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 9: Contraste de lo nuevo
 

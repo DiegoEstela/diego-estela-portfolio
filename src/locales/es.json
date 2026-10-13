@@ -217,6 +217,13 @@
     "doingLabel": "Lo que hace",
     "readOnly": "Solo lectura",
     "canEdit": "Puede editar",
+    "mode": {
+      "toggle": "Que el equipo descanse",
+      "fromPlan": "Estado según el último plan: {{state}}",
+      "manual": "Elegido por ti: {{state}}",
+      "working": "trabajando",
+      "resting": "descansando"
+    },
     "plan": {
       "selected": "Pizarra del plan seleccionada",
       "latest": "Último plan del repositorio",
@@ -240,6 +247,11 @@
           "Leyendo la issue y escribiendo el plan",
           "Escribiendo primero el test que falla",
           "Pidiendo la revisión a los agentes"
+        ],
+        "resting": [
+          "Tomándose un café",
+          "Repasando lo que salió bien",
+          "Esperando la próxima issue"
         ]
       },
       "code-reviewer": {
@@ -249,6 +261,11 @@
           "Revisando el diff contra main",
           "Buscando casos límite",
           "Comprobando que hay tests"
+        ],
+        "resting": [
+          "Echándose una siesta",
+          "Soñando con diffs pequeños",
+          "Sin nada que revisar"
         ]
       },
       "content-copywriter": {
@@ -258,6 +275,11 @@
           "Puliendo el texto de un proyecto",
           "Comparando la versión en español y en inglés",
           "Quitando relleno y superlativos"
+        ],
+        "resting": [
+          "Soñando con titulares",
+          "Descansando la vista",
+          "Sin superlativos, por una vez"
         ]
       },
       "web-quality-auditor": {
@@ -267,6 +289,11 @@
           "Midiendo el tamaño del bundle",
           "Revisando el contraste en tema claro y oscuro",
           "Comprobando los metadatos de SEO"
+        ],
+        "resting": [
+          "Tomándose un café",
+          "Contando ovejas en kilobytes",
+          "Con el contraste en reposo"
         ]
       },
       "security-auditor": {
@@ -276,6 +303,11 @@
           "Buscando secretos en el historial",
           "Ejecutando npm audit",
           "Revisando qué llega al bundle público"
+        ],
+        "resting": [
+          "Durmiendo con un ojo abierto",
+          "Soñando con claves rotadas",
+          "Descansando de los secretos"
         ]
       }
     }
