@@ -102,3 +102,41 @@ describe('latestPlanPlugin', () => {
     expect(load.call({ addWatchFile: vi.fn() }, 'src/main.tsx')).toBeNull()
   })
 })
+
+describe('readPlans in a folder that is not tidy', () => {
+  it('returns nothing when the folder does not exist, instead of breaking the build', () => {
+    expect(readPlans(join(tmpdir(), 'plans-that-do-not-exist'))).toEqual([])
+  })
+
+  it('skips entries that are not files, even if they are called like a plan', () => {
+    const dir = plansDir({ '4-real.md': plan('Cuatro', 4, true) })
+    mkdirSync(join(dir, '9-carpeta.md'))
+    expect(readPlans(dir).map((p) => p.issue)).toEqual([4])
+  })
+})
+
+describe('latestPlanPlugin in a project without plans yet', () => {
+  const load = (plugin: ReturnType<typeof latestPlanPlugin>, addWatchFile = vi.fn()) =>
+    (plugin.load as (this: { addWatchFile: (file: string) => void }, id: string) => string | null).call({ addWatchFile }, '\0virtual:latest-plan')
+
+  it('serves null when the folder does not exist', () => {
+    expect(load(latestPlanPlugin(join(tmpdir(), 'plans-that-do-not-exist')))?.trim()).toBe('export default null')
+  })
+
+  it('watches the folder itself, so a plan created while the dev server runs refreshes the board', () => {
+    const dir = plansDir({})
+    const addWatchFile = vi.fn()
+    load(latestPlanPlugin(dir), addWatchFile)
+    expect(addWatchFile).toHaveBeenCalledWith(dir)
+  })
+
+  it('looks for the plans from the root of the project, not from the folder the command was run in', () => {
+    const root = mkdtempSync(join(tmpdir(), 'root-'))
+    dirs.push(root)
+    mkdirSync(join(root, 'docs', 'plans'), { recursive: true })
+    writeFileSync(join(root, 'docs', 'plans', '7-x.md'), plan('Siete', 7, true))
+    const plugin = latestPlanPlugin()
+    ;(plugin.configResolved as (config: { root: string }) => void)({ root })
+    expect(load(plugin)).toContain('"issue":7')
+  })
+})

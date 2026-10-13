@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import type { Plugin } from 'vite'
 import { latestPlan, parsePlan, planIssueNumber, type Plan } from '../src/components/AgentsOffice/planParser'
@@ -6,13 +6,17 @@ import { latestPlan, parsePlan, planIssueNumber, type Plan } from '../src/compon
 const VIRTUAL_ID = 'virtual:latest-plan'
 const RESOLVED_ID = `\0${VIRTUAL_ID}`
 
-/** The plans of a folder: the Markdown files named with an issue number (`24-feat-….md`) that have a title. */
+/**
+ * The plans of a folder: the Markdown files named with an issue number (`24-feat-….md`) that have
+ * a title. A folder that does not exist has no plans, which must not break the build.
+ */
 export function readPlans(dir: string): Plan[] {
-  return readdirSync(dir)
-    .filter((file) => file.endsWith('.md'))
-    .flatMap((file) => {
-      const issue = planIssueNumber(file)
-      const plan = issue === null ? null : parsePlan(readFileSync(join(dir, file), 'utf8'), issue)
+  if (!existsSync(dir)) return []
+  return readdirSync(dir, { withFileTypes: true })
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
+    .flatMap(({ name }) => {
+      const issue = planIssueNumber(name)
+      const plan = issue === null ? null : parsePlan(readFileSync(join(dir, name), 'utf8'), issue)
       return plan ? [plan] : []
     })
     .sort((a, b) => a.issue - b.issue)
@@ -27,17 +31,26 @@ export function latestPlanModule(plans: readonly Plan[]): string {
  * Serves `virtual:latest-plan`. The office shows the latest plan of the repository, and it only
  * needs its title, its link and its tasks: shipping the Markdown of every plan would multiply
  * the size of the lazy chunk and publish the text of every plan.
+ *
+ * Without an explicit folder it uses `docs/plans` under the root of the Vite project, not under
+ * wherever the command happened to run.
  */
-export function latestPlanPlugin(dir: string = resolve('docs/plans')): Plugin {
+export function latestPlanPlugin(folder?: string): Plugin {
+  let dir = folder ?? resolve('docs/plans')
   return {
     name: 'latest-plan',
+    configResolved(config) {
+      if (folder === undefined) dir = join(config.root, 'docs', 'plans')
+    },
     resolveId(id) {
       return id === VIRTUAL_ID ? RESOLVED_ID : null
     },
     load(id) {
       if (id !== RESOLVED_ID) return null
-      // Editing a plan while `npm run dev` runs refreshes the board.
-      for (const file of readdirSync(dir)) this.addWatchFile(join(dir, file))
+      // Watching the folder as well as each file means a plan created while `npm run dev` runs
+      // refreshes the board too.
+      this.addWatchFile(dir)
+      if (existsSync(dir)) for (const file of readdirSync(dir)) this.addWatchFile(join(dir, file))
       return latestPlanModule(readPlans(dir))
     },
   }
