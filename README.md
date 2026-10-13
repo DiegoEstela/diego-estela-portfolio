@@ -1,4 +1,6 @@
-# Portfolio de Diego Estela
+# Diego Estela · Portfolio, built with an AI engineering team
+
+**English** · [Español](README.es.md)
 
 [![CI](https://github.com/DiegoEstela/diego-estela-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/DiegoEstela/diego-estela-portfolio/actions/workflows/ci.yml)
 ![React](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=white)
@@ -6,97 +8,131 @@
 ![Vite](https://img.shields.io/badge/Vite-8-646cff?logo=vite&logoColor=white)
 ![Tailwind](https://img.shields.io/badge/Tailwind-4-06b6d4?logo=tailwindcss&logoColor=white)
 
-**Sitio en producción:** https://diego-estela-lopez.vercel.app
+> A personal site that is also a working example of **how I build software with AI agents without giving up engineering discipline**: every change goes through an issue, an approved plan, test-first implementation, an agent review and a human decision.
 
-Portfolio personal de un desarrollador de software especializado en IA. Es también un **caso práctico de ingeniería asistida por IA**: el repositorio se desarrolla con un flujo de issues, planes, TDD, revisión y puntos de control humanos que está documentado y versionado aquí mismo.
+**Live site:** https://diego-estela-lopez.vercel.app · **Contact:** die.estela@gmail.com
 
-## Qué incluye
+<p align="center">
+  <img src="docs/images/agents-office.svg" alt="Pixel art office with five AI agents at their desks. A spotlight moves from one to the next and a speech bubble shows what each one is doing." width="760">
+</p>
 
-- Secciones de perfil, proyectos, experiencia, educación, clientes, recomendaciones y contacto.
-- Demos interactivas de proyectos (componentes propios con animaciones de `framer-motion`).
-- Internacionalización **es/en** con i18next; un test garantiza que ambos idiomas tienen las mismas claves.
-- Tema claro y oscuro.
-- **La oficina de agentes:** un botón del Hero abre una escena pixel art, dibujada con código y responsive, donde los agentes de IA de este repositorio trabajan en sus escritorios. Al tocar un personaje se ve su ficha, con las herramientas y el modelo **leídos de `.claude/agents/`**, así que nunca se desactualiza ([ADR 0005](docs/decisions/0005-oficina-de-agentes-pixel-art-con-codigo.md)).
-- Chatbot sobre la API de Anthropic que responde preguntas sobre mi experiencia. La clave y el prompt viven en el servidor (`api/chat.ts`), con validación, límites de uso y una guardia en CI que impide que se filtren al bundle ([ADR 0004](docs/decisions/0004-api-del-chatbot-en-el-servidor.md)).
+<p align="center"><sub>The AI team of this repository, drawn from code. On the site, the Hero button <b>“How does AI work for me?”</b> opens it, and tapping a character shows its real definition.</sub></p>
 
-### La oficina de agentes
+## What this repository demonstrates
 
-| Móvil (360 px) | Escritorio |
-| :------------: | :--------: |
-| <img src="docs/images/agents-office-mobile.png" alt="La oficina de agentes en un móvil: escena pixel art y ficha del auditor de seguridad" width="240"> | <img src="docs/images/agents-office-desktop.png" alt="La oficina de agentes en escritorio: escena a la izquierda y ficha a la derecha" width="520"> |
+1. **AI-assisted engineering with control.** An orchestrator and four specialised agents plan, implement and review the work. They cannot push, open a PR or merge on their own: those are human decisions, enforced by hooks and permissions rather than by good intentions.
+2. **Rigour you can check.** Test-first development, a CI that blocks regressions and leaked secrets, and a written trail for every decision (plans and ADRs). Everything below links to the real evidence.
+3. **A real product.** A bilingual, responsive, accessible portfolio with a server-side chatbot on the Anthropic API.
 
-## Stack
+## Meet the team
 
-| Capa | Tecnología |
-| ---- | ---------- |
+The pixel art characters are not decoration. Each one is an agent defined in [`.claude/agents/`](.claude/agents), and the site reads those files at build time, so what you see is what the repository really configures ([ADR 0005](docs/decisions/0005-oficina-de-agentes-pixel-art-con-codigo.md)).
+
+| Character | Agent | Model | What it does | Can it edit files? |
+| --------- | ----- | ----- | ------------ | ------------------ |
+| Antenna, orange shirt | Claude (orchestrator) | — | Reads the issue, writes the plan, implements with TDD and asks the others for a review. It is the Claude Code session itself, not a file. | Yes, inside an isolated worktree |
+| Glasses, blue shirt | `code-reviewer` | `sonnet` | Reviews the diff before the PR: correctness, types, hooks, readability. | No, read-only |
+| Beret, pink shirt | `content-copywriter` | `sonnet` | Improves the Spanish and English copy without inventing achievements. | Yes, text only |
+| Visor, green shirt | `web-quality-auditor` | `sonnet` | Audits accessibility, SEO and bundle size. | No, read-only |
+| Badge, purple shirt | `security-auditor` | `sonnet` | Hunts for secrets, leaks into the public bundle and vulnerable dependencies. | No, read-only |
+
+## How a change travels
+
+```mermaid
+flowchart LR
+  I[Issue] --> P["Plan in docs/plans"]
+  P --> H1{{"Human approves the plan"}}
+  H1 --> M["TDD in an isolated worktree"]
+  M --> R["Agent review: code-reviewer, security-auditor"]
+  R --> H2{{"Human decides push and PR"}}
+  H2 --> CI["CI + Lighthouse + Vercel preview"]
+  CI --> H3{{"Human tests the preview"}}
+  H3 -->|defect found| M
+  H3 -->|OK| G["Squash merge"]
+```
+
+The diamonds are **human checkpoints**; the AI never crosses one by itself.
+
+| Layer | Mechanism |
+| ----- | --------- |
+| Editing | A hook runs ESLint on every file the AI edits |
+| Execution | A hook blocks `git add -A`, `--no-verify`, `--amend`, force push and writes to `.env*` (the hook has its own tests) |
+| Permissions | `allow` and `deny` rules in `.claude/settings.json` |
+| Commit | Husky, lint-staged and commitlint (Conventional Commits) |
+| Pull request | CI (lint, types, tests, build, bundle secret scan), Lighthouse, an AI review, and a PR template that declares what the AI did and what a person verified |
+| Untrusted input | Skills treat issue and comment text as data, not instructions |
+
+Full diagram, principles and known limits: **[docs/AI-WORKFLOW.md](docs/AI-WORKFLOW.md)** (in Spanish).
+
+## Evidence, not claims
+
+- **A human caught what the tests could not** ([issue #11](https://github.com/DiegoEstela/diego-estela-portfolio/issues/11), [PR #17](https://github.com/DiegoEstela/diego-estela-portfolio/pull/17)). All checks were green, but testing the preview by hand showed error messages that did not translate when switching language. Two tasks were added to the plan, a failing test came first, then the fix ([ADR 0002](docs/decisions/0002-claves-i18n-en-mensajes-del-sistema.md)).
+- **Review changed the plan** ([PR #20](https://github.com/DiegoEstela/diego-estela-portfolio/pull/20)). The Anthropic key used to ship in the public bundle. Moving the call to a serverless function started as a 10-task plan; the reviewer agents and a failed preview grew it to 17, and [the plan](docs/plans/10-fix-protect-anthropic-key.md) records each addition and why. A CI guard now fails the build if a key reaches `dist/`.
+- **Local green is not production green** ([PR #25](https://github.com/DiegoEstela/diego-estela-portfolio/pull/25)). A Vercel build log showed two compiler errors that never appeared locally: Vercel compiles without `strict` and deploys every file in `api/` as a function. The fix started with a test that reproduces Vercel's compilation (red first); the reviewer agent's findings were fixed in a follow-up commit before merging.
+- **Every decision is written down:** [`docs/decisions`](docs/decisions/README.md) (ADRs) and [`docs/plans`](docs/plans) (one plan per change).
+
+<details>
+<summary><b>Technical details</b>: stack, commands, structure and chatbot security</summary>
+
+### Stack
+
+| Layer | Technology |
+| ----- | ---------- |
 | UI | React 19, TypeScript 6, Tailwind CSS 4, framer-motion |
 | Build | Vite 8 |
-| i18n | i18next, react-i18next |
+| i18n | i18next, react-i18next (Spanish and English, a test keeps the keys in sync) |
 | Tests | Vitest, Testing Library, jsdom |
-| Calidad | ESLint 9, Husky, lint-staged, commitlint |
-| CI/CD | GitHub Actions, Lighthouse CI, Vercel (preview por PR) |
-| IA | Claude Code (skills, agentes, hooks, MCP context7) |
+| Quality | ESLint 9, Husky, lint-staged, commitlint |
+| CI/CD | GitHub Actions, Lighthouse CI, Vercel (a preview per PR) |
+| AI | Claude Code (skills, agents, hooks, the context7 MCP server) |
 
-## Cómo se trabaja en este repositorio
+### Getting started
 
-Cada cambio sigue el mismo ciclo, con una persona decidiendo en cada punto de control:
-
-```
-Issue → plan aprobado → TDD en un worktree → revisión previa → PR → CI + preview → prueba manual → merge
-```
-
-- **Plan antes de código:** `/new-feature` convierte una issue en un plan de tareas pequeñas, que se publica en la issue tras aprobación.
-- **TDD estricto:** `/implement-issue` implementa con rojo, verde y refactor, un commit por tarea.
-- **Defensa por capas:** hooks que bloquean acciones peligrosas (con tests), permisos, commitlint, CI y Lighthouse.
-- **Humano en el bucle:** push, PR y merge los decide una persona; cada PR declara qué hizo la IA y qué verificó la persona.
-- **Decisiones por escrito:** [`docs/decisions`](docs/decisions/README.md) y [`docs/plans`](docs/plans).
-
-Detalle, diagrama y límites conocidos en **[docs/AI-WORKFLOW.md](docs/AI-WORKFLOW.md)**. Un ejemplo completo del ciclo es la [issue #11](https://github.com/DiegoEstela/diego-estela-portfolio/issues/11) y su [PR #17](https://github.com/DiegoEstela/diego-estela-portfolio/pull/17).
-
-## Empezar
-
-Requisitos: Node 22 o superior.
+Requires Node 22 or higher.
 
 ```bash
 npm ci
 npm run dev
 ```
 
-| Comando | Para qué |
-| ------- | -------- |
-| `npm run dev` | Servidor de desarrollo |
+| Command | Purpose |
+| ------- | ------- |
+| `npm run dev` | Development server |
 | `npm run lint` | ESLint |
-| `npm run typecheck` | Comprobación de tipos |
+| `npm run typecheck` | Type check |
 | `npm run test` | Tests (`test:watch`, `test:coverage`) |
-| `npm run build` | Build de producción |
-| `npm run check:bundle` | Falla si `dist/` contiene claves o el prompt del servidor |
+| `npm run build` | Production build |
+| `npm run check:bundle` | Fails if `dist/` contains keys or the server prompt |
+| `npm run docs:office` | Regenerates the animation at the top of this README |
 
-Para probar el chatbot en local, crea `.env.local` con `ANTHROPIC_API_KEY` (ver `.env.example`). Solo la lee el servidor; `npm run dev` sirve `/api/chat` con el mismo handler que Vercel. **No arranques el servidor con `--host` mientras haya una clave real**: expondría el endpoint (y tu crédito) a tu red local.
+To try the chatbot locally, create `.env.local` with `ANTHROPIC_API_KEY` (see `.env.example`). Only the server reads it, and `npm run dev` serves `/api/chat` with the same handler as Vercel. The key must be created with a **workspace** scope in the Anthropic console. **Do not start the server with `--host` while a real key is present**: it would expose the endpoint, and your credit, to your local network.
 
-## Estructura
+### Structure
 
 ```
 src/
-  components/   Secciones y componentes de UI
-  context/      Contextos de React (tema, chat)
-  data/         Contenido del portfolio
-  hooks/        Hooks propios
-  locales/      Traducciones es y en
-api/            Función serverless del chatbot (Vercel)
-server/         Lógica del chatbot: validación, límites, adaptador
-vite-plugins/   Plugin que sirve /api/chat en desarrollo
-.claude/        Skills, agentes, hooks y permisos de Claude Code
-.github/        Workflows, plantillas de issue y de PR, Dependabot
-docs/           Flujo de IA, planes y decisiones (ADR)
+  components/   Sections and UI, including the agents office
+  context/      React contexts (theme, chat)
+  data/         Portfolio content
+  hooks/        Custom hooks
+  locales/      Spanish and English translations
+api/            Vercel serverless function for the chatbot (only functions live here)
+server/         Chatbot logic: validation, rate limits, provider adapter
+vite-plugins/   Plugin that serves /api/chat in development
+.claude/        Skills, agents, hooks and permissions for Claude Code
+.github/        Workflows, issue and PR templates, Dependabot
+docs/           AI workflow, plans and decisions (ADRs)
 ```
 
-## Seguridad del chatbot
+### Chatbot security
 
-- La clave de Anthropic y el prompt del sistema nunca llegan al navegador: el cliente solo habla con `/api/chat`.
-- El servidor valida la entrada, limita el tamaño de la conversación y el ritmo de peticiones, y oculta los errores del proveedor.
-- El CI falla si el bundle contiene una clave (`npm run check:bundle`).
-- Límite honesto: el control de ritmo está en memoria por instancia, así que no es global; el tope real de gasto es el límite mensual de la consola de Anthropic.
+- The Anthropic key and the system prompt never reach the browser: the client only talks to `/api/chat` ([ADR 0004](docs/decisions/0004-api-del-chatbot-en-el-servidor.md)).
+- The server validates input, caps conversation size and request rate, and hides provider errors.
+- CI fails if the bundle contains a key (`npm run check:bundle`).
+- An honest limit: the rate limiter lives in memory per instance, so it is not global. The real spending cap is the monthly limit set in the Anthropic console.
 
-## Contacto
+</details>
+
+## Contact
 
 Diego Estela · die.estela@gmail.com

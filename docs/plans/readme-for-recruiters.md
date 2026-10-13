@@ -52,6 +52,8 @@ Decisiones acordadas con el autor:
 
 ### Tarea 3: Tests de contenido del README
 
+> Se confirma **después** de los README (tareas 4 y 5) para que cada commit deje la suite en verde; el rojo se verificó antes de escribirlos.
+
 - **Ficheros:** `scripts/readme.test.mjs`
 - **Test (red):** `README.md` enlaza `README.es.md` y al revés; toda ruta local de enlaces e imágenes existe; ambos incrustan `docs/images/agents-office.svg`; cada agente de `.claude/agents/*.md` aparece con su `model` en los dos README; ningún README contiene `sk-ant` ni `VITE_ANTHROPIC`. Falla hoy (no existe `README.es.md`).
 - **Implementación (green):** el test lee los ficheros reales; la implementación llega en las tareas 4 y 5.
@@ -64,7 +66,7 @@ Decisiones acordadas con el autor:
 - **Estructura:** título y una frase · badges · animación · "What this demonstrates" (3 puntos) · cómo trabaja la IA (diagrama del flujo con los puntos de control humanos) · el equipo de agentes (leyenda de personajes, modelo y herramientas) · evidencias reales · `<details>` con stack, comandos, estructura y seguridad del chatbot · contacto.
 - **Verificación:** los tests de la tarea 3 pasan en lo que a `README.md` se refiere.
 - **Commit:** `docs: rewrite the readme for recruiters, led by how AI works in the repo`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 5: `README.es.md` en español
 
