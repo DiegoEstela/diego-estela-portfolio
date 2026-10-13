@@ -14,9 +14,40 @@ export interface Plan {
 /** Plans are written in Spanish and follow the template of `/new-feature`. */
 const TITLE = /^#\s+(?:Plan:\s*)?(.+?)(?:\s*\(#\d+\))?\s*$/
 const ISSUE_URL = /^-\s+\*\*Issue:\*\*\s*(\S+)/
-const TASK = /^###\s+Tarea\s+\d+:\s*(.+?)\s*$/
+// "### Tarea 3: X", "### Tarea 3 - X", "### Tarea 3. X" or just "### Tarea 3". A heading that is
+// written a little differently must still count, or a plan could look finished with a task missing.
+const TASK = /^###\s+Tarea\s+(\d+)\s*[:.\-–—]?\s*(.*?)\s*$/
 const DONE = /^-\s+\[x\]\s+Hecho\b/i
 const ANY_HEADING = /^#{1,3}\s/
+const FENCE = /^\s*(```|~~~)/
+
+/** Only GitHub over https: the link ends up in an href, and the plans are free text. */
+function safeIssueUrl(raw: string | undefined): string | null {
+  if (!raw) return null
+  try {
+    const url = new URL(raw)
+    return url.protocol === 'https:' && url.hostname === 'github.com' ? raw : null
+  } catch {
+    return null
+  }
+}
+
+/** The lines outside fenced code blocks: inside them live `# comments` and examples that look like headings. */
+function proseLines(source: string): string[] {
+  const lines: string[] = []
+  let fence: string | null = null
+  // A byte order mark at the start would hide the title from the "# " test below.
+  const text = source.charCodeAt(0) === 0xfeff ? source.slice(1) : source
+  for (const line of text.replace(/\r\n/g, '\n').split('\n')) {
+    const marker = line.match(FENCE)?.[1]
+    if (marker && (fence === null || marker === fence)) {
+      fence = fence === null ? marker : null
+    } else if (fence === null) {
+      lines.push(line)
+    }
+  }
+  return lines
+}
 
 /**
  * Reads what the office needs from a plan: its title, the link to its issue and every task with
@@ -24,22 +55,22 @@ const ANY_HEADING = /^#{1,3}\s/
  * the document (acceptance criteria, risks) are not tasks. Returns null without a title.
  */
 export function parsePlan(source: string, issue: number): Plan | null {
-  const lines = source.replace(/\r\n/g, '\n').split('\n')
+  const lines = proseLines(source)
 
   const heading = lines.find((line) => /^#\s/.test(line))
   const title = heading?.match(TITLE)?.[1]
   if (!title) return null
 
-  const issueUrl = lines.map((line) => line.match(ISSUE_URL)?.[1]).find(Boolean) ?? null
+  const issueUrl = safeIssueUrl(lines.map((line) => line.match(ISSUE_URL)?.[1]).find(Boolean))
 
   const tasks: PlanTask[] = []
   // The task whose block we are in. The next heading closes it: a "Hecho" line further down
   // (say, in the risks section) is not its own.
   let current: PlanTask | null = null
   for (const line of lines) {
-    const taskTitle = line.match(TASK)?.[1]
-    if (taskTitle) {
-      current = { title: taskTitle, done: false }
+    const task = line.match(TASK)
+    if (task) {
+      current = { title: task[2] || `Tarea ${task[1]}`, done: false }
       tasks.push(current)
     } else if (ANY_HEADING.test(line)) {
       current = null
