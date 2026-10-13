@@ -46,7 +46,10 @@ function OfficeBody({ active }: { active: boolean }) {
           selectedId={selectedId}
           activeId={activeId}
           bubble={bubble}
-          onSelect={setSelectedId}
+          onSelect={(id) => {
+            // The plan board gets its own card in the integration task; until then only agents open one.
+            if (id !== 'board') setSelectedId(id)
+          }}
         />
       </div>
       <AgentCard selectedId={selectedId} />

@@ -69,7 +69,8 @@ describe('AgentsOfficeModal semantics', () => {
   it('shows the office and a hint, so there is something to do right away', async () => {
     render(<Harness />)
     await openModal()
-    expect(screen.getAllByRole('button', { pressed: false })).toHaveLength(5)
+    // Five characters and the plan board.
+    expect(screen.getAllByRole('button', { pressed: false })).toHaveLength(6)
     expect(screen.getByText(i18n.t('agentsOffice.hint'))).toBeInTheDocument()
   })
 

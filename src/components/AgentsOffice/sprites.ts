@@ -171,14 +171,16 @@ function darken(hex: string, amount: number): string {
   return `#${channel(1)}${channel(3)}${channel(5)}`
 }
 
+// A pixel Z needs 3x5 to read as a letter; at 3x3 it looks like an "I".
 const ZZZ: Sprite = {
-  rows: ['.......zzz', '........z.', '.......zzz', ...blankRows(9)],
+  rows: ['.......zzz', '.........z', '........z.', '.......z..', '.......zzz', ...blankRows(7)],
   palette: { z: '#E2E8F0' },
 }
 
+// The coffee and the steam sit on rows 7-9, the part of the body that stays above the sofa.
 const MUG: Sprite = {
-  rows: [...blankRows(7), '........s.', '.......mm.', '.......mmm', ...blankRows(2)],
-  palette: { s: '#CBD5E1', m: '#F8FAFC' },
+  rows: [...blankRows(7), '........s.', '.......cc.', '.......mmm', '.......mm.', ...blankRows(1)],
+  palette: { s: '#CBD5E1', c: '#6B3F1D', m: '#F8FAFC' },
 }
 
 /** The same character, with the same accessory, drawn for the sofa: asleep or with a coffee. */

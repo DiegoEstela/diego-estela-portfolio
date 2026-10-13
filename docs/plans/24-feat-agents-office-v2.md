@@ -79,7 +79,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** con `mode="resting"` cada personaje está en su plaza del sofá (con "zZz" o café) y no en su mesa, y los escritorios siguen dibujados; con `working` se ve como la v1; la pizarra es un botón con nombre accesible que incluye el progreso y llama a `onSelect('board')`; el botón de la pizarra va **después** de los cinco personajes en el orden de tabulación; `aria-pressed` solo en el seleccionado.
 - **Implementación (green):** props `mode` y `plan`, `buildArt` por modo, y el botón de la pizarra.
 - **Commit:** `feat(agents-office): draw the board and the sofa, and rest the team` + `Refs #24`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 6: Animaciones del descanso
 

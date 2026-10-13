@@ -75,7 +75,7 @@ export const REST_STATIONS: Record<AgentId, { cx: number; y: number; bubbleY: nu
  * The sofa: a long bench below the desks, big enough for five seats. `y` is the top of the back
  * rest; the seat front starts `seatOffset` lower and hides the legs of whoever sits.
  */
-export const SOFA = { x: 6, y: 78, width: 100, height: 9, seatOffset: 3 } as const
+export const SOFA = { x: 6, y: 78, width: 100, height: 10, seatOffset: 4 } as const
 
 /** Where the board of the wall is drawn, and the touch target around it (the art is smaller than 44 px). */
 export const BOARD = { x: 47, y: 5 } as const
