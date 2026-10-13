@@ -154,3 +154,42 @@ describe('the speech bubbles at rest', () => {
     expect(bubbleText()).toBe(english[0])
   })
 })
+
+describe('the announcement of the selection', () => {
+  // The only live region meant for the selection. The caption of the mode has its own.
+  const announcer = () => document.querySelector<HTMLElement>('p.sr-only[role="status"]')
+
+  it('is one region that exists before anything is selected, empty', () => {
+    open(WORKING_PLAN)
+    expect(document.querySelectorAll('p.sr-only[role="status"]')).toHaveLength(1)
+    expect(announcer()).toBeEmptyDOMElement()
+  })
+
+  it('names the character that was picked, with one short line', async () => {
+    open(WORKING_PLAN)
+    await userEvent.click(screen.getByRole('button', { name: t('agentsOffice.agents.code-reviewer.name') }))
+    expect(announcer()).toHaveTextContent(t('agentsOffice.selected', { name: t('agentsOffice.agents.code-reviewer.name') }))
+  })
+
+  it('names the board when it is picked', async () => {
+    open(WORKING_PLAN)
+    await userEvent.click(board())
+    expect(announcer()).toHaveTextContent(t('agentsOffice.plan.selected'))
+  })
+
+  it('keeps the very same region between a character and the board, so screen readers notice the change', async () => {
+    open(WORKING_PLAN)
+    const region = announcer()
+    await userEvent.click(screen.getByRole('button', { name: t('agentsOffice.agents.claude.name') }))
+    await userEvent.click(board())
+    await userEvent.click(screen.getByRole('button', { name: t('agentsOffice.agents.code-reviewer.name') }))
+    expect(announcer()).toBe(region)
+  })
+
+  it('does not leave a second live region inside the cards, which come and go', async () => {
+    open(WORKING_PLAN)
+    await userEvent.click(board())
+    expect(screen.getByRole('progressbar').closest('[role="status"]')).toBeNull()
+    expect(document.querySelectorAll('[role="status"]')).toHaveLength(2) // the announcement and the mode caption
+  })
+})

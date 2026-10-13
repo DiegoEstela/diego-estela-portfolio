@@ -95,27 +95,6 @@ describe('AgentCard language', () => {
     expect(screen.getByRole('heading').textContent).not.toBe(spanish)
     expect(screen.getByText(i18n.t('agentsOffice.agents.security-auditor.role'))).toBeInTheDocument()
   })
-
-  it('announces the selection with one short line, not by reading the whole card aloud', async () => {
-    await useLanguage('es')
-    const { container } = render(<AgentCard selectedId="code-reviewer" agents={[reviewer]} />)
-    const status = screen.getByRole('status')
-    expect(status).toHaveTextContent(i18n.t('agentsOffice.selected', { name: i18n.t('agentsOffice.agents.code-reviewer.name') }))
-    expect(container.querySelector('[aria-live]')).toBeNull()
-  })
-
-  it('keeps the status region mounted but empty before anything is selected', () => {
-    render(<AgentCard selectedId={null} agents={[]} />)
-    expect(screen.getByRole('status')).toBeEmptyDOMElement()
-  })
-
-  it('keeps the very same region when the selection changes, so screen readers notice the update', () => {
-    const { rerender } = render(<AgentCard selectedId={null} agents={[]} />)
-    const region = screen.getByRole('status')
-    rerender(<AgentCard selectedId="claude" agents={[]} />)
-    expect(screen.getByRole('status')).toBe(region)
-    expect(region).not.toBeEmptyDOMElement()
-  })
 })
 
 describe('agents office copy', () => {

@@ -62,6 +62,16 @@ function OfficeBody({ active, plan }: { active: boolean; plan: Plan | null }) {
   return (
     <div className="grid gap-4 p-4 sm:p-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-start">
       <div className="flex flex-col gap-3">
+        {/* One short line for screen readers, in a region that is always mounted and only changes its
+            text: some screen readers ignore a live region that is created already holding its content,
+            and the cards below come and go. */}
+        <p role="status" className="sr-only">
+          {selection === 'board'
+            ? t('agentsOffice.plan.selected')
+            : selection !== null
+              ? t('agentsOffice.selected', { name: t(`agentsOffice.agents.${selection}.name`) })
+              : ''}
+        </p>
         <div className="overflow-hidden rounded-2xl" style={{ border: '1px solid var(--border)' }}>
           <OfficeScene
             agents={agents}

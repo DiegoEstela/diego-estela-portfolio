@@ -95,12 +95,6 @@ describe('PlanCard with a plan', () => {
     render(<PlanCard plan={plan} />)
     expect(screen.queryByText(i18n.t('agentsOffice.plan.spanishNote'))).not.toBeInTheDocument()
   })
-
-  it('announces the selection with a short line for screen readers', async () => {
-    await useLanguage('es')
-    render(<PlanCard plan={plan} />)
-    expect(screen.getByRole('status')).toHaveTextContent(i18n.t('agentsOffice.plan.selected'))
-  })
 })
 
 describe('PlanCard without tasks or plans', () => {

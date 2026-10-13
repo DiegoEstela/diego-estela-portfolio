@@ -31,10 +31,6 @@ export function PlanCard({ plan }: PlanCardProps) {
       className="rounded-2xl p-4 sm:p-5"
       style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', minHeight: 168 }}
     >
-      <p role="status" className="sr-only">
-        {t('agentsOffice.plan.selected')}
-      </p>
-
       {plan === null ? (
         <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
           {t('agentsOffice.plan.empty')}
