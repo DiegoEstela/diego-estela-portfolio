@@ -80,7 +80,7 @@ Decisiones acordadas con el autor:
 - **Ficheros:** `CLAUDE.md`, `docs/AI-WORKFLOW.md` (solo si enlaza al README)
 - **Contenido:** una línea en CLAUDE.md: `README.md` va en inglés y `README.es.md` en español, y `npm run docs:office` regenera la animación al cambiar los personajes.
 - **Commit:** `docs: document the bilingual readme and the svg regeneration`
-- [ ] Hecho
+- [x] Hecho
 
 ## Verificación
 

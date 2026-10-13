@@ -4,6 +4,8 @@ SPA personal (React 19 + Vite 8 + TypeScript + Tailwind 4) con chatbot basado en
 
 **Idioma:** documentación, planes, skills y mensajes al usuario en **español**. Código, tests y commits en **inglés**.
 
+**Excepción:** `README.md` va en **inglés** (para reclutamiento internacional) y `README.es.md` es su versión en español; deben mantenerse al día a la vez (`scripts/readme.test.mjs` lo vigila). La animación de su cabecera (`docs/images/agents-office.svg`) se genera desde los sprites reales: tras cambiar personajes o textos de la oficina, ejecuta `npm run docs:office`.
+
 ## Comandos
 
 | Tarea | Comando |
