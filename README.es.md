@@ -28,7 +28,7 @@
 
 Los personajes pixel art no son decoración. Cada uno es un agente definido en [`.claude/agents/`](.claude/agents), y el sitio lee esos ficheros al compilar, así que lo que ves es lo que el repositorio configura de verdad ([ADR 0005](docs/decisions/0005-oficina-de-agentes-pixel-art-con-codigo.md)).
 
-La oficina también lee los planes del propio repositorio. La pizarra de la pared abre el último plan de [`docs/plans`](docs/plans) con su progreso real, y cuando todas las tareas están hechas el equipo se va a descansar al sofá. Un conmutador permite a quien visita cambiarlo.
+La oficina también lee los planes del propio repositorio. La pizarra de la pared abre el último plan de [`docs/plans`](docs/plans) con su progreso real, y cuando todas las tareas están hechas el equipo se va a descansar al sofá. Un conmutador permite a quien visita cambiarlo ([ADR 0006](docs/decisions/0006-oficina-de-agentes-v2.md)).
 
 | Personaje | Agente | Modelo | Qué hace | ¿Puede editar ficheros? |
 | --------- | ------ | ------ | -------- | ----------------------- |

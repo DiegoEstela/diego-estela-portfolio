@@ -28,7 +28,7 @@
 
 The pixel art characters are not decoration. Each one is an agent defined in [`.claude/agents/`](.claude/agents), and the site reads those files at build time, so what you see is what the repository really configures ([ADR 0005](docs/decisions/0005-oficina-de-agentes-pixel-art-con-codigo.md)).
 
-The office also reads the repository's own plans. The board on the wall opens the latest plan in [`docs/plans`](docs/plans) with its real progress, and when every task is done the team goes to rest on the sofa. A toggle lets a visitor override that.
+The office also reads the repository's own plans. The board on the wall opens the latest plan in [`docs/plans`](docs/plans) with its real progress, and when every task is done the team goes to rest on the sofa. A toggle lets a visitor override that ([ADR 0006](docs/decisions/0006-oficina-de-agentes-v2.md)).
 
 | Character | Agent | Model | What it does | Can it edit files? |
 | --------- | ----- | ----- | ------------ | ------------------ |

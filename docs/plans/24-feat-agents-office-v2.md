@@ -137,7 +137,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Ficheros:** `docs/decisions/0006-oficina-de-agentes-v2.md`, `docs/decisions/README.md`, `README.md`, `README.es.md` (enlace al ADR)
 - **Contenido:** el ADR recoge las decisiones de este plan (derivación del estado, sofá largo, pizarra que sustituye al kanban, tareas en español, el `glob` descartado por peso y el módulo virtual) y los resultados de la verificación. Capturas de la web real en 360 px y en escritorio, en los dos modos y en los dos temas, con Chrome automatizado, para detectar lo que los tests no ven (la lección de la v1).
 - **Commit:** `docs(agents-office): add ADR 0006 for the office v2` + `Refs #24`
-- [ ] Hecho
+- [x] Hecho
 
 ## Riesgos y verificación
 
