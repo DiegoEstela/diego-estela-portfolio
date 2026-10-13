@@ -34,7 +34,7 @@ El build de Vercel termina bien, pero al compilar las funciones muestra dos erro
 - **Ficheros:** `server/esmImports.test.ts`, `api/chat.test.ts` → `server/apiEntrypoint.test.ts`
 - **Test (red):** nuevo caso en `esmImports.test.ts`: ningún fichero de `api/` termina en `.test.ts`. Falla hoy por `api/chat.test.ts`.
 - **Implementación (green):** `git mv api/chat.test.ts server/apiEntrypoint.test.ts` y los imports pasan a `../api/chat.js`.
-- **Commit:** `fix(chatbot): move the entrypoint test out of api/ so vercel does not deploy it`
+- **Commit:** `fix(chatbot): move the entrypoint test out of api/`
 - [x] Hecho
 
 ### Tarea 3: Documentación
@@ -42,7 +42,7 @@ El build de Vercel termina bien, pero al compilar las funciones muestra dos erro
 - **Ficheros:** `docs/decisions/0004-api-del-chatbot-en-el-servidor.md`
 - **Contenido:** una línea: `api/` solo contiene funciones (Vercel despliega todo lo que haya) y el código compila también sin `strict`, comprobado por `vercelCompile.test.ts`.
 - **Commit:** `docs(chatbot): note vercel constraints on api/ and non-strict compile`
-- [ ] Hecho
+- [x] Hecho
 
 ## Verificación
 
