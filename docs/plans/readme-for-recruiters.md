@@ -58,7 +58,7 @@ Decisiones acordadas con el autor:
 - **Test (red):** `README.md` enlaza `README.es.md` y al revés; toda ruta local de enlaces e imágenes existe; ambos incrustan `docs/images/agents-office.svg`; cada agente de `.claude/agents/*.md` aparece con su `model` en los dos README; ningún README contiene `sk-ant` ni `VITE_ANTHROPIC`. Falla hoy (no existe `README.es.md`).
 - **Implementación (green):** el test lee los ficheros reales; la implementación llega en las tareas 4 y 5.
 - **Commit:** `test: guard the readmes against broken links and a stale agent roster`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 4: `README.md` en inglés
 
@@ -73,7 +73,7 @@ Decisiones acordadas con el autor:
 - **Ficheros:** `README.es.md`
 - **Contenido:** misma estructura y mismas evidencias, traducidas con naturalidad; el enlace de idioma arriba. Quedan en verde todos los tests de la tarea 3.
 - **Commit:** `docs: add the spanish readme`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 6: Convención documentada
 
