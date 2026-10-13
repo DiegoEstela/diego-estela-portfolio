@@ -62,12 +62,15 @@ function buildArt() {
     }),
   ) as Record<AgentId, { character: Rect[]; monitor: Rect[]; desk: Rect[] }>
 
+  // The last layer of a resting pose is the zZz or the steam: it moves on its own.
   const resting = Object.fromEntries(
     AGENT_IDS.map((id) => {
       const { cx, y } = REST_STATIONS[id]
-      return [id, restingLayers(id).flatMap((layer) => rects(layer, cx - 5, y))]
+      const layers = restingLayers(id)
+      const draw = (items: Sprite[]) => items.flatMap((layer) => rects(layer, cx - 5, y))
+      return [id, { body: draw(layers.slice(0, -1)), overlay: draw(layers.slice(-1)) }]
     }),
-  ) as Record<AgentId, Rect[]>
+  ) as Record<AgentId, { body: Rect[]; overlay: Rect[] }>
 
   const sofa = sofaSprites(SOFA.width)
 
@@ -221,7 +224,10 @@ export function OfficeScene({
               <g key={id} data-agent={id} data-pose={REST_POSE[id]} className="office-station" data-active={activeId === id || undefined}>
                 <rect className="office-glow" x={cx - 11} y={y - 1} width="22" height="17" style={{ fill: 'var(--accent)' }} />
                 <g className="office-character office-resting" style={{ animationDelay: `${(index * 0.23).toFixed(2)}s` }}>
-                  <Pixels items={ART.resting[id]} />
+                  <Pixels items={ART.resting[id].body} />
+                  <g className="office-zzz" style={{ animationDelay: `${(index * 0.37).toFixed(2)}s` }}>
+                    <Pixels items={ART.resting[id].overlay} />
+                  </g>
                 </g>
               </g>
             )

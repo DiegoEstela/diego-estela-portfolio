@@ -87,7 +87,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** existe una animación `@keyframes office-zzz` por pasos (`steps(1, end)`) y otra de respiración lenta para los que descansan; ambas se desactivan en `prefers-reduced-motion`, con el mismo selector que las anima (la lección de la v1).
 - **Implementación (green):** CSS y las clases en `OfficeScene`.
 - **Commit:** `feat(agents-office): animate the sleeping team in pixel steps` + `Refs #24`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 7: Ficha del plan
 

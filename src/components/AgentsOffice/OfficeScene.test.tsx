@@ -296,6 +296,21 @@ describe('the team at rest', () => {
     expect(left).toBeCloseTo(((REST_STATIONS.claude.cx - 10) / SCENE_SIZE.width) * 100, 1)
   })
 
+  it('lets the zZz and the steam move on their own, apart from the body that breathes', () => {
+    const { container } = setup({ mode: 'resting' })
+    for (const id of AGENT_IDS) {
+      const station = container.querySelector(`[data-agent="${id}"].office-station`)!
+      expect(station.querySelector('.office-resting'), id).not.toBeNull()
+      expect(station.querySelector('.office-zzz'), id).not.toBeNull()
+    }
+  })
+
+  it('does not draw them at work', () => {
+    const { container } = setup()
+    expect(container.querySelector('.office-zzz')).toBeNull()
+    expect(container.querySelector('.office-resting')).toBeNull()
+  })
+
   it('still highlights the one in the spotlight', () => {
     const { container } = setup({ mode: 'resting', activeId: 'security-auditor' })
     const active = Array.from(container.querySelectorAll('.office-station[data-active]')).map((g) => g.getAttribute('data-agent'))

@@ -44,6 +44,37 @@ describe('office animations', () => {
   })
 })
 
+describe('office animations while the team rests', () => {
+  const seconds = (rule: string) => Number(rule.match(/animation:[^;]*?([\d.]+)s/)?.[1] ?? 'NaN')
+  const bob = css.match(/\.office-character\s*\{([^}]*)\}/)?.[1] ?? ''
+  const breathe = css.match(/(?<![\w-])\.office-resting\s*\{([^}]*)\}/)?.[1] ?? ''
+
+  it('breathes slowly, in pixel steps, slower than the team at work bobs', () => {
+    expect(css).toMatch(/@keyframes office-breathe/)
+    expect(breathe).toMatch(/animation:[^;]*office-breathe[^;]*steps\(/)
+    expect(seconds(breathe)).toBeGreaterThan(seconds(bob))
+  })
+
+  it('floats the zZz and the steam in pixel steps', () => {
+    expect(css).toMatch(/@keyframes office-zzz/)
+    const rule = css.match(/\.office-zzz\s*\{([^}]*)\}/)?.[1] ?? ''
+    expect(rule).toMatch(/animation:[^;]*office-zzz[^;]*steps\(/)
+  })
+
+  it('does not speed up the breathing of the one in the spotlight, whose rule would otherwise win', () => {
+    const rule = css.match(/\.office-station\[data-active\] \.office-resting\s*\{([^}]*)\}/)?.[1] ?? ''
+    expect(rule).toMatch(/animation-duration:/)
+    expect(seconds(`animation: x ${rule.match(/animation-duration:\s*([\d.]+)s/)?.[1]}s`)).toBeGreaterThanOrEqual(seconds(breathe))
+  })
+
+  it('switches them off for prefers-reduced-motion, with the same selectors that animate them', () => {
+    const block = css.match(/@media \(prefers-reduced-motion: reduce\)\s*\{([\s\S]*?)\n\}/)?.[1] ?? ''
+    expect(block).toContain('.office-resting')
+    expect(block).toContain('.office-zzz')
+    expect(block).toMatch(/animation:\s*none/)
+  })
+})
+
 describe('page layout while the modal is open', () => {
   it('reserves the scrollbar gutter, so locking the scroll does not make the page jump sideways', () => {
     expect(css).toMatch(/html\s*\{[^}]*scrollbar-gutter:\s*stable/)
