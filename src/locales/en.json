@@ -217,6 +217,21 @@
     "doingLabel": "What it does",
     "readOnly": "Read-only",
     "canEdit": "Can edit",
+    "plan": {
+      "selected": "Plan board selected",
+      "latest": "Latest plan in the repository",
+      "issueLink": "Open issue #{{number}}",
+      "progressLabel": "Plan progress",
+      "progressText": "{{done}} of {{total}} tasks done",
+      "tasksLabel": "Tasks",
+      "done": "Done",
+      "pending": "Pending",
+      "noTasks": "This plan has no tasks yet.",
+      "empty": "There are no plans in the repository yet.",
+      "spanishNote": "Plans are written in Spanish.",
+      "boardLabel": "Plan board: {{done}} of {{total}} tasks done",
+      "boardLabelEmpty": "Plan board: there are no plans yet"
+    },
     "agents": {
       "claude": {
         "name": "Claude",

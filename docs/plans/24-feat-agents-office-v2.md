@@ -95,7 +95,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** muestra título, enlace a la issue con `rel="noopener noreferrer"`, una barra con `role="progressbar"` (`aria-valuenow`, `aria-valuemax`, nombre accesible) y todas las tareas con "Hecha" o "Pendiente" en texto; las tareas llevan `lang="es"`; en inglés aparece la nota de que los planes están en español; el estado vacío sale sin planes; un plan con 13/13 muestra la barra completa. Las claves nuevas existen en es y en.
 - **Implementación (green):** componente y claves `agentsOffice.plan.*`.
 - **Commit:** `feat(agents-office): show the latest plan and its progress in a card` + `Refs #24`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 8: Integración en el modal y conmutador
 

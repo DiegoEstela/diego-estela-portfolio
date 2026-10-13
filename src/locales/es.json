@@ -217,6 +217,21 @@
     "doingLabel": "Lo que hace",
     "readOnly": "Solo lectura",
     "canEdit": "Puede editar",
+    "plan": {
+      "selected": "Pizarra del plan seleccionada",
+      "latest": "Último plan del repositorio",
+      "issueLink": "Abrir la issue #{{number}}",
+      "progressLabel": "Progreso del plan",
+      "progressText": "{{done}} de {{total}} tareas hechas",
+      "tasksLabel": "Tareas",
+      "done": "Hecha",
+      "pending": "Pendiente",
+      "noTasks": "Este plan todavía no tiene tareas.",
+      "empty": "Todavía no hay planes en el repositorio.",
+      "spanishNote": "Los planes se escriben en español.",
+      "boardLabel": "Pizarra del plan: {{done}} de {{total}} tareas hechas",
+      "boardLabelEmpty": "Pizarra del plan: todavía no hay planes"
+    },
     "agents": {
       "claude": {
         "name": "Claude",
