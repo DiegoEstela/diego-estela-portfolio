@@ -47,7 +47,7 @@ Cada tarea: 5-10 min, con su test; el proyecto compila y los tests pasan tras ca
 - **Test (red):** `parsePlan` extrae título, URL de la issue y tareas con su estado; plan sin tareas, con ninguna marcada y con todas marcadas; ignora `[ ]`/`[x]` que no sean la línea `Hecho` de una tarea; devuelve `null` si no hay título. `latestPlan` elige por número de issue numérico (`9` < `10`) e ignora ficheros sin prefijo numérico; con una lista vacía devuelve `null`. `progress(plan)` da `{ done, total }`. `loadPlans()` devuelve los planes reales (al menos el #10, el #11 y el #18, con tareas).
 - **Implementación (green):** parser puro y `import.meta.glob`.
 - **Commit:** `feat(agents-office): read the repository plans at build time` + `Refs #24`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 2: Estado de la oficina derivado del plan
 
