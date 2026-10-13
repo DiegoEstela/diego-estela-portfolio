@@ -91,6 +91,11 @@ describe('renderOfficeSvg', () => {
     expect(reduced).toMatch(/\[data-first\]/)
   })
 
+  // The README embeds this file. If the sprites change, `npm run docs:office` regenerates it.
+  it('matches the committed docs/images/agents-office.svg', async () => {
+    await expect(svg).toMatchFileSnapshot('../../../docs/images/agents-office.svg')
+  })
+
   it('is deterministic', () => {
     expect(renderOfficeSvg(input)).toBe(svg)
   })

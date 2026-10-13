@@ -48,7 +48,7 @@ Decisiones acordadas con el autor:
 - **Test (red):** `expect(renderOfficeSvg(labelsFromEnJson)).toMatchFileSnapshot('../../../docs/images/agents-office.svg')` falla con `CI=true` porque el fichero no existe.
 - **Implementación (green):** generar el fichero con `npm run docs:office`; el script se añade a `package.json`. Comprobar el aspecto renderizándolo en un navegador y ajustar tiempos si hace falta.
 - **Commit:** `feat(agents-office): add the generated animated svg and its sync test`
-- [ ] Hecho
+- [x] Hecho
 
 ### Tarea 3: Tests de contenido del README
 
