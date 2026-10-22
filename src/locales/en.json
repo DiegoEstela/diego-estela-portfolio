@@ -104,7 +104,9 @@
   },
   "education": {
     "title": "Education",
-    "master": "Master in Web Development with AI Integration",
+    "aiweb": "Web Development with AI: OpenAI, DeepSeek, JavaScript and NodeJS",
+    "claudecode": "Claude Code for software development",
+    "aisecurity": "Generative AI Security (in progress)",
     "mern": "Full Stack MERN",
     "reactnative": "Advanced React Native",
     "scrum": "Scrum Master",

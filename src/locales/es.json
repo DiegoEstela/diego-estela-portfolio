@@ -104,7 +104,9 @@
   },
   "education": {
     "title": "Formación",
-    "master": "Máster en Desarrollo Web con IA Integrada",
+    "aiweb": "Desarrollo Web con IA: OpenAI, DeepSeek, JavaScript y NodeJS",
+    "claudecode": "Claude Code para desarrollo de software",
+    "aisecurity": "Seguridad en IA Generativa (en curso)",
     "mern": "Full Stack MERN",
     "reactnative": "React Native Avanzado",
     "scrum": "Scrum Master",
