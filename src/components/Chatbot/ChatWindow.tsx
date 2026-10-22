@@ -6,10 +6,11 @@ import { useChatContext } from '@/context/ChatContext';
 import { ChatMessage } from './ChatMessage';
 import type { ChatMessage as ChatMessageType } from '@/types';
 
-type SystemKey = 'chatbot.error' | 'chatbot.no_credits' | 'chatbot.rate_limit';
+type SystemKey = 'chatbot.error' | 'chatbot.rate_limit';
 
-// The server answers with these statuses; anything else is a generic failure.
-const KEY_BY_STATUS: Record<number, SystemKey> = { 402: 'chatbot.no_credits', 429: 'chatbot.rate_limit' };
+// The server answers with these statuses; anything else is a generic failure. An empty credit balance
+// is deliberately not one of them: the server shows it as a generic failure and only logs the reason.
+const KEY_BY_STATUS: Record<number, SystemKey> = { 429: 'chatbot.rate_limit' };
 
 export function ChatWindow() {
   const { t } = useTranslation();

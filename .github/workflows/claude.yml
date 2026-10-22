@@ -14,6 +14,8 @@ jobs:
   claude:
     # Solo quien tiene acceso al repositorio puede invocar a Claude: lo que escribe un desconocido en un
     # comentario o una issue llegaría al modelo, que trabaja con el secreto de este repositorio.
+    # Límite: se comprueba quién invoca, no quién escribió el contenido que Claude leerá después. No pidas
+    # "@claude" sobre una issue o un PR de un desconocido: su texto es entrada no confiable.
     if: |
       (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude') && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
       (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude') && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
