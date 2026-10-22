@@ -483,7 +483,8 @@
           }
         },
         "imageAlt": "Certificado: {{name}}"
-      }
+      },
+      "menu": "Menú"
     }
   }
 }

@@ -28,7 +28,7 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-28 sm:py-0"
     >
       {/* ── Animated aurora blobs ── */}
       <div className="absolute inset-0 -z-20 overflow-hidden" aria-hidden="true">
@@ -155,7 +155,7 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 1.4 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="absolute bottom-4 sm:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         style={{ color: 'var(--text-secondary)' }}
       >
         <span className="text-xs tracking-widest uppercase">Scroll</span>

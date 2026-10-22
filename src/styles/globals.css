@@ -375,55 +375,85 @@
 }
 
 /* Technical surfaces: flat white panels, hairline blue borders, square corners, HUD brackets */
-/* Two by two on a phone, so the bar stays short; a single row from 640px. */
-.world-dock {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 2px;
-  width: 100%;
-  padding: 3px;
-  max-width: 100%;
+/* Navigation: icon buttons on a phone, a fixed side panel from 768px. */
+.world-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  padding: 12px;
+  width: max-content;
+  max-width: calc(100vw - 24px);
+}
+
+.world-icon-btn {
+  display: inline-flex;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
   border-radius: 6px;
+  color: var(--accent);
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(10px);
   border: 1px solid var(--accent);
-  box-shadow: 0 6px 24px var(--glow);
+  box-shadow: 0 4px 16px var(--glow);
+  transition: background 0.2s, color 0.2s;
+}
+.world-icon-btn:hover { background: #FFFFFF; }
+.world-icon-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.world-icon-btn--back { color: #FFFFFF; background: var(--accent); }
+.world-icon-btn--back:hover { background: var(--accent-hover); }
+
+.world-menu {
+  width: 14rem;
+  padding: 6px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--accent);
+  box-shadow: 0 10px 32px var(--glow);
 }
 
-@media (min-width: 640px) {
-  .world-dock {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: auto;
-  }
-}
-
-.world-dock-btn {
-  display: inline-flex;
+.world-nav-link {
+  display: flex;
+  width: 100%;
   min-height: 44px;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 0 10px;
-  text-align: center;
-  line-height: 1.2;
+  gap: 10px;
+  padding: 0 12px;
   border-radius: 4px;
   font-family: 'Space Grotesk', sans-serif;
   font-size: 0.8125rem;
   font-weight: 600;
   letter-spacing: 0.04em;
+  text-align: left;
   text-transform: uppercase;
   color: var(--text-primary);
+  border-left: 2px solid transparent;
   transition: background 0.2s, color 0.2s;
 }
-@media (min-width: 640px) {
-  .world-dock-btn { padding: 0 16px; }
+.world-nav-link:hover { background: rgba(29, 78, 216, 0.08); }
+.world-nav-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.world-nav-link[aria-current] {
+  color: var(--accent);
+  background: rgba(29, 78, 216, 0.1);
+  border-left-color: var(--accent);
 }
-.world-dock-btn:hover { background: rgba(29, 78, 216, 0.1); }
-.world-dock-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.world-dock-btn--back { color: #FFFFFF; background: var(--accent); }
-.world-dock-btn--back:hover { background: var(--accent-hover); }
+
+@media (min-width: 768px) {
+  .world-rail {
+    width: 13.5rem;
+    margin: 12px 0 0 12px;
+    padding: 8px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 28px var(--glow);
+  }
+  .world-icon-btn--back { box-shadow: none; }
+}
 
 .world-card {
   position: relative;
