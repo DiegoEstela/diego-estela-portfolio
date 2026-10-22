@@ -10,6 +10,8 @@ export const LIMITS = {
   maxMessages: 10,
   // Bot replies (max_tokens 512) can reach ~2000 chars, so a full history must fit comfortably.
   maxMessageChars: 4000,
+  // What the chat box lets a visitor type. A longer question did not come from the page.
+  maxUserChars: 1000,
   maxTotalChars: 16000,
 } as const
 
@@ -20,7 +22,7 @@ function parseTurn(raw: unknown): ChatTurn | null {
   const { role, content } = raw as Record<string, unknown>
   if (role !== 'user' && role !== 'assistant') return null
   if (typeof content !== 'string' || content.trim() === '') return null
-  if (content.length > LIMITS.maxMessageChars) return null
+  if (content.length > (role === 'user' ? LIMITS.maxUserChars : LIMITS.maxMessageChars)) return null
   return { role, content }
 }
 

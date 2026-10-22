@@ -96,6 +96,9 @@ export async function handleChat(request: Request, deps: ChatDeps): Promise<Resp
       status: error instanceof ProviderError ? error.status : undefined,
       type: error instanceof Error ? error.name : typeof error,
     })
-    return json(PROVIDER_ERROR_STATUS[kind], { error: kind })
+    // An empty balance is for the owner to know, not for a visitor: it would tell anyone abusing the
+    // endpoint that it worked. The visitor gets the same generic failure as for any provider outage.
+    const exposed = kind === 'no_credits' ? 'upstream' : kind
+    return json(PROVIDER_ERROR_STATUS[exposed], { error: exposed })
   }
 }

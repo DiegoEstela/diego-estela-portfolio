@@ -56,9 +56,21 @@ export const experiences: Experience[] = [
 
 export const education: Education[] = [
   {
-    id: 'master',
-    degreeKey: 'education.master',
-    institution: 'Víctor Robles',
+    id: 'aisecurity',
+    degreeKey: 'education.aisecurity',
+    institution: 'DEXS (Knowmad Mood)',
+    year: '2026',
+  },
+  {
+    id: 'claudecode',
+    degreeKey: 'education.claudecode',
+    institution: 'DEXS (Knowmad Mood)',
+    year: '2026',
+  },
+  {
+    id: 'aiweb',
+    degreeKey: 'education.aiweb',
+    institution: 'Udemy',
     year: '2026',
   },
   {

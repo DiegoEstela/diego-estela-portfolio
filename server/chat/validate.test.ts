@@ -38,12 +38,17 @@ describe('parseChatRequest', () => {
   })
 
   it('rejects a message longer than the per-message limit', () => {
-    expect(parseChatRequest({ messages: [user('a'.repeat(LIMITS.maxMessageChars + 1))] })).toEqual({ ok: false })
+    expect(parseChatRequest({ messages: [user('a'), assistant('a'.repeat(LIMITS.maxMessageChars + 1)), user('b')] })).toEqual({ ok: false })
+  })
+
+  it('rejects a question longer than the chat box allows, and accepts one that fills it', () => {
+    expect(parseChatRequest({ messages: [user('a'.repeat(LIMITS.maxUserChars + 1))] })).toEqual({ ok: false })
+    expect(parseChatRequest({ messages: [user('a'.repeat(LIMITS.maxUserChars))] }).ok).toBe(true)
   })
 
   it('rejects a history longer than the total limit', () => {
     const chunk = 'a'.repeat(LIMITS.maxMessageChars)
-    const messages = [user(chunk), assistant(chunk), user(chunk), assistant(chunk), user('fin')]
+    const messages = [user('a'), assistant(chunk), user('b'), assistant(chunk), user('c'), assistant(chunk), user('d'), assistant(chunk), user('fin')]
     expect(parseChatRequest({ messages })).toEqual({ ok: false })
   })
 

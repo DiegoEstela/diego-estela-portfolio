@@ -117,8 +117,8 @@ describe('ChatWindow server contract', () => {
   })
 
   it.each([
-    [402, 'no_credits', 'chatbot.no_credits'],
     [429, 'rate_limit', 'chatbot.rate_limit'],
+    [402, 'no_credits', 'chatbot.error'],
     [502, 'upstream', 'chatbot.error'],
     [400, 'invalid_request', 'chatbot.error'],
     [500, 'not_configured', 'chatbot.error'],
