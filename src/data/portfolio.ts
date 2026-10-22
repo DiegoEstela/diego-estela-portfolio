@@ -4,7 +4,7 @@ export const experiences: Experience[] = [
   {
     id: 'knowmad',
     titleKey: 'experience.knowmad.title',
-    company: 'Knowmad Mood · Mapfre Inversiones',
+    company: 'Knowmad Mood',
     period: 'Sep 2023 – Present',
     bulletsKey: [
       'experience.knowmad.bullet1',

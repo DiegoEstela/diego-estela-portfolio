@@ -17,12 +17,6 @@ const CLIENTS: Client[] = [
     color: '#4A9FD9',
   },
   {
-    name: 'Mapfre Inversiones',
-    abbr: 'MAPFRE',
-    sector: 'Fintech · Seguros',
-    color: '#E8344E',
-  },
-  {
     name: 'CIPDH',
     abbr: 'CIPDH',
     sector: 'Derechos Humanos',

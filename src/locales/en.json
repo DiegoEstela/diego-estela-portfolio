@@ -22,7 +22,7 @@
   },
   "about": {
     "title": "About me",
-    "p1": "I'm a Software Engineer with over 5 years of experience specializing in frontend development with React and TypeScript. I currently lead the frontend team at Knowmad Mood for the Mapfre Inversiones project.",
+    "p1": "I'm a Software Engineer with over 5 years of experience specializing in frontend development with React and TypeScript. I currently lead the frontend team at Knowmad Mood on a project for a financial-sector client.",
     "p2": "I'm passionate about building high-performance, scalable, and accessible user interfaces. I have solid experience in application architecture, technical leadership, and integrating AI technologies into modern products.",
     "p3": "Beyond my developer role, I'm an active tutor at CoderHouse where I've trained over 200 students in fullstack technologies.",
     "stat1": "years of experience",
@@ -44,8 +44,8 @@
     "knowmad": {
       "title": "Software Engineer",
       "bullet1": "Lead the frontend team as project owner, managing Jira, Bitbucket repository and coordinating with the CI/CD team on production deployments.",
-      "bullet2": "Developed critical frontend modules (SCR Reports, HierarchiesManager) with ReactJS, TypeScript and TanStack Query, reducing production errors by 35%.",
-      "bullet3": "Designed the investment portfolio hierarchies module: node system with dynamic parent-child relationships, concurrent editing and multi-level validations.",
+      "bullet2": "Developed critical frontend modules (reporting and hierarchy management) with ReactJS, TypeScript and TanStack Query, reducing production errors by 35%.",
+      "bullet3": "Designed the hierarchies module: node system with dynamic parent-child relationships, concurrent editing and multi-level validations.",
       "bullet4": "Implemented Excel download flows with concurrency control and visual feedback.",
       "bullet5": "Resolved race conditions and cache invalidation with TanStack Query, improving module stability by 40%."
     },
