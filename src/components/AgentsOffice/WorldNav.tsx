@@ -20,9 +20,10 @@ interface WorldNavProps {
 }
 
 /**
- * The navigation of the AI world. It sticks to the top left while the page scrolls: an icon-only
- * "back" button on the left, and the sections either as a side panel under it (tablet and up) or
- * behind a menu button at the top right (phone), like the menu of the portfolio. It takes no height, so the page flows under it.
+ * The navigation of the AI world. It sticks to the top while the page scrolls: on a phone, an icon-only
+ * "back" button on the left and the sections behind a menu button at the top right (phone, like the
+ * menu of the portfolio), or a bar of labelled buttons floating at the top centre (tablet and up).
+ * It takes no height, so the page flows under it.
  */
 export function WorldNav({ backRef, onBack, items, activeId, menuOpen, onMenuOpenChange }: WorldNavProps) {
   const { t } = useTranslation()
@@ -60,10 +61,11 @@ export function WorldNav({ backRef, onBack, items, activeId, menuOpen, onMenuOpe
           className="world-icon-btn world-icon-btn--back"
         >
           <ArrowLeft size={20} aria-hidden="true" />
+          <span className="world-back-label">{t('agentsOffice.close')}</span>
         </button>
 
         <nav aria-label={t('agentsOffice.world.nav')} className="hidden md:block">
-          <ul className="flex flex-col gap-1">{items.map(link)}</ul>
+          <ul className="flex gap-0.5">{items.map(link)}</ul>
         </nav>
       </div>
 

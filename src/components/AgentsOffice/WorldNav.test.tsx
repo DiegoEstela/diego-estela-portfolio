@@ -19,11 +19,12 @@ function Harness({ onBack = () => {}, onSelect = () => {}, activeId = 'projects'
 }
 
 describe('WorldNav', () => {
-  it('has a back button that shows only an icon but is named for assistive technology', async () => {
+  it('has a back button named for assistive technology, whose label shows only from tablet width up', async () => {
     const onBack = vi.fn()
     render(<Harness onBack={onBack} />)
     const back = screen.getByRole('button', { name: backLabel() })
-    expect(back.textContent).toBe('')
+    // On a phone it is an icon alone: the label is hidden by the stylesheet below 768px.
+    expect(back.querySelector('.world-back-label')).toHaveTextContent(backLabel())
     await userEvent.click(back)
     expect(onBack).toHaveBeenCalledTimes(1)
   })

@@ -237,7 +237,7 @@ export function AgentsOfficeModal({ open, onClose, returnFocusTo, plan }: Agents
               onMenuOpenChange={setMenuOpen}
             />
 
-            <div className="mx-auto w-full max-w-5xl px-4 pb-16 pt-16 sm:px-6 md:pl-64 md:pt-4 lg:pl-72">
+            <div className="mx-auto w-full max-w-5xl px-4 pb-16 pt-16 sm:px-6 md:pt-20">
               <div className="py-8 text-center sm:py-12">
                 <Cpu size={32} aria-hidden="true" className="world-float mx-auto mb-4" style={{ color: 'var(--accent)' }} />
                 <h2 id={titleId} className="world-title text-4xl font-extrabold sm:text-6xl">

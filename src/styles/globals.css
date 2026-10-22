@@ -441,18 +441,49 @@
   border-left-color: var(--accent);
 }
 
+.world-back-label { display: none; }
+
+/* From 768px the navigation is a bar of buttons floating at the top centre: the back button with its
+   label, then the sections. */
 @media (min-width: 768px) {
   .world-rail {
-    width: 13.5rem;
-    margin: 12px 0 0 12px;
-    padding: 8px;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--border);
-    box-shadow: 0 8px 28px var(--glow);
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    width: max-content;
+    max-width: calc(100% - 24px);
+    margin: 12px auto 0;
+    padding: 3px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--accent);
+    box-shadow: 0 6px 24px var(--glow);
   }
-  .world-icon-btn--back { box-shadow: none; }
+  .world-rail .world-icon-btn--back {
+    width: auto;
+    gap: 8px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 4px;
+    box-shadow: none;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .world-back-label { display: inline; }
+  .world-rail .world-nav-link {
+    width: auto;
+    padding: 0 16px;
+    border-left: 0;
+    justify-content: center;
+  }
+  .world-rail .world-nav-link svg { display: none; }
+  .world-rail .world-nav-link[aria-current] { box-shadow: inset 0 -2px 0 var(--accent); }
 }
 
 .world-card {
