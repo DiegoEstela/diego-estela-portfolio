@@ -65,7 +65,7 @@ describe('AgentsOfficeModal semantics', () => {
     await act(() => i18n.changeLanguage('en'))
     render(<Harness />)
     expect(await openModal()).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'How AI works for me' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'My AI world' })).toBeInTheDocument()
   })
 
   it('shows the office and a hint, so there is something to do right away', async () => {
@@ -102,14 +102,12 @@ describe('AgentsOfficeModal closing', () => {
     expect(onClose).toHaveBeenCalledTimes(1)
   })
 
-  it('closes when the backdrop is clicked, but not when the dialog itself is', async () => {
+  it('does not close when the dialog itself is clicked: it is a page of its own, with a button to go back', async () => {
     const onClose = vi.fn()
     render(<Harness onClose={onClose} />)
     const dialog = await openModal()
     await userEvent.click(dialog)
     expect(onClose).not.toHaveBeenCalled()
-    await userEvent.click(screen.getByTestId('agents-office-backdrop'))
-    expect(onClose).toHaveBeenCalledTimes(1)
   })
 })
 

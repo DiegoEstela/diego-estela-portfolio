@@ -22,7 +22,7 @@ export function Hero() {
     'Software Engineer', 2000,
     'Frontend Developer', 2000,
     'Fullstack Developer', 2000,
-    'AI Enthusiast', 2000,
+    'AI Software Developer', 2000,
   ];
 
   return (

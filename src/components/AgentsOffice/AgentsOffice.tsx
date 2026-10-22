@@ -1,6 +1,6 @@
 import { Component, Suspense, lazy, useEffect, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
-import { Bot } from 'lucide-react'
+import { Bot, Sparkles } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 const loadModal = () => import('./AgentsOfficeModal')
@@ -102,10 +102,9 @@ export function AgentsOffice() {
         onPointerEnter={preload}
         onFocus={preload}
         aria-haspopup="dialog"
-        className="agents-cta flex w-64 items-center justify-center gap-2 rounded-xl border px-8 py-3.5 font-semibold transition-all duration-300 hover:scale-105 sm:w-auto"
-        style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
+        className="agents-cta flex w-64 items-center justify-center gap-2 rounded-xl px-8 py-3.5 font-semibold transition-all duration-300 hover:scale-105 sm:w-auto"
       >
-        <Bot size={18} aria-hidden="true" className="shrink-0" />
+        <Sparkles size={18} aria-hidden="true" className="shrink-0" />
         {/* Same width as the other two buttons on a phone, so the question may wrap: keep it tight. */}
         <span className="text-left leading-snug">{t('agentsOffice.cta')}</span>
       </button>

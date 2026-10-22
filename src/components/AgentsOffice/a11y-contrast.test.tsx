@@ -36,12 +36,6 @@ const contrast = (a: string, b: string) => {
   const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x)
   return (hi + 0.05) / (lo + 0.05)
 }
-/** `foreground` laid over `background` at the given opacity (0-1), as a hex color. */
-const blend = (foreground: string, background: string, opacity: number) =>
-  '#' +
-  rgb(foreground)
-    .map((f, i) => Math.round(f * opacity + rgb(background)[i] * (1 - opacity)).toString(16).padStart(2, '0'))
-    .join('')
 /** jsdom may report a color as #rrggbb or as rgb(r, g, b): compare them in one format. */
 const toHex = (color: string) =>
   color.startsWith('#')
@@ -74,16 +68,17 @@ describe('"Orchestrator" badge', () => {
 })
 
 describe('hero button', () => {
-  const alpha = Number(css.match(/\.agents-cta\s*\{[^}]*?background:[^;]*color-mix\(in srgb,\s*var\(--accent\)\s*(\d+)%/)?.[1]) / 100
+  const block = css.match(/\.agents-cta\s*\{([^}]*)\}/)?.[1] ?? ''
+  const text = block.match(/\scolor:\s*(#[0-9a-fA-F]{6})/)?.[1] ?? ''
+  const gold = [...(block.match(/background:[^;]*;/)?.[0] ?? '').matchAll(/#[0-9a-fA-F]{6}/g)].map((m) => m[0])
 
-  it('tints its background with a light mix of the accent, defined in the stylesheet', () => {
-    expect(alpha).toBeGreaterThan(0)
-    expect(alpha).toBeLessThan(0.3)
+  it('is gold, defined in the stylesheet', () => {
+    expect(text).not.toBe('')
+    expect(gold.length).toBeGreaterThanOrEqual(2)
   })
 
-  it.each(THEMES)('keeps its accent text at 4.5:1 or better over the most tinted point (%s theme)', (_name, vars) => {
-    const worstBackground = blend(vars['--accent'], vars['--bg-primary'], alpha)
-    expect(contrast(vars['--accent'], worstBackground)).toBeGreaterThanOrEqual(4.5)
+  it('keeps its text at 4.5:1 or better over every stop of the gold, in any theme', () => {
+    for (const stop of gold) expect(contrast(text, stop)).toBeGreaterThanOrEqual(4.5)
   })
 })
 

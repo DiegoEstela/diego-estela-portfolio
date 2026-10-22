@@ -12,16 +12,16 @@ afterEach(async () => {
 })
 
 describe('AgentsOffice button', () => {
-  it('invites the visitor with a question, in Spanish', async () => {
+  it('invites the visitor into the AI world, in Spanish', async () => {
     await act(() => i18n.changeLanguage('es'))
     render(<AgentsOffice />)
-    expect(screen.getByRole('button', { name: '¿Cómo trabaja la IA por mí?' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Mi mundo IA' })).toBeInTheDocument()
   })
 
   it('and in English', async () => {
     await act(() => i18n.changeLanguage('en'))
     render(<AgentsOffice />)
-    expect(screen.getByRole('button', { name: 'How does AI work for me?' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'My AI world' })).toBeInTheDocument()
   })
 
   it('announces that it opens a dialog', () => {
