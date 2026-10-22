@@ -135,6 +135,10 @@ docs/           AI workflow, plans and decisions (ADRs)
 
 </details>
 
+## License and security
+
+All rights reserved: the code is public to be read and evaluated, not to be reused (see [LICENSE](LICENSE)). To report a vulnerability, follow [SECURITY.md](SECURITY.md).
+
 ## Contact
 
 Diego Estela · die.estela@gmail.com

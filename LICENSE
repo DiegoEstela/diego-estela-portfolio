@@ -1,0 +1,19 @@
+Copyright (c) 2026 Diego Ezequiel Estela López. All rights reserved.
+
+This repository is public so that it can be read and evaluated as a portfolio.
+Being public does not grant any license to the code or to the content:
+
+- You may view the source code and run it locally to evaluate it.
+- You may not copy, modify, merge, publish, distribute, sublicense or sell the
+  code, the texts, the images, the diplomas or any other content of this
+  repository, in whole or in part, without the prior written permission of the
+  copyright holder.
+
+Third-party dependencies are distributed under their own licenses, which are
+listed in their respective packages.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHOR BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY ARISING FROM THE USE OF THE
+SOFTWARE.

@@ -135,6 +135,10 @@ docs/           Flujo de IA, planes y decisiones (ADR)
 
 </details>
 
+## Licencia y seguridad
+
+Todos los derechos reservados: el código es público para leerlo y evaluarlo, no para reutilizarlo (véase [LICENSE](LICENSE)). Para reportar una vulnerabilidad, sigue [SECURITY.md](SECURITY.md).
+
 ## Contacto
 
 Diego Estela · die.estela@gmail.com
