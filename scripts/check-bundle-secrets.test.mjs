@@ -66,8 +66,9 @@ describe('findSecrets: patterns derived from the real system prompt', () => {
   })
 
   it('finds a line from the middle of the prompt, not only its first sentence', () => {
-    const middle = longLines[longLines.length - 1].replace(/^[-\s]+/, '').replace(/`;?$/, '')
-    const dir = bundle({ 'assets/app.js': 'x="' + middle.slice(0, 80) + '"' })
+    // The last stretch of plain ASCII the prompt has: accents break the runs the check fingerprints.
+    const middle = longLines.flatMap((line) => line.match(/[ -~]{40,}/g) ?? []).filter((run) => !run.includes('`')).at(-1).trim()
+    const dir = bundle({ 'assets/app.js': 'x="' + middle + '"' })
     expect(findSecrets(dir).map((f) => f.rule)).toContain('Server-side system prompt')
   })
 

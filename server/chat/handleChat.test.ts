@@ -106,13 +106,21 @@ describe('handleChat provider errors', () => {
   const failing = (error: unknown) => makeDeps({ complete: vi.fn().mockRejectedValue(error) })
 
   it.each([
-    ['no_credits', 402],
     ['rate_limit', 429],
     ['upstream', 502],
   ] as const)('maps a %s provider error to status %i', async (kind, status) => {
     const res = await handleChat(post(validBody), failing(new ProviderError(kind)))
     expect(res.status).toBe(status)
     expect(await res.json()).toEqual({ error: kind })
+  })
+
+  it('does not tell the visitor that the credit ran out, but logs it for the owner', async () => {
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const res = await handleChat(post(validBody), failing(new ProviderError('no_credits', 402)))
+    expect(res.status).toBe(502)
+    expect(await res.json()).toEqual({ error: 'upstream' })
+    expect(log).toHaveBeenCalledWith('[chat] provider failure', expect.objectContaining({ kind: 'no_credits', status: 402 }))
+    log.mockRestore()
   })
 
   it('hides unexpected error details from the client', async () => {
