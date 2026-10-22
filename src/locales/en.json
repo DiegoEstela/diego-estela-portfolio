@@ -14,7 +14,7 @@
       "Software Engineer",
       "Frontend Developer",
       "Fullstack Developer",
-      "AI Enthusiast"
+      "AI Software Developer"
     ],
     "subtitle": "Specialized in scalable frontend architectures with React, TypeScript and AI integration.",
     "cta_projects": "View projects",
@@ -203,12 +203,12 @@
   },
   "agentsOffice": {
     "selected": "{{name}} selected",
-    "loading": "Opening the office…",
-    "loadError": "Couldn't load the office. Check your connection and press the button again.",
-    "cta": "How does AI work for me?",
-    "title": "How AI works for me",
-    "subtitle": "A pixel art office with this repository's real agents. Tap a character.",
-    "close": "Close",
+    "loading": "Entering the AI world…",
+    "loadError": "Couldn't load the AI world. Check your connection and press the button again.",
+    "cta": "My AI world",
+    "title": "My AI world",
+    "subtitle": "AI automation and agentic AI: the projects where I use it, and the team of agents working behind them.",
+    "close": "Back to portfolio",
     "sceneDescription": "A top-down office with five AI assistants at their desks: the orchestrator and four specialized agents.",
     "hint": "Tap a character to see what it does",
     "orchestrator": "Orchestrator",
@@ -310,6 +310,181 @@
           "Taking a break from secrets"
         ]
       }
+    },
+    "world": {
+      "nav": "AI world sections",
+      "navProjects": "AI projects",
+      "navOffice": "How AI works for me",
+      "boot": {
+        "title": "AI WORLD",
+        "skip": "Tap or press any key to skip",
+        "lines": [
+          "Warming up the engines…",
+          "Waking the agents…",
+          "Setting up the office…",
+          "Connecting projects…",
+          "Ready. Entering."
+        ]
+      },
+      "projects": {
+        "title": "AI projects",
+        "subtitle": "Real automations, agents and evaluations. Tap a project to see how AI works there and open its repository.",
+        "repoCta": "View repository on GitHub",
+        "whatLabel": "What it is",
+        "highlightsLabel": "Highlights",
+        "limitsLabel": "Honest limits",
+        "stackLabel": "Stack",
+        "items": {
+          "portfolio": {
+            "name": "My portfolio",
+            "tagline": "A portfolio developed, reviewed and protected by a team of AI agents.",
+            "summary": "My portfolio does not just talk about AI: it is built with it. An orchestrator (Claude Code) coordinates specialized agents inside an automated flow, and rules that run on their own set its limits. I decide and approve; the AI plans, writes, reviews and audits. It also includes a Claude chatbot behind a serverless function.",
+            "highlights": [
+              "Custom skills automate each step: /new-feature, /implement-issue, /plan-tdd and /commit.",
+              "Four agents with limited tools: code reviewer, copywriter, web quality auditor and security auditor.",
+              "The chatbot calls Anthropic from the server, and CI checks the key never reaches the public bundle.",
+              "The pixel art office below is drawn with code from the repository's real agents."
+            ],
+            "stack": "React 19 · Vite · TypeScript · Tailwind 4 · Claude Code · Anthropic API · Vercel",
+            "tags": [
+              "Agentic AI",
+              "Automation",
+              "Subagents",
+              "Hooks",
+              "Claude chatbot"
+            ],
+            "how": [
+              "An issue triggers the flow: the AI reads the request and writes a plan that it posts for me to approve.",
+              "It implements with TDD (test first, then code) in an isolated environment, with subagents per area.",
+              "Before the PR, a code reviewer and a security auditor go one after the other. The reviewing agents are read-only.",
+              "Automatic hooks block the dangerous (force push, skipping checks, writing .env) and run the linter on every edited file.",
+              "I try the preview and merge: the last word is always human."
+            ]
+          },
+          "rag": {
+            "name": "EU AI Act RAG Assistant",
+            "tagline": "Answers with the exact article or says \"the regulation does not state it\". And it is measured automatically.",
+            "summary": "An assistant that answers questions about the European AI Act (Regulation EU 2024/1689). Language models often invent things with total confidence, and on a legal topic an invented fine or article has real consequences. So it retrieves the fragments of the official text first and asks Claude to answer using only those and to cite them: every answer can be verified.",
+            "highlights": [
+              "The right article is in the top 3 results for 100% of answerable questions (it started at 58%).",
+              "It correctly abstains on 3 of 3 out-of-scope questions, with no wrong abstentions.",
+              "Finding from the evals: the recitals were displacing the articles. Excluding them raised MRR from 0.61 to 0.79.",
+              "No LangChain or LlamaIndex, on purpose: every piece is visible and explainable."
+            ],
+            "limits": [
+              "Very long articles are only partially retrieved.",
+              "The test set is small (15 questions) and scores vary a little between runs.",
+              "It is not legal advice."
+            ],
+            "stack": "Python · sentence-transformers · Claude Haiku 4.5 · Claude Sonnet 5.5 (judge) · pytest",
+            "tags": [
+              "RAG",
+              "Automatic evals",
+              "LLM as judge",
+              "Responsible AI",
+              "Claude"
+            ],
+            "how": [
+              "A deterministic ingestion downloads the official text and splits it by its legal structure (articles and annexes), without using an LLM.",
+              "Each fragment becomes a vector (local embeddings), and for each question the 8 most similar ones are retrieved.",
+              "Claude Haiku writes the answer using only those fragments and citing the article.",
+              "The evaluations run on their own: retrieval metrics, code checks for the citation and the abstention, and a judge model (Claude Sonnet) for what needs judgment.",
+              "Tests fail if quality drops below versioned thresholds, so a regression cannot go unnoticed."
+            ]
+          },
+          "hincha": {
+            "name": "El Rincón del Hincha",
+            "tagline": "A real website built end to end by a team of AI agents, with controls.",
+            "summary": "A mobile-first web app that rebuilds each fan's football history from the day they started following their club: matches, streaks, rivals and derbies. When data coverage is missing it says so and invents nothing. Original idea by Juan Farre. What is interesting is how it was made: with Claude Code as a development partner inside a designed agentic process, not loose prompts. I decide the product and the AI executes.",
+            "highlights": [
+              "A release agent prepares the versions and release-please publishes them automatically.",
+              "Business logic lives in a pure domain, with tests written first and every piece of data tied to a source.",
+              "All copy in Rioplatense Spanish, with no betting and no official crests.",
+              "It shows agentic AI pays off when the process is well designed: clear roles, explicit rules, automatic review and a person who decides."
+            ],
+            "stack": "Next.js 16 · TypeScript · pnpm · unit and e2e tests · GitHub CI · release-please",
+            "tags": [
+              "Agentic AI",
+              "Subagents",
+              "Custom skills",
+              "Guardrails",
+              "Human in the loop"
+            ],
+            "how": [
+              "A mandatory flow with custom skills: /idea, /build (TDD on an isolated branch), /review, /ship and /release.",
+              "Subagents with one role each: one turns ideas into issues, one plans, and several audit in parallel (code, data integrity, security, UI) with read-only permissions.",
+              "/review merges everything into one verdict. Nothing merges without an issue, a plan, an approved review and green CI.",
+              "Guardrails: a versioned CLAUDE.md and hooks that prevent force push, skipping hooks, reading .env or touching the workflows. An emergency kill switch stops push, PR and merge.",
+              "Human in the loop: the AI stops and asks me on credentials, uncovered product decisions or a guardrail that blocks twice."
+            ]
+          }
+        },
+        "webCta": "Open the live site",
+        "howLabel": "How the AI works"
+      },
+      "office": {
+        "title": "How AI works for me",
+        "subtitle": "This repository's real team of agents, in a pixel art office. Tap a character."
+      },
+      "navCerts": "Certifications",
+      "certs": {
+        "title": "Certifications",
+        "subtitle": "Ongoing AI training: from integrating models into web apps to agentic development and LLM security.",
+        "topicsLabel": "What it covers",
+        "viewImage": "View certificate",
+        "verify": "Verify credential",
+        "credentialLabel": "Credential ID",
+        "statusDone": "Completed",
+        "statusInProgress": "In progress",
+        "statusFinished": "Finished",
+        "noImage": "The certificate will be published once it is issued",
+        "items": {
+          "udemy": {
+            "name": "Web Development with AI: OpenAI, DeepSeek, JavaScript and NodeJS",
+            "issuer": "Udemy · Instructor: Víctor Robles",
+            "date": "February 25, 2026",
+            "duration": "10 hours",
+            "summary": "I worked on real projects: custom chatbots, smart assistants, content and image generators and web apps powered by generative AI models.",
+            "topics": [
+              "Integrating AI models into fullstack web applications",
+              "Advanced use of APIs such as OpenAI and DeepSeek",
+              "Prompt engineering and context engineering"
+            ]
+          },
+          "claude": {
+            "name": "Claude Code for software development",
+            "issuer": "DEXS, a Knowmad mood company",
+            "date": "From September 30 to October 8, 2026",
+            "duration": "16 hours · virtual classroom",
+            "summary": "Training in agentic and multi-agent development and in integrating AI into CI/CD. It is the basis of how this portfolio is built.",
+            "topics": [
+              "The agentic loop and the working modes",
+              "Context management, rules and slash commands",
+              "Skills, agents and subagents",
+              "MCPs and hooks",
+              "Collaborative multi-agent development",
+              "Integrating AI into CI/CD pipelines"
+            ]
+          },
+          "security": {
+            "name": "Generative AI Security (OWASP Top 10 for LLMs)",
+            "issuer": "DEXS, a Knowmad mood company",
+            "date": "From October 19 to 27, 2026",
+            "duration": "16 hours · virtual classroom",
+            "summary": "How an LLM-based system is attacked and how it is protected: the architecture of the applications (APIs, embeddings, RAG and agents) and the OWASP Top 10 for LLMs.",
+            "topics": [
+              "Direct and indirect prompt injection, jailbreaking and attacks on RAG chains",
+              "Sensitive information disclosure and unsafe handling of the model output",
+              "Excessive agency, unsafe tool calling and human in the loop",
+              "Supply chain, data poisoning and unbounded consumption",
+              "Hallucinations and misinformation: AI as a copilot, not as an authority",
+              "Regulatory framework: EU AI Act and GDPR"
+            ]
+          }
+        },
+        "imageAlt": "Certificate: {{name}}"
+      },
+      "menu": "Menu"
     }
   }
 }

@@ -14,7 +14,7 @@
       "Software Engineer",
       "Frontend Developer",
       "Fullstack Developer",
-      "AI Enthusiast"
+      "AI Software Developer"
     ],
     "subtitle": "Especializado en arquitecturas frontend escalables con React, TypeScript e integración de IA.",
     "cta_projects": "Ver proyectos",
@@ -203,12 +203,12 @@
   },
   "agentsOffice": {
     "selected": "{{name}} seleccionado",
-    "loading": "Abriendo la oficina…",
-    "loadError": "No se pudo cargar la oficina. Revisa tu conexión y vuelve a pulsar el botón.",
-    "cta": "¿Cómo trabaja la IA por mí?",
-    "title": "Así trabaja la IA por mí",
-    "subtitle": "Una oficina pixel art con los agentes reales de este repositorio. Toca un personaje.",
-    "close": "Cerrar",
+    "loading": "Entrando al mundo IA…",
+    "loadError": "No se pudo cargar el mundo IA. Revisa tu conexión y vuelve a pulsar el botón.",
+    "cta": "Mi mundo IA",
+    "title": "Mi mundo IA",
+    "subtitle": "Automatizaciones con IA e IA agéntica: los proyectos donde la uso y la oficina de agentes que trabaja detrás.",
+    "close": "Volver al portfolio",
     "sceneDescription": "Una oficina vista desde arriba con cinco asistentes de IA en sus escritorios: el orquestador y cuatro agentes especializados.",
     "hint": "Toca un personaje para ver qué hace",
     "orchestrator": "Orquestador",
@@ -310,6 +310,181 @@
           "Descansando de los secretos"
         ]
       }
+    },
+    "world": {
+      "nav": "Secciones del mundo IA",
+      "navProjects": "Proyectos con IA",
+      "navOffice": "Cómo trabaja la IA por mí",
+      "boot": {
+        "title": "MUNDO IA",
+        "skip": "Toca o pulsa una tecla para saltar",
+        "lines": [
+          "Calentando motores…",
+          "Despertando a los agentes…",
+          "Montando la oficina…",
+          "Conectando proyectos…",
+          "Listo. Entrando."
+        ]
+      },
+      "projects": {
+        "title": "Proyectos con IA",
+        "subtitle": "Automatizaciones, agentes y evaluaciones reales. Toca un proyecto para ver cómo trabaja la IA ahí y abrir su repositorio.",
+        "repoCta": "Ver repositorio en GitHub",
+        "whatLabel": "De qué va",
+        "highlightsLabel": "Lo destacado",
+        "limitsLabel": "Límites honestos",
+        "stackLabel": "Stack",
+        "items": {
+          "portfolio": {
+            "name": "Mi portfolio",
+            "tagline": "Un portfolio que se desarrolla, revisa y protege con un equipo de agentes de IA.",
+            "summary": "Mi portfolio no solo habla de IA: se construye con ella. Un orquestador (Claude Code) coordina agentes especializados dentro de un flujo automatizado, y unas reglas que se ejecutan solas le ponen límites. Yo decido y apruebo; la IA planifica, escribe, revisa y audita. Además incluye un chatbot con Claude detrás de una función serverless.",
+            "highlights": [
+              "Skills propias que automatizan cada paso: /new-feature, /implement-issue, /plan-tdd y /commit.",
+              "Cuatro agentes con herramientas acotadas: revisor de código, copywriter, auditor de calidad web y auditor de seguridad.",
+              "El chatbot llama a Anthropic desde el servidor y el CI comprueba que la clave nunca llegue al bundle público.",
+              "La oficina pixel art de más abajo se dibuja con código a partir de los agentes reales del repositorio."
+            ],
+            "stack": "React 19 · Vite · TypeScript · Tailwind 4 · Claude Code · Anthropic API · Vercel",
+            "tags": [
+              "IA agéntica",
+              "Automatización",
+              "Subagentes",
+              "Hooks",
+              "Chatbot con Claude"
+            ],
+            "how": [
+              "Una issue dispara el flujo: la IA lee el pedido y escribe un plan que publica para que yo lo apruebe.",
+              "Implementa con TDD (primero el test, después el código) en un entorno aislado, con subagentes por área.",
+              "Antes del PR pasan, uno tras otro, un revisor de código y un auditor de seguridad. Los agentes revisores son de solo lectura.",
+              "Hooks automáticos bloquean lo peligroso (force push, saltarse validaciones, escribir .env) y corren el linter en cada archivo editado.",
+              "Yo pruebo la vista previa y fusiono: la última palabra siempre es humana."
+            ]
+          },
+          "rag": {
+            "name": "Asistente RAG del Reglamento de IA de la UE",
+            "tagline": "Responde con el artículo exacto o dice «el reglamento no lo indica». Y está medido automáticamente.",
+            "summary": "Un asistente que responde preguntas sobre la Ley de IA europea (Reglamento UE 2024/1689). Los modelos suelen inventar con total seguridad, y en un tema legal una multa o un artículo inventados tienen consecuencias reales. Por eso busca primero los fragmentos del texto oficial y le pide a Claude que responda solo con ellos y los cite: cada respuesta se puede verificar.",
+            "highlights": [
+              "El artículo correcto aparece entre los 3 primeros resultados en el 100 % de las preguntas respondibles (partía de 58 %).",
+              "Se abstiene correctamente en 3 de 3 preguntas fuera de alcance, sin abstenciones erróneas.",
+              "Hallazgo de las evaluaciones: la exposición de motivos desplazaba a los artículos. Al excluirla, el MRR subió de 0,61 a 0,79.",
+              "Sin LangChain ni LlamaIndex, a propósito: cada pieza es visible y explicable."
+            ],
+            "limits": [
+              "Los artículos muy largos se recuperan solo en parte.",
+              "El conjunto de prueba es pequeño (15 preguntas) y los puntajes varían un poco entre corridas.",
+              "No es asesoramiento legal."
+            ],
+            "stack": "Python · sentence-transformers · Claude Haiku 4.5 · Claude Sonnet 5.5 (juez) · pytest",
+            "tags": [
+              "RAG",
+              "Evaluaciones automáticas",
+              "LLM como juez",
+              "IA responsable",
+              "Claude"
+            ],
+            "how": [
+              "Una ingesta determinista descarga el texto oficial y lo divide por su estructura legal (artículos y anexos), sin usar un LLM.",
+              "Cada fragmento se convierte en un vector (embeddings locales) y ante una pregunta se buscan los 8 más parecidos.",
+              "Claude Haiku redacta la respuesta usando solo esos fragmentos y citando el artículo.",
+              "Las evaluaciones corren solas: métricas de búsqueda, comprobaciones con código para la cita y la abstención, y un modelo juez (Claude Sonnet) para lo que requiere criterio.",
+              "Los tests fallan si la calidad baja de umbrales versionados, así que una regresión no pasa desapercibida."
+            ]
+          },
+          "hincha": {
+            "name": "El Rincón del Hincha",
+            "tagline": "Una web real construida de punta a punta por un equipo de agentes de IA con controles.",
+            "summary": "Web app mobile-first que reconstruye la historia futbolera de cada hincha desde que empezó a seguir a su club: partidos, rachas, rivales y clásicos. Si falta cobertura de datos, lo dice y no inventa nada. Idea original de Juan Farre. Lo interesante es cómo se hizo: con Claude Code como socio de desarrollo dentro de un proceso agéntico diseñado, no con prompts sueltos. Yo decido el producto y la IA ejecuta.",
+            "highlights": [
+              "Un agente de lanzamientos prepara las versiones y release-please las publica de forma automática.",
+              "Lógica de negocio en un dominio puro, con los tests escritos primero y cada dato con su fuente.",
+              "Todo el texto en español rioplatense, sin apuestas ni escudos oficiales.",
+              "Demuestra que la IA agéntica rinde cuando el proceso está bien diseñado: roles claros, reglas explícitas, revisión automática y una persona que decide."
+            ],
+            "stack": "Next.js 16 · TypeScript · pnpm · tests unitarios y e2e · CI en GitHub · release-please",
+            "tags": [
+              "IA agéntica",
+              "Subagentes",
+              "Skills propias",
+              "Guardrails",
+              "Humano en el loop"
+            ],
+            "how": [
+              "Flujo obligatorio con skills propias: /idea, /build (TDD en una rama aislada), /review, /ship y /release.",
+              "Subagentes con un rol cada uno: uno convierte ideas en issues, otro planifica, y varios auditan en paralelo (código, integridad de datos, seguridad, interfaz) con permisos de solo lectura.",
+              "/review junta todo en un único veredicto. Nada se fusiona sin issue, plan, revisión aprobada y CI en verde.",
+              "Guardrails: un CLAUDE.md versionado y hooks que impiden force push, saltarse hooks, leer .env o tocar los workflows. Un interruptor de emergencia frena push, PR y merge.",
+              "Humano en el loop: la IA se detiene y me consulta ante credenciales, decisiones de producto no cubiertas o un guardrail que bloquea dos veces."
+            ]
+          }
+        },
+        "webCta": "Abrir la web en vivo",
+        "howLabel": "Cómo trabaja la IA"
+      },
+      "office": {
+        "title": "Así trabaja la IA por mí",
+        "subtitle": "El equipo de agentes real de este repositorio, en una oficina pixel art. Toca un personaje."
+      },
+      "navCerts": "Certificaciones",
+      "certs": {
+        "title": "Certificaciones",
+        "subtitle": "Formación continua en IA: desde integrar modelos en apps web hasta desarrollo agéntico y seguridad en sistemas con LLM.",
+        "topicsLabel": "Qué incluye",
+        "viewImage": "Ver certificado",
+        "verify": "Verificar credencial",
+        "credentialLabel": "ID de la credencial",
+        "statusDone": "Completado",
+        "statusInProgress": "En curso",
+        "statusFinished": "Finalizado",
+        "noImage": "El certificado se publicará cuando se emita",
+        "items": {
+          "udemy": {
+            "name": "Desarrollo Web con IA: OpenAI, DeepSeek, JavaScript y NodeJS",
+            "issuer": "Udemy · Instructor: Víctor Robles",
+            "date": "25 de febrero de 2026",
+            "duration": "10 horas",
+            "summary": "Trabajé en proyectos reales: chatbots personalizados, asistentes inteligentes, generadores de contenido e imágenes y aplicaciones web potenciadas por modelos de IA generativa.",
+            "topics": [
+              "Integración de modelos de IA en aplicaciones web fullstack",
+              "Uso avanzado de APIs como OpenAI y DeepSeek",
+              "Prompt engineering e ingeniería de contexto"
+            ]
+          },
+          "claude": {
+            "name": "Claude Code para desarrollo de software",
+            "issuer": "DEXS, a Knowmad mood company",
+            "date": "Del 30 de septiembre al 8 de octubre de 2026",
+            "duration": "16 horas · aula virtual",
+            "summary": "Formación en desarrollo agéntico, multiagente e integración de la IA en CI/CD. Es la base de cómo se construye este portfolio.",
+            "topics": [
+              "El ciclo agéntico y los modos de trabajo",
+              "Gestión del contexto, reglas y slash commands",
+              "Skills, agentes y subagentes",
+              "MCPs y hooks",
+              "Desarrollo colaborativo multiagente",
+              "Integración de la IA en pipelines de CI/CD"
+            ]
+          },
+          "security": {
+            "name": "Seguridad en IA Generativa (OWASP Top 10 para LLM)",
+            "issuer": "DEXS, a Knowmad mood company",
+            "date": "Del 19 al 27 de octubre de 2026",
+            "duration": "16 horas · aula virtual",
+            "summary": "Cómo se ataca y cómo se protege un sistema basado en LLM: arquitectura de las aplicaciones (APIs, embeddings, RAG y agentes) y el OWASP Top 10 para LLM.",
+            "topics": [
+              "Inyección de prompt directa e indirecta, jailbreaking y ataques en cadenas RAG",
+              "Divulgación de información sensible y manejo inseguro de la salida del modelo",
+              "Agencia excesiva, tool calling inseguro y confirmación humana (human in the loop)",
+              "Cadena de suministro, envenenamiento de datos y consumo ilimitado",
+              "Alucinaciones y desinformación: la IA como copiloto, no como autoridad",
+              "Marco normativo: EU AI Act y RGPD"
+            ]
+          }
+        },
+        "imageAlt": "Certificado: {{name}}"
+      },
+      "menu": "Menú"
     }
   }
 }

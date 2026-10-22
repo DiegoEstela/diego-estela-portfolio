@@ -16,7 +16,7 @@
   <img src="docs/images/agents-office.svg" alt="Oficina pixel art con cinco agentes de IA en sus escritorios. Un foco pasa de uno a otro mientras se llena la barra de progreso de la pizarra del plan; cuando está llena, el equipo descansa en el sofá." width="760">
 </p>
 
-<p align="center"><sub>El equipo de IA de este repositorio, dibujado con código. En el sitio, el botón del Hero <b>«¿Cómo trabaja la IA por mí?»</b> lo abre, y al tocar un personaje se ve su definición real. El bucle: el equipo trabaja mientras se llena la pizarra del plan y después descansa en el sofá.</sub></p>
+<p align="center"><sub>El equipo de IA de este repositorio, dibujado con código. En el sitio, el botón del Hero <b>«Mi mundo IA»</b> lo abre, junto a mis proyectos con IA, y al tocar un personaje se ve su definición real. El bucle: el equipo trabaja mientras se llena la pizarra del plan y después descansa en el sofá.</sub></p>
 
 ## Qué demuestra este repositorio
 

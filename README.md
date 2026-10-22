@@ -16,7 +16,7 @@
   <img src="docs/images/agents-office.svg" alt="Pixel art office with five AI agents at their desks. A spotlight moves from one to the next while the progress bar of the plan board fills; when it is full, the team rests on the sofa." width="760">
 </p>
 
-<p align="center"><sub>The AI team of this repository, drawn from code. On the site, the Hero button <b>“How does AI work for me?”</b> opens it, and tapping a character shows its real definition. The loop: the team works while the plan board fills, then rests on the sofa.</sub></p>
+<p align="center"><sub>The AI team of this repository, drawn from code. On the site, the Hero button <b>“My AI world”</b> opens it, next to my AI projects, and tapping a character shows its real definition. The loop: the team works while the plan board fills, then rests on the sofa.</sub></p>
 
 ## What this repository demonstrates
 

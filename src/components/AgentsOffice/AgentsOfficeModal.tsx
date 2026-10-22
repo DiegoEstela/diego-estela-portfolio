@@ -1,12 +1,16 @@
 import { useEffect, useId, useRef, useState, type RefObject } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { Coffee, X } from 'lucide-react'
+import { Award, Bot, Coffee, Cpu, FolderGit2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { AgentCard } from './AgentCard'
 import { deriveMode, otherMode, resolveMode, type OfficeMode } from './officeMode'
 import { OfficeScene } from './OfficeScene'
 import { PlanCard } from './PlanCard'
+import { CertificationsShowcase } from './CertificationsShowcase'
+import { ProjectsShowcase } from './ProjectsShowcase'
+import { WorldBoot } from './WorldBoot'
+import { WorldNav, type WorldNavItem } from './WorldNav'
 import { progress, type Plan } from './planParser'
 import { LATEST_PLAN } from './plans'
 import { AGENT_IDS, type AgentId } from './sprites'
@@ -119,9 +123,13 @@ export function AgentsOfficeModal({ open, onClose, returnFocusTo, plan }: Agents
   const dialogRef = useRef<HTMLDivElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
   const onCloseRef = useRef(onClose)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuOpenRef = useRef(false)
+  const [activeSection, setActiveSection] = useState('projects')
 
   useEffect(() => {
     onCloseRef.current = onClose
+    menuOpenRef.current = menuOpen
   })
 
   // While open: lock the page scroll, move the focus in, and put everything back on close.
@@ -134,7 +142,9 @@ export function AgentsOfficeModal({ open, onClose, returnFocusTo, plan }: Agents
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
-        onCloseRef.current()
+        // The phone menu is a layer of its own: Escape closes it before it closes the world.
+        if (menuOpenRef.current) setMenuOpen(false)
+        else onCloseRef.current()
         return
       }
       if (event.key !== 'Tab' || !dialogRef.current) return
@@ -167,6 +177,24 @@ export function AgentsOfficeModal({ open, onClose, returnFocusTo, plan }: Agents
   }, [open, returnFocusTo])
 
   const duration = reduceMotion ? 0 : 0.2
+  const projectsRef = useRef<HTMLElement>(null)
+  const certsRef = useRef<HTMLElement>(null)
+  const officeRef = useRef<HTMLElement>(null)
+  const goTo = (target: RefObject<HTMLElement | null>) =>
+    target.current?.scrollIntoView({ block: 'start', behavior: reduceMotion ? 'auto' : 'smooth' })
+
+  const sections: (WorldNavItem & { ref: RefObject<HTMLElement | null> })[] = [
+    { id: 'projects', label: t('agentsOffice.world.navProjects'), icon: FolderGit2, ref: projectsRef, onSelect: () => goTo(projectsRef) },
+    { id: 'certs', label: t('agentsOffice.world.navCerts'), icon: Award, ref: certsRef, onSelect: () => goTo(certsRef) },
+    { id: 'office', label: t('agentsOffice.world.navOffice'), icon: Bot, ref: officeRef, onSelect: () => goTo(officeRef) },
+  ]
+
+  // The section in the upper part of the screen is the one the visitor is reading.
+  const trackSection = () => {
+    const line = window.innerHeight * 0.35
+    const current = [...sections].reverse().find(({ ref }) => (ref.current?.getBoundingClientRect().top ?? Infinity) <= line)
+    setActiveSection(current?.id ?? sections[0].id)
+  }
 
   // Drawn on document.body: an ancestor with a transform (like the hero buttons) would break `fixed`.
   return createPortal(
@@ -174,19 +202,17 @@ export function AgentsOfficeModal({ open, onClose, returnFocusTo, plan }: Agents
       {open && (
         <motion.div
           key="agents-office"
-          className="fixed inset-0 z-[70] flex items-stretch justify-center sm:items-center sm:p-6"
+          className="ai-world fixed inset-0 z-[70]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration }}
         >
-          <div
-            data-testid="agents-office-backdrop"
-            aria-hidden="true"
-            className="absolute inset-0"
-            style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}
-            onClick={onClose}
-          />
+          {/* A whole page of its own, not a small window: the blueprint grid and the scanner line
+              are what make it feel like another place. */}
+          <div aria-hidden="true" className="world-sky absolute inset-0">
+            <div className="world-scan" />
+          </div>
 
           <motion.div
             ref={dialogRef}
@@ -194,40 +220,69 @@ export function AgentsOfficeModal({ open, onClose, returnFocusTo, plan }: Agents
             aria-modal="true"
             aria-labelledby={titleId}
             aria-describedby={subtitleId}
-            className="relative flex h-full w-full flex-col overflow-y-auto overscroll-contain sm:h-auto sm:max-h-[92vh] sm:max-w-4xl sm:rounded-3xl"
-            style={{
-              background: 'var(--bg-primary)',
-              border: '1px solid var(--border)',
-              boxShadow: '0 0 60px rgba(74,159,217,0.2), 0 24px 48px rgba(0,0,0,0.4)',
-            }}
-            initial={{ opacity: 0, y: reduceMotion ? 0 : 24, scale: reduceMotion ? 1 : 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: reduceMotion ? 0 : 16, scale: reduceMotion ? 1 : 0.98 }}
-            transition={{ duration, ease: 'easeOut' }}
+            onScroll={trackSection}
+            className="relative flex h-full w-full flex-col overflow-y-auto overscroll-contain"
+            style={{ color: 'var(--text-primary)' }}
+            initial={{ opacity: 0, scale: reduceMotion ? 1 : 1.05 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: reduceMotion ? 1 : 0.97 }}
+            transition={{ duration: reduceMotion ? 0 : 0.6, ease: 'easeOut' }}
           >
-            <header className="flex items-start justify-between gap-4 p-4 sm:p-6 sm:pb-2">
-              <div>
-                <h2 id={titleId} className="text-xl font-bold sm:text-2xl" style={{ color: 'var(--text-primary)' }}>
+            <WorldNav
+              backRef={closeRef}
+              onBack={onClose}
+              items={sections}
+              activeId={activeSection}
+              menuOpen={menuOpen}
+              onMenuOpenChange={setMenuOpen}
+            />
+
+            <div className="mx-auto w-full max-w-5xl px-4 pb-16 pt-16 sm:px-6 md:pt-20">
+              <div className="py-8 text-center sm:py-12">
+                <Cpu size={32} aria-hidden="true" className="world-float mx-auto mb-4" style={{ color: 'var(--accent)' }} />
+                <h2 id={titleId} className="world-title text-4xl font-extrabold sm:text-6xl">
                   {t('agentsOffice.title')}
                 </h2>
-                <p id={subtitleId} className="mt-1 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                <p id={subtitleId} className="mx-auto mt-4 max-w-2xl text-base sm:text-lg" style={{ color: 'var(--text-secondary)' }}>
                   {t('agentsOffice.subtitle')}
                 </p>
               </div>
-              <button
-                ref={closeRef}
-                type="button"
-                onClick={onClose}
-                aria-label={t('agentsOffice.close')}
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2"
-                style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-primary)', outlineColor: 'var(--accent)' }}
-              >
-                <X size={20} aria-hidden="true" />
-              </button>
-            </header>
 
-            <OfficeBody active={open} plan={plan === undefined ? LATEST_PLAN : plan} />
+              <section ref={projectsRef} aria-labelledby={`${titleId}-projects`} className="scroll-mt-24">
+                <h2 id={`${titleId}-projects`} className="world-heading text-2xl font-bold sm:text-3xl">
+                  {t('agentsOffice.world.projects.title')}
+                </h2>
+                <p className="mb-5 mt-1 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                  {t('agentsOffice.world.projects.subtitle')}
+                </p>
+                <ProjectsShowcase />
+              </section>
+
+              <section ref={certsRef} aria-labelledby={`${titleId}-certs`} className="mt-16 scroll-mt-24">
+                <h2 id={`${titleId}-certs`} className="world-heading text-2xl font-bold sm:text-3xl">
+                  {t('agentsOffice.world.certs.title')}
+                </h2>
+                <p className="mb-5 mt-1 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                  {t('agentsOffice.world.certs.subtitle')}
+                </p>
+                <CertificationsShowcase />
+              </section>
+
+              <section ref={officeRef} aria-labelledby={`${titleId}-office`} className="mt-16 scroll-mt-24">
+                <h2 id={`${titleId}-office`} className="world-heading text-2xl font-bold sm:text-3xl">
+                  {t('agentsOffice.world.office.title')}
+                </h2>
+                <p className="mt-1 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                  {t('agentsOffice.world.office.subtitle')}
+                </p>
+                <div className="-mx-4 sm:-mx-6">
+                  <OfficeBody active={open} plan={plan === undefined ? LATEST_PLAN : plan} />
+                </div>
+              </section>
+            </div>
           </motion.div>
+
+          <WorldBoot skip={Boolean(reduceMotion)} />
         </motion.div>
       )}
     </AnimatePresence>,
