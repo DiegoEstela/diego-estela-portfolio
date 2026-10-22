@@ -317,7 +317,7 @@
       "navOffice": "How AI works for me",
       "boot": {
         "title": "AI WORLD",
-        "skip": "Tap to skip",
+        "skip": "Tap or press any key to skip",
         "lines": [
           "Warming up the engines…",
           "Waking the agents…",

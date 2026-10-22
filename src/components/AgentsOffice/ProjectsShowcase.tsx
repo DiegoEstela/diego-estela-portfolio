@@ -1,4 +1,4 @@
-import { useId, useState } from 'react'
+import { useId, useState, type ReactNode } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { ChevronDown, ExternalLink, Globe } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -26,7 +26,7 @@ function Tags({ id }: { id: AiProjectId }) {
   )
 }
 
-function Section({ label, children }: { label: string; children: React.ReactNode }) {
+function Section({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div>
       <h4 className="world-label mb-2">{label}</h4>

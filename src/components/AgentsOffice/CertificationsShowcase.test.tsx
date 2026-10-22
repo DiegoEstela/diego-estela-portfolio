@@ -46,6 +46,15 @@ describe('Certifications', () => {
     }
   })
 
+  it('reserves the space of each diploma, so the page does not jump when it loads', () => {
+    render(<CertificationsShowcase />)
+    for (const id of ['udemy', 'claude']) {
+      const image = within(card(id)).getByRole('img')
+      expect(image).toHaveAttribute('width', String(cert(id).imageSize!.width))
+      expect(image).toHaveAttribute('height', String(cert(id).imageSize!.height))
+    }
+  })
+
   it('links the Udemy credential to its public verification page and shows its ID', () => {
     render(<CertificationsShowcase />)
     const udemy = within(card('udemy'))

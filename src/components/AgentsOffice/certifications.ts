@@ -6,6 +6,8 @@ export interface Certification {
   id: 'udemy' | 'claude' | 'security'
   /** Scan of the certificate, served from `public/`. Missing while the training has no certificate yet. */
   image?: string
+  /** Pixel size of that image, so the page reserves its space before it loads. */
+  imageSize?: { width: number; height: number }
   /** Where anyone can check the credential. */
   verifyUrl?: string
   credentialId?: string
@@ -17,10 +19,11 @@ export const CERTIFICATIONS: readonly Certification[] = [
   {
     id: 'udemy',
     image: '/certifications/udemy-desarrollo-web-ia.png',
+    imageSize: { width: 872, height: 642 },
     verifyUrl: 'https://ude.my/UC-3f436f5d-672b-46a6-baac-027daa61758a',
     credentialId: 'UC-3f436f5d-672b-46a6-baac-027daa61758a',
   },
-  { id: 'claude', image: '/certifications/dexs-claude-code.png' },
+  { id: 'claude', image: '/certifications/dexs-claude-code.png', imageSize: { width: 1242, height: 881 } },
   { id: 'security', endsOn: '2026-10-27' },
 ]
 

@@ -317,7 +317,7 @@
       "navOffice": "Cómo trabaja la IA por mí",
       "boot": {
         "title": "MUNDO IA",
-        "skip": "Toca para saltar",
+        "skip": "Toca o pulsa una tecla para saltar",
         "lines": [
           "Calentando motores…",
           "Despertando a los agentes…",

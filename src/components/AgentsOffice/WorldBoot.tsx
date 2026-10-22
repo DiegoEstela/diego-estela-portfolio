@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Cog } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -16,6 +16,16 @@ function Machine({ onDone }: { onDone: () => void }) {
   useEffect(() => {
     const timer = setTimeout(onDone, BOOT_MS)
     return () => clearTimeout(timer)
+  }, [onDone])
+
+  // Any key skips the machine, for a visitor with a keyboard. Escape is left alone: it still goes
+  // to the dialog, which closes the world, boot included.
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key !== 'Escape') onDone()
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
   }, [onDone])
 
   return (
@@ -77,5 +87,7 @@ function Machine({ onDone }: { onDone: () => void }) {
  */
 export function WorldBoot({ skip }: { skip: boolean }) {
   const [booting, setBooting] = useState(!skip)
-  return <AnimatePresence>{booting && <Machine onDone={() => setBooting(false)} />}</AnimatePresence>
+  // Stable, so the timer of the machine is not restarted every time the world re-renders.
+  const finish = useCallback(() => setBooting(false), [])
+  return <AnimatePresence>{booting && <Machine onDone={finish} />}</AnimatePresence>
 }

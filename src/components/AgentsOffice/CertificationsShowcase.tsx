@@ -28,7 +28,7 @@ function CertificationCard({ cert, index }: { cert: Certification; index: number
           className="block self-start overflow-hidden rounded-md focus-visible:outline-2 focus-visible:outline-offset-2"
           style={{ border: '1px solid var(--border)', outlineColor: 'var(--accent)' }}
         >
-          <img src={cert.image} alt={t('agentsOffice.world.certs.imageAlt', { name })} loading="lazy" className="h-auto w-full" />
+          <img src={cert.image} alt={t('agentsOffice.world.certs.imageAlt', { name })} width={cert.imageSize?.width} height={cert.imageSize?.height} loading="lazy" className="h-auto w-full" />
           <span className="sr-only">{t('agentsOffice.world.certs.viewImage')}</span>
         </a>
       ) : (
