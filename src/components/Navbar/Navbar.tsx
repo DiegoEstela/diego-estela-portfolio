@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sun, Moon, Menu, X } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
+import { Logo } from "@/components/Logo";
 import clsx from "clsx";
 
 const LINKS = ["home", "about", "experience", "recommendations", "projects", "contact"] as const;
@@ -85,13 +86,10 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         <button
           onClick={() => scrollTo("home")}
-          className="font-display font-bold text-lg tracking-tight"
-          style={{
-            color: "var(--text-primary)",
-            fontFamily: "'Space Grotesk', sans-serif",
-          }}
+          aria-label="Delo IA Studio"
+          style={{ color: "var(--text-primary)" }}
         >
-          Die<span style={{ color: "var(--accent)" }}>zte</span>
+          <Logo className="h-9 w-auto" />
         </button>
 
         <nav className="hidden md:flex items-center gap-8">
