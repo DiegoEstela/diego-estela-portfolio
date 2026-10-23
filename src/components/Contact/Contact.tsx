@@ -97,7 +97,7 @@ export function Contact() {
             color: "var(--text-secondary)",
           }}
         >
-          © 2026 Diezte · Built with React + TypeScript
+          © 2026 Delo IA Studio · Built with React + TypeScript
         </div>
       </div>
     </section>
